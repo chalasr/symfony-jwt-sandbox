@@ -21,7 +21,8 @@
         "sonata-project/admin-bundle": "^2.3",
         "sonata-project/user-bundle": "^2.2",
         "sonata-project/doctrine-orm-admin-bundle": "^2.3",
-        "sonata-project/easy-extends-bundle": "^2.1"
+        "sonata-project/easy-extends-bundle": "^2.1",
+        "chalasdev/capistrano-bundle": "^2.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

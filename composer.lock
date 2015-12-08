@@ -4,9 +4,58 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5d3cb26d977ee0d7bc658d59532dd38d",
-    "content-hash": "37e4742698a5094b06cf04549f131285",
+    "hash": "9dcf7654a6cdf6afd9b335d4a33ddff9",
+    "content-hash": "b23f6974f3d924b6745185b18dd0b97a",
     "packages": [
+        {
+            "name": "chalasdev/capistrano-bundle",
+            "version": "2.2",
+            "target-dir": "Chalasdev/CapistranoBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chalasr/CapistranoBundle.git",
+                "reference": "7cecaae54661c0154865e76fed6bd16f76d1b507"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chalasr/CapistranoBundle/zipball/7cecaae54661c0154865e76fed6bd16f76d1b507",
+                "reference": "7cecaae54661c0154865e76fed6bd16f76d1b507",
+                "shasum": ""
+            },
+            "require": {
+                "php": "> 5.4",
+                "symfony/console": ">=2.7",
+                "symfony/filesystem": ">=2.7"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Chalasdev\\CapistranoBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Robin CHALAS",
+                    "email": "robin.chalas@gmail.com",
+                    "homepage": "https://github.com/chalasr"
+                }
+            ],
+            "description": "Symfony/console command that provide automation of your deployment workflow on top of Capistrano.",
+            "keywords": [
+                "Symfony2",
+                "bundle",
+                "capifony",
+                "capistrano",
+                "deploy",
+                "production",
+                "workflow"
+            ],
+            "time": "2015-12-01 12:48:32"
+        },
         {
             "name": "cocur/slugify",
             "version": "v1.4",
