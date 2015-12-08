@@ -1,0 +1,111 @@
+
+sonata_user:
+    security_acl: false
+    manager_type: orm
+    table:
+        user_group: fos_user_user_group
+    impersonating:
+        route:                page_slug
+        parameters:           { path: / }
+
+    class:                  # Entity Classes
+        user:               App\UserBundle\Entity\User
+        group:              App\UserBundle\Entity\Group
+
+    admin:                  # Admin Classes
+        user:
+            class:          Sonata\UserBundle\Admin\Entity\UserAdmin
+            controller:     SonataAdminBundle:CRUD
+            translation:    SonataUserBundle
+
+        group:
+            class:          Sonata\UserBundle\Admin\Entity\GroupAdmin
+            controller:     SonataAdminBundle:CRUD
+            translation:    SonataUserBundle
+
+    profile:
+        # As in SonataAdminBundle's dashboard
+        dashboard:
+#            groups:
+#
+#                # Prototype
+#                id:
+#                    label:                ~
+#                    label_catalogue:      ~
+#                    items:                []
+#                    item_adds:            []
+#                    roles:                []
+            blocks:
+                - { position: left, type: sonata.block.service.text, settings: { content: "<h2>Welcome!</h2> <p>This is a sample user profile dashboard, feel free to override it in the configuration! Want to make this text dynamic? For instance display the user's name? Create a dedicated block and edit the configuration!</p>"} }
+#                - { position: left, type: sonata.order.block.recent_orders, settings: { title: Recent Orders, number: 5, mode: public }}
+#                - { position: right, type: sonata.timeline.block.timeline, settings: { max_per_page: 15 }}
+#                - { position: right, type: sonata.news.block.recent_posts, settings: { title: Recent Posts, number: 5, mode: public }}
+#                - { position: right, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 5, mode: public }}
+#        register:
+#            # You may customize the registration forms over here
+#            form:
+#                type:                 sonata_user_registration
+#                handler:              sonata.user.registration.form.handler.default
+#                name:                 sonata_user_registration_form
+#                validation_groups:
+#                    # Defaults:
+#                    - Registration
+#                    - Default
+#            # This allows you to specify where you want your user redirected once he activated his account
+#            confirm:
+#                redirect:
+#                    # Set it to false to disable redirection
+#                    route: 'sonata_user_profile_show'
+#                    route_parameters: ~
+
+        # Customize user portal menu by setting links
+        menu:
+            - { route: 'sonata_user_profile_edit', label: 'link_edit_profile', domain: 'SonataUserBundle'}
+            - { route: 'sonata_user_profile_edit_authentication', label: 'link_edit_authentication', domain: 'SonataUserBundle'}
+
+        # Profile Form (firstname, lastname, etc ...)
+        form:
+            type:               sonata_user_profile
+            handler:            sonata.user.profile.form.handler.default
+            name:               sonata_user_profile_form
+            validation_groups:  [Profile]
+
+    # override FOSUser default serialization
+#    jms_serializer:
+#        metadata:
+#            directories:
+#                - { path: %kernel.root_dir%/../vendor/sonata-project/user-bundle/Sonata/UserBundle/Resources/config/serializer/FOSUserBundle, namespace_prefix: 'FOS\UserBundle' }
+
+fos_user:
+    db_driver:      orm # can be orm or odm
+    firewall_name:  main
+#    user_class:     FOS\UserBundle\Entity\User
+    user_class: App\UserBundle\Entity\User
+
+    group:
+        group_class:   App\UserBundle\Entity\Group
+#        group_class:   FOS\UserBundle\Entity\Group
+        group_manager: sonata.user.orm.group_manager
+
+    service:
+        user_manager: sonata.user.orm.user_manager
+    profile:
+        # Authentication Form
+        form:
+            type:               fos_user_profile
+            handler:            fos_user.profile.form.handler.default
+            name:               fos_user_profile_form
+            validation_groups:  [Authentication] # Please note : this is not the default value
+
+
+doctrine:
+    dbal:
+        types:
+            json: Sonata\Doctrine\Types\JsonType
+    orm:
+        entity_managers:
+            default:
+                mappings:
+                    FOSUserBundle: ~
+                    AppUserBundle: ~
+                    SonataUserBundle: ~
