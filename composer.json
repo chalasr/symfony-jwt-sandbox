@@ -18,10 +18,13 @@
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
-        "sonata-project/admin-bundle": "^2.3",
+        "knplabs/knp-menu-bundle": "@dev",
+        "sonata-project/admin-bundle": "^2.4@dev",
         "sonata-project/user-bundle": "^2.2",
-        "sonata-project/doctrine-orm-admin-bundle": "^2.3",
+        "sonata-project/doctrine-orm-admin-bundle": "^2.4@dev",
         "sonata-project/easy-extends-bundle": "^2.1",
+        "sonata-project/intl-bundle": "^2.2",
+        "sonata-project/block-bundle": "^2.3",
         "chalasdev/capistrano-bundle": "^2.2"
     },
     "require-dev": {
