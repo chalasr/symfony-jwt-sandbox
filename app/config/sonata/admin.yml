@@ -1,5 +1,3 @@
-
-
 # Default configuration for "SonataAdminBundle"
 sonata_admin:
     security:
