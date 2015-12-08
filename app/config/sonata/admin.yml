@@ -119,9 +119,6 @@ sonata_admin:
             -
                 position: left
                 type: sonata.admin.block.admin_list
-            -
-                position: right
-                type: sonata.admin.block.admin_list
 #            -
 #                position: right
 #                type: sonata.block.service.text
@@ -139,10 +136,7 @@ sonata_admin:
 #                    title: Sonata Project's Feeds
 #                    url: http://sonata-project.org/blog/archive.rss
             # display one dashboard block in the top zone with a col-md-6 HTML class
-            -
-                position: top
-                class: col-md-6
-                type: sonata.admin.block.admin_list
+            
     admin_services:
 
         # Prototype
