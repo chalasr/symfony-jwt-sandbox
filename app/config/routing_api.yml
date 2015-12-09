@@ -1,0 +1,3 @@
+api_sport:
+    resource: "@AppSportBundle/Resources/config/routing.yml"
+    prefix:   /
