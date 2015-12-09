@@ -9,7 +9,7 @@
     },
     "require": {
         "php": ">=5.3.9",
-        "symfony/symfony": "2.7.*",
+        "symfony/symfony": "2.6.*",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
         "symfony/assetic-bundle": "~2.3",
@@ -25,7 +25,6 @@
         "sonata-project/easy-extends-bundle": "^2.1",
         "sonata-project/intl-bundle": "^2.2",
         "sonata-project/block-bundle": "^2.3",
-        "chalasdev/capistrano-bundle": "^2.2",
         "fabpot/php-cs-fixer": "^1.11"
     },
     "require-dev": {
