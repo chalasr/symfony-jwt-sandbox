@@ -1,11 +1,11 @@
 app_sport:
     resource: "@AppSportBundle/Resources/config/routing.yml"
-    host: "api.sportroops.dev"
+    host: "api.%domain%"
     prefix:   /
 
 app_admin:
     resource: "@AppAdminBundle/Resources/config/routing.yml"
-    host: "sportroops.dev"
+    host: "%domain%"
     prefix: /
 
 admin:
