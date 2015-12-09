@@ -1,6 +1,12 @@
 app_sport:
     resource: "@AppSportBundle/Resources/config/routing.yml"
+    host: "api.sportroops.dev"
     prefix:   /
+
+app_admin:
+    resource: "@AppAdminBundle/Resources/config/routing.yml"
+    host: "sportroops.dev"
+    prefix: /
 
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
@@ -10,6 +16,7 @@ _sonata_admin:
     resource: .
     type: sonata_admin
     prefix: /admin
+
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

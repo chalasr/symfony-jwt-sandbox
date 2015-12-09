@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
             new App\SportBundle\AppSportBundle(),
             new App\UserBundle\AppUserBundle(),
+            new App\AdminBundle\AppAdminBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
