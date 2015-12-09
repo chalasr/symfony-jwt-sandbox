@@ -4,9 +4,6 @@ sonata_user:
     manager_type: orm
     table:
         user_group: fos_user_user_group
-    impersonating:
-        route:                page_slug
-        parameters:           { path: / }
 
     class:                  # Entity Classes
         user:               App\UserBundle\Entity\User
