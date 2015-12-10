@@ -2,20 +2,11 @@
 
 namespace App\UserBundle\Services;
 
-use \Sonata\AdminBundle\Form\Type\ModelType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Sonata\AdminBundle\Form\ChoiceList\ModelChoiceList;
-use Sonata\AdminBundle\Form\ChoiceList\ModelChoiceLoader;
-use Sonata\AdminBundle\Form\DataTransformer\LegacyModelsToArrayTransformer;
-use Sonata\AdminBundle\Form\DataTransformer\ModelsToArrayTransformer;
 use Sonata\AdminBundle\Form\DataTransformer\ModelToIdTransformer;
 use Sonata\AdminBundle\Form\EventListener\MergeCollectionListener;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Sonata\AdminBundle\Form\Type\ModelType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class PatchedModelType extends ModelType
 {

@@ -25,9 +25,13 @@
         "sonata-project/easy-extends-bundle": "^2.1",
         "sonata-project/intl-bundle": "^2.2",
         "sonata-project/block-bundle": "^2.3",
-        "fabpot/php-cs-fixer": "^1.11"
+        "jms/serializer-bundle": "dev-master",
+        "friendsofsymfony/rest-bundle": "1.4.*@dev",
+        "friendsofsymfony/oauth-server-bundle": "1.4.*@dev",
+        "nelmio/api-doc-bundle": "2.5.*@dev"
     },
     "require-dev": {
+        "fabpot/php-cs-fixer": "^1.11",
         "sensio/generator-bundle": "~2.3",
         "symfony/phpunit-bridge": "~2.7"
     },
