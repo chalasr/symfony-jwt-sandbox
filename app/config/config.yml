@@ -95,6 +95,10 @@ fos_oauth_server:
 
 nelmio_api_doc: ~
 
+jms_serializer:
+    metadata:
+        auto_detection: true
+
 fos_rest:
     param_fetcher_listener: true
     body_listener: true
@@ -105,6 +109,8 @@ fos_rest:
         default_format: json
     access_denied_listener:
         json: true
+    param_fetcher_listener: true
+    body_listener: true
     exception:
         codes:
             'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404

@@ -1,3 +1,6 @@
+imports:
+    - { resource: parameters.yml }
+
 security:
 
     providers:
@@ -51,17 +54,33 @@ security:
             anonymous:          true
         # -> end custom configuration
 
-        main:
-            pattern:             .*
-            context:             user
+        login:
+            host: api\.%domain%
+            pattern:  ^/login
+            stateless: true
+            anonymous: true
             form_login:
-                provider:       fos_userbundle
-                login_path:     /login
-                use_forward:    false
-                check_path:     /login_check
-                failure_path:   null
-            logout:             true
-            anonymous:          true
+                provider: fos_userbundle
+                check_path: /login_check
+                require_previous_session: false
+                username_parameter: username
+                password_parameter: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern:   ^/
+            stateless: true
+            host: api\.%domain%
+            lexik_jwt:
+                authorization_header:
+                    enabled: true
+                    prefix:  Bearer
+                query_parameter:
+                    enabled: true
+                    name:    bearer
+            logout:
+                path:           /logout
 
     access_control:
         # URL of FOSUserBundle which need to be available to anonymous users
