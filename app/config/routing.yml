@@ -5,4 +5,5 @@ app_api:
 
 app_admin:
     resource: "routing_admin.yml"
+    host: "%domain%"
     prefix: /

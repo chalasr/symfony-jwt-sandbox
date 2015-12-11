@@ -2,9 +2,8 @@
 
 namespace App\SportBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -12,10 +11,5 @@ class DefaultController extends Controller
     {
         // return $this->redirect($this->generateUrl('sonata_admin_dashboard'));
         return new Response('API HOME');
-    }
-
-    public function callTestAction()
-    {
-        return new JsonResponse(['content' => 'hello']);
     }
 }

@@ -1,36 +1,49 @@
 <?php
 
-/**
- * This file is part of the Sportroops project.
- *
- * (c) <Robin Chalas> <rchalas@sutunam.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 namespace App\UserBundle\Entity;
 
-use Sonata\UserBundle\Entity\BaseUser as BaseUser;
+use Doctrine\ORM\Mapping as ORM;
+use Sonata\UserBundle\Entity\BaseUser;
 
 /**
- * User entity.
+ * User.
  *
- * @author <Robin Chalas> <rchalas@sutunam.com>
+ * @ORM\Table(name="fos_user_user")
+ * @ORM\Entity
  */
 class User extends BaseUser
 {
     /**
-     * @var int
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
-     * Get id.
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @return int $id
+     * @ORM\ManyToMany(targetEntity="App\UserBundle\Entity\Group")
+     * @ORM\JoinTable(name="fos_user_user_group",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
+     *   }
+     * )
      */
-    public function getId()
+    protected $groups;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-        return $this->id;
+        parent::__construct();
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
 }
