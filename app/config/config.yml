@@ -82,3 +82,44 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+fos_oauth_server:
+    db_driver: orm
+    client_class:        App\UserBundle\Entity\Client
+    access_token_class:  App\UserBundle\Entity\AccessToken
+    refresh_token_class: App\UserBundle\Entity\RefreshToken
+    auth_code_class:     App\UserBundle\Entity\AuthCode
+    service:
+        options:
+            supported_scopes: read
+
+nelmio_api_doc: ~
+
+jms_serializer:
+    metadata:
+        auto_detection: true
+
+fos_rest:
+    param_fetcher_listener: true
+    body_listener: true
+    format_listener: true
+    view:
+        view_response_listener: 'force'
+    routing_loader:
+        default_format: json
+    access_denied_listener:
+        json: true
+    param_fetcher_listener: true
+    body_listener: true
+    exception:
+        codes:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
+            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
+        messages:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': true
+
+lexik_jwt_authentication:
+    private_key_path: %jwt_private_key_path%
+    public_key_path:  %jwt_public_key_path%
+    pass_phrase:      %jwt_key_pass_phrase%
+    token_ttl:        %jwt_token_ttl%
