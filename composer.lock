@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d9db339808ce9de462a3e853b611fdf9",
-    "content-hash": "db75cab2de1c530baa5272caefea6b05",
+    "hash": "a8844a06dbb799e5317df3627e144fb2",
+    "content-hash": "000b03485564ae01cf7c78869e79105d",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -1635,27 +1635,27 @@
         },
         {
             "name": "lexik/jwt-authentication-bundle",
-            "version": "v1.3.1",
+            "version": "dev-master",
             "target-dir": "Lexik/Bundle/JWTAuthenticationBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "f2a431baac672272835d77038196551666c1da7d"
+                "reference": "4da7e56a7c4d8b5b0d4845aa8fe86edd732bcfa7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/f2a431baac672272835d77038196551666c1da7d",
-                "reference": "f2a431baac672272835d77038196551666c1da7d",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/4da7e56a7c4d8b5b0d4845aa8fe86edd732bcfa7",
+                "reference": "4da7e56a7c4d8b5b0d4845aa8fe86edd732bcfa7",
                 "shasum": ""
             },
             "require": {
-                "namshi/jose": "~2.2",
-                "php": ">=5.3.3",
-                "symfony/framework-bundle": "~2.3",
-                "symfony/symfony": "~2.3"
+                "namshi/jose": "~6.0",
+                "php": ">=5.4.8",
+                "symfony/framework-bundle": "~2.3|~3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.1"
+                "phpunit/phpunit": "~4.1",
+                "symfony/phpunit-bridge": "~2.7|~3.0"
             },
             "suggest": {
                 "gesdinet/jwt-refresh-token-bundle": "Implements a refresh token system over Json Web Tokens in Symfony"
@@ -1663,7 +1663,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -1704,7 +1704,7 @@
                 "jwt",
                 "rest"
             ],
-            "time": "2015-10-21 14:19:05"
+            "time": "2015-12-03 10:13:36"
         },
         {
             "name": "michelf/php-markdown",
@@ -1836,22 +1836,27 @@
         },
         {
             "name": "namshi/jose",
-            "version": "2.2.2",
+            "version": "6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/namshi/jose.git",
-                "reference": "403927c45e786dd4c851bc475b50a8a03068afa4"
+                "reference": "e214c25ce0deed923ef6b299fbad87a822b51b2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/namshi/jose/zipball/403927c45e786dd4c851bc475b50a8a03068afa4",
-                "reference": "403927c45e786dd4c851bc475b50a8a03068afa4",
+                "url": "https://api.github.com/repos/namshi/jose/zipball/e214c25ce0deed923ef6b299fbad87a822b51b2c",
+                "reference": "e214c25ce0deed923ef6b299fbad87a822b51b2c",
                 "shasum": ""
             },
             "require": {
-                "lib-openssl": "*",
-                "php": ">=5.3.3",
-                "phpseclib/phpseclib": "~0.3"
+                "ext-date": "*",
+                "ext-hash": "*",
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "ext-pcre": "*",
+                "ext-spl": "*",
+                "php": ">=5.4.8",
+                "phpseclib/phpseclib": "1.0.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.5",
@@ -1860,7 +1865,8 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Namshi\\JOSE": "src/"
+                    "Namshi\\JOSE": "src/",
+                    "Namshi\\JOSE\\Test": "test/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1882,7 +1888,7 @@
                 "jwt",
                 "token"
             ],
-            "time": "2015-06-16 11:41:59"
+            "time": "2015-11-13 08:01:01"
         },
         {
             "name": "nelmio/api-doc-bundle",
@@ -2061,16 +2067,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "0.3.10",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "d15bba1edcc7c89e09cc74c5d961317a8b947bf4"
+                "reference": "844134df95e42b93ed5506a2d11ca5accda99412"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/d15bba1edcc7c89e09cc74c5d961317a8b947bf4",
-                "reference": "d15bba1edcc7c89e09cc74c5d961317a8b947bf4",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/844134df95e42b93ed5506a2d11ca5accda99412",
+                "reference": "844134df95e42b93ed5506a2d11ca5accda99412",
                 "shasum": ""
             },
             "require": {
@@ -2080,19 +2086,15 @@
                 "phing/phing": "~2.7",
                 "phpunit/phpunit": "~4.0",
                 "sami/sami": "~2.0",
-                "squizlabs/php_codesniffer": "~1.5"
+                "squizlabs/php_codesniffer": "~2.0"
             },
             "suggest": {
                 "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
-                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a wide variety of cryptographic operations.",
-                "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP < 4.3.3."
+                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
+                "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations.",
+                "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP < 5.0.0."
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.3-dev"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Crypt": "phpseclib/",
@@ -2155,7 +2157,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2015-01-28 21:50:33"
+            "time": "2015-08-04 02:22:12"
         },
         {
             "name": "psr/log",
@@ -3847,7 +3849,8 @@
         "jms/serializer-bundle": 20,
         "friendsofsymfony/rest-bundle": 20,
         "friendsofsymfony/oauth-server-bundle": 20,
-        "nelmio/api-doc-bundle": 20
+        "nelmio/api-doc-bundle": 20,
+        "lexik/jwt-authentication-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

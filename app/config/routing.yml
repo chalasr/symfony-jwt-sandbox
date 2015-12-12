@@ -1,9 +1,14 @@
 app_api:
-    resource: "routing_api.yml"
-    host: "api.%domain%"
-    prefix:   /
+  host: "api.%domain%"
+  prefix: /v1/
+  resource: "routing_api.yml"
 
 app_admin:
-    resource: "routing_admin.yml"
     host: "%domain%"
     prefix: /
+    resource: "routing_admin.yml"
+
+app_api_demo:
+    host: "api.%domain%"
+    path: /
+    defaults: { _controller: AppSportBundle:Default:index }

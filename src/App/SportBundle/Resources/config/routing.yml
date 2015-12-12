@@ -1,3 +1,5 @@
-app_sport_homepage:
-    path:     /
-    defaults: { _controller: AppSportBundle:Default:index }
+app_users_list:
+    path:     /users
+    defaults: { _controller: AppSportBundle:Default:getUsersList }
+    requirements:
+        _format: json

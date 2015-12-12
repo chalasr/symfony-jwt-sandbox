@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html ng-app="demoApp">
+  <head>
+    <meta charset="utf-8">
+    <title>Sportroops REST API</title>
+    <link rel="stylesheet" href="/bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container" ng-controller="MainCtrl">
+        <div class="header clearfix"></div>
+        <div class="jumbotron">
+            <h1>Sportroops API v1</h1>
+            <p class="lead">
+              Submit your back-office credentials. <br />
+            </p>
+            <div class="container">
+            </div>
+            <form class="form-horizontal" role="form" ng-submit="">
+              <div class="alert alert-danger" ng-if="errorMessage">
+                [% errorMessage %]
+              </div>
+              <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Username</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" ng-model="credentials.username" placeholder="Username" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control" ng-model="credentials.password" placeholder="Password" required>
+                </div>
+              </div>
+              <p><button ng-click="submit(credentials)" class="btn btn btn-success" href="#" role="button">Try our API</button></p>
+            </form>
+            <div class="row">
+              <div class="col-md-10 col-md-offset-2" ng-if="$root.users[0]">
+                <h3 class="text-center">Fetched results</h3>
+                <pre>[% $root.users %]</pre>
+              </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+          <p>&copy; Sutunam - 2015</p>
+        </footer>
+    </div>
+
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/angular-http-auth/src/http-auth-interceptor.js"></script>
+    <script type="text/javascript">
+      (function (demo) {
+
+          function Authentication($rootScope, $http, authService, $httpBackend) {
+            return {
+              login: function (credentials) {
+                return $http.post('/v1/login_check', credentials, { ignoreAuthModule: true })
+              },
+              logout: function (user) {
+                delete $http.defaults.headers.common.Authorization;
+                $rootScope.$broadcast('event:auth-logout-complete');
+              }
+            };
+          };
+
+          function MainCtrl($scope, $rootScope, $http, authService, AuthenticationService) {
+            $scope.credentials = {
+              username: 'robin',
+              password: 'robin'
+            };
+
+            $scope.getUsers = function() {
+              $http.get('/v1/users')
+              .success(function (data) {
+                  $rootScope.users = data;
+                  // angular.forEach(data, function(user) {
+                  //     $rootScope.users.push(user);
+                  // })
+                  console.log($scope.users);
+              });
+            };
+
+            $scope.submit = function (credentials) {
+              AuthenticationService.login(credentials)
+                .success(function (data, status, headers, config) {
+                  $http.defaults.headers.common.Authorization = 'Bearer ' + data.token;
+                  $scope.getUsers();
+                  authService.loginConfirmed(data, function (config) {
+                    config.headers.Authorization = 'Bearer ' + data.token;
+                    return config;
+                  });
+                })
+                .error(function (data, status, headers, config) {
+                  $scope.errorMessage = 'Bad credentials';
+                });
+            };
+
+          };
+
+          demo
+            .factory('AuthenticationService', Authentication)
+            .controller('MainCtrl', MainCtrl)
+          ;
+
+      })(angular.module('demoApp', ['http-auth-interceptor', 'ui.bootstrap'], function($interpolateProvider) {
+          $interpolateProvider.startSymbol('[%');
+          $interpolateProvider.endSymbol('%]');
+      }));
+    </script>
+  </body>
+</html>
