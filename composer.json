@@ -29,7 +29,8 @@
         "friendsofsymfony/rest-bundle": "1.4.*",
         "friendsofsymfony/oauth-server-bundle": "1.4.*@dev",
         "nelmio/api-doc-bundle": "2.5.*@dev",
-        "lexik/jwt-authentication-bundle": "dev-master"
+        "lexik/jwt-authentication-bundle": "dev-master",
+        "hwi/oauth-bundle": "0.4.*@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

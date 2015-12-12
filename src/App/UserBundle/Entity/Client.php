@@ -20,7 +20,7 @@ class Client extends BaseClient
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string")
+     * @ORM\Column(name="name", type="string", nullable=true)
      */
     protected $name;
 
@@ -28,5 +28,29 @@ class Client extends BaseClient
     {
         parent::__construct();
         // your own logic
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Client
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

@@ -14,6 +14,12 @@ class DefaultController extends Controller
         return $this->render('AppUserBundle:Default:list.html.twig');
     }
 
+    public function securedAction()
+    {
+        // return $this->redirect($this->generateUrl('sonata_admin_dashboard'));
+        return new Response('Secured!');
+    }
+
     public function getUsersListAction()
     {
         $em = $this->getEntityManager();

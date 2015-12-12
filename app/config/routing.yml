@@ -12,3 +12,14 @@ app_api_demo:
     host: "api.%domain%"
     path: /
     defaults: { _controller: AppSportBundle:Default:index }
+
+# Eventual FOSOAuthServerBundle routing
+# fos_oauth_server_token:
+#     resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+#
+# fos_oauth_server_authorize:
+#     resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
+#
+# app_secured:
+#     path:  /secured/test
+#     defaults: { _controller: AppSportBundle:Default:secured }
