@@ -26,8 +26,8 @@
                   <input type="password" class="form-control" ng-model="credentials.password" placeholder="Password" required>
                 </div>
               </div>
+              <button ng-click="submit(credentials)" class="btn btn btn-success" href="#" role="button">Try our API</button>
             </form>
-            <button ng-click="submit(credentials)" class="btn btn btn-success" href="#" role="button">Try our API</button>
             <br>
             <div class="alert alert-danger" ng-if="errorMessage">
               [% errorMessage %]
