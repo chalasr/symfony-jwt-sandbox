@@ -8,17 +8,12 @@
   <body>
     <div class="container" ng-controller="MainCtrl">
         <div class="header clearfix"></div>
-        <div class="jumbotron">
+        <div class="jumbotron text-center">
             <h1>Sportroops API v1</h1>
             <p class="lead">
               Submit your back-office credentials. <br />
             </p>
-            <div class="container">
-            </div>
-            <form class="form-horizontal" role="form" ng-submit="">
-              <div class="alert alert-danger" ng-if="errorMessage">
-                [% errorMessage %]
-              </div>
+            <form class="form-horizontal" role="form" style="margin-left: -8%;">
               <div class="form-group">
                 <label for="inputEmail3" class="col-sm-2 control-label">Username</label>
                 <div class="col-sm-10">
@@ -31,16 +26,20 @@
                   <input type="password" class="form-control" ng-model="credentials.password" placeholder="Password" required>
                 </div>
               </div>
-              <p><button ng-click="submit(credentials)" class="btn btn btn-success" href="#" role="button">Try our API</button></p>
             </form>
-            <div class="row">
-              <div class="col-md-10 col-md-offset-2" ng-if="$root.users[0]">
+            <button ng-click="submit(credentials)" class="btn btn btn-success" href="#" role="button">Try our API</button>
+            <br>
+            <div class="alert alert-danger" ng-if="errorMessage">
+              [% errorMessage %]
+            </div>
+            <div class="row" ng-if="$root.results.data && !errorMessage">
                 <h3 class="text-center">Fetched results</h3>
-                <pre>[% $root.users %]</pre>
-              </div>
+                <pre class="text-left">
+                  [% $root.results.config.method %] [% $root.results.config.url %]
+                  [% $root.results.data %]
+                </pre>
             </div>
         </div>
-
         <footer class="footer">
           <p>&copy; Sutunam - 2015</p>
         </footer>
@@ -72,12 +71,12 @@
 
             $scope.getUsers = function() {
               $http.get('/v1/users')
-              .success(function (data) {
-                  $rootScope.users = data;
+              .then(function (response) {
+                  $rootScope.results = response;
+                  $scope.errorMessage = null;
                   // angular.forEach(data, function(user) {
                   //     $rootScope.users.push(user);
                   // })
-                  console.log($scope.users);
               });
             };
 
