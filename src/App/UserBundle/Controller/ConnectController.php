@@ -66,7 +66,7 @@ class ConnectController extends Controller
             $error = $error->getMessage();
         }
 
-        $token =
+        // $token =
 
         return $this->render('HWIOAuthBundle:Connect:login.html.'.$this->getTemplatingEngine(), array(
             'error'   => $error,
