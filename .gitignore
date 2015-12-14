@@ -13,3 +13,4 @@
 !app/logs/.gitkeep
 /app/phpunit.xml
 /app/sessions/*
+/.idea/
