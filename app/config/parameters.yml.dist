@@ -18,7 +18,9 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
     domain: localhost
-    jwt_private_key_path: %kernel.root_dir%/jwt/private.pem   # ssh private key path
-    jwt_public_key_path:  %kernel.root_dir%/jwt/public.pem    # ssh public key path
-    jwt_key_pass_phrase:  'Ypu41db4896lVXF'
-    jwt_token_ttl:        86400
+    jwt_private_key_path: '%kernel.root_dir%/jwt/private.pem'
+    jwt_public_key_path: '%kernel.root_dir%/jwt/public.pem'
+    jwt_key_pass_phrase: Ypu41db4896lVXF
+    jwt_token_ttl: 86400
+    facebook_app_id: 443841915819706
+    facebook_app_secret: 9aa001f9d87310a01ed1adcc483263b3
