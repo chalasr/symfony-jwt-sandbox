@@ -2024,16 +2024,16 @@
         },
         {
             "name": "namshi/jose",
-            "version": "6.0.3",
+            "version": "6.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/namshi/jose.git",
-                "reference": "e214c25ce0deed923ef6b299fbad87a822b51b2c"
+                "reference": "7176b9245040e44197ef34db3461b9abc24a6f47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/namshi/jose/zipball/e214c25ce0deed923ef6b299fbad87a822b51b2c",
-                "reference": "e214c25ce0deed923ef6b299fbad87a822b51b2c",
+                "url": "https://api.github.com/repos/namshi/jose/zipball/7176b9245040e44197ef34db3461b9abc24a6f47",
+                "reference": "7176b9245040e44197ef34db3461b9abc24a6f47",
                 "shasum": ""
             },
             "require": {
@@ -2048,7 +2048,8 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.5",
-                "satooshi/php-coveralls": "dev-master"
+                "satooshi/php-coveralls": "dev-master",
+                "sllh/php-cs-fixer-styleci-bridge": "^1.4"
             },
             "type": "library",
             "autoload": {
@@ -2076,7 +2077,7 @@
                 "jwt",
                 "token"
             ],
-            "time": "2015-11-13 08:01:01"
+            "time": "2015-12-14 06:48:22"
         },
         {
             "name": "nelmio/api-doc-bundle",
@@ -2550,12 +2551,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "f9d4621c1635b5a088b9ff2508f724cd3f1b6129"
+                "reference": "dc535f0616b56761bf5c172d0dae9de3a5b43cde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/f9d4621c1635b5a088b9ff2508f724cd3f1b6129",
-                "reference": "f9d4621c1635b5a088b9ff2508f724cd3f1b6129",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/dc535f0616b56761bf5c172d0dae9de3a5b43cde",
+                "reference": "dc535f0616b56761bf5c172d0dae9de3a5b43cde",
                 "shasum": ""
             },
             "require": {
@@ -2628,7 +2629,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2015-12-11 05:25:44"
+            "time": "2015-12-14 06:05:37"
         },
         {
             "name": "sonata-project/block-bundle",
