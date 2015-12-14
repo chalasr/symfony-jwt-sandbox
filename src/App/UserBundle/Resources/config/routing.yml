@@ -3,6 +3,11 @@ oauth_login:
     defaults: { _controller: AppUserBundle:Security:authenticateByOAuth }
     methods: POST
 
+sign_up:
+    path: /signup
+    defaults: { _controller: AppUserBundle:Security:registerUserFromRequest }
+    methods: POST
+
 users_list:
     path:     /users
     defaults: { _controller: AppUserBundle:Security:getAllUsers }

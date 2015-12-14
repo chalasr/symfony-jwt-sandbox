@@ -3,7 +3,6 @@
 namespace App\UserBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use FOS\UserBundle\Model\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +30,11 @@ class SecurityController extends Controller
                 'username' => 'required',
                 'password' => 'required',
             ),
+            'register' => array(
+                'username' => 'required',
+                'password' => 'required',
+                'email'    => 'required',
+            ),
         );
     }
 
@@ -48,29 +52,39 @@ class SecurityController extends Controller
         $data = $request->request->all();
 
         if (false == $this->validator($data, 'oauth')) {
-            return new JsonResponse(['message' => 'Mandatory parameters are missing']);
+            return $this->missingParametersError('authenticate');
         }
 
-        $userManager = $this->get('fos_user.user_manager');
+        $userManager = $this->getUserManager();
         $username = $password = strtolower(str_replace(' ', '', $data['name']));
         $existing = $userManager->findUserBy(['facebookId' => $data['id']]);
 
         if ($existing !== null) {
-            return new JsonResponse(array(
-                'token' => $this->get('lexik_jwt_authentication.jwt_manager')->create($existing),
-            ));
+            return $this->generateToken($existing);
         }
-        $user = $this->createUser($data, $username, $password, true);
 
-        return new JsonResponse(array(
-            'token' => $this->get('lexik_jwt_authentication.jwt_manager')->create($user),
-        ));
+        return $this->generateToken($this->createUser($data, $username, $password, true));
     }
-    //
-    // public function registerUserAccount(Request $request)
-    // {
-    //     if (false === $this->validator)
-    // }
+
+    /**
+     * Create user account from Request.
+     *
+     * @param  Request $request
+     *
+     * @method POST
+     *
+     * @return User $user Newly created
+     */
+    public function registerUserFromRequestAction(Request $request)
+    {
+        $data = $request->request->all();
+
+        if (false == $this->validator($data, 'register')) {
+            return $this->missingParametersError('register');
+        }
+
+        return $this->generateToken($this->createUser($data, $data['username'], $data['password']));
+    }
 
     /**
      * Get users list.
@@ -112,7 +126,7 @@ class SecurityController extends Controller
      */
     protected function createUser($data, $username, $password, $isOAuth = false)
     {
-        $userManager = $this->get('fos_user.user_manager');
+        $userManager = $this->getUserManager();
 
         $user = $userManager->createUser();
         $user->setUsername($username);
@@ -126,7 +140,7 @@ class SecurityController extends Controller
             $user->setLastname($data['last_name']);
         }
         if (isset($data['email'])) {
-            $user->setEmail($data['email']);
+            $user->setEmail($data['email'] == null ? 'unknown' : $data['email']);
         }
 
         if (true === $isOAuth) {
@@ -136,16 +150,6 @@ class SecurityController extends Controller
         $userManager->updateUser($user);
 
         return $user;
-    }
-
-    /**
-     * Returns Entity Manager.
-     *
-     * @return EntityManager $entityManagers
-     */
-    protected function getEntityManager()
-    {
-        return $this->getDoctrine()->getEntityManager();
     }
 
     /**
@@ -167,5 +171,54 @@ class SecurityController extends Controller
         }
 
         return $validator;
+    }
+
+    /**
+     * Generate token from user.
+     *
+     * @param  User         $user
+     *
+     * @return JsonResponse $token
+     */
+    protected function generateToken($user)
+    {
+        return new JsonResponse(array(
+            'token' => $this->get('lexik_jwt_authentication.jwt_manager')->create($user),
+        ));
+    }
+
+    /**
+     * Returns Entity Manager.
+     *
+     * @return EntityManager $entityManager
+     */
+    protected function getEntityManager()
+    {
+        return $this->getDoctrine()->getEntityManager();
+    }
+
+    /**
+     * Returns User Manager.
+     *
+     * @return UserManager $userManager
+     */
+    protected function getUserManager()
+    {
+        return $this->get('fos_user.user_manager');
+    }
+
+    /**
+    * Returns "valid format but not good data" exception.
+    *
+    * @param  string $action
+    * @param  string $user
+    *
+    * @return JsonResponse  Unprocessable entity 422
+    */
+    protected function missingParametersError($action, $user)
+    {
+        return new JsonResponse(array(
+            'message' => sprintf('Some mandatory parameters are missing for %s user', $action, $user),
+        ), 422);
     }
 }

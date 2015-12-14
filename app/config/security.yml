@@ -39,6 +39,11 @@ security:
                 password_parameter: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        # Signup
+        signup:
+            pattern: ^/v1/signup
+            anonymous: true
+            stateless: true
         # OAuth
         oauth:
             pattern: ^/v1/oauth/login
@@ -56,10 +61,6 @@ security:
                     enabled: true
                     name:    bearer
     access_control:
-        # URL of FOSUserBundle which need to be available to anonymous users
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         # Admin login page needs to be access without credential
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -67,6 +68,7 @@ security:
         # Secured part of the Admin
         - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
         # REST API
+        - { path: ^/v1/signup, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v1/oauth/login , role: [IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY] }
         - { path: ^/v1/, role: [ROLE_ADMIN, ROLE_USER, IS_AUTHENTICATED_FULLY] }
         - { path: ^/ , role: [IS_AUTHENTICATED_FULLY, IS_AUTHENTICATED_ANONYMOUSLY] }

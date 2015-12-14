@@ -2,6 +2,8 @@ app_api:
   host: "api.%domain%"
   prefix: /v1/
   resource: "routing_api.yml"
+  requirements:
+      _format: json
 
 app_admin:
     host: "%domain%"
