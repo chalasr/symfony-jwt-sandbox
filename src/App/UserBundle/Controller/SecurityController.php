@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Mangages users from mobile app in API.
+ *
  * @author Robin Chalas
  */
 class SecurityController extends Controller
@@ -69,7 +70,7 @@ class SecurityController extends Controller
     /**
      * Create user account from Request.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @method POST
      *
@@ -176,7 +177,7 @@ class SecurityController extends Controller
     /**
      * Generate token from user.
      *
-     * @param  User         $user
+     * @param User $user
      *
      * @return JsonResponse $token
      */
@@ -208,13 +209,13 @@ class SecurityController extends Controller
     }
 
     /**
-    * Returns "valid format but not good data" exception.
-    *
-    * @param  string $action
-    * @param  string $user
-    *
-    * @return JsonResponse  Unprocessable entity 422
-    */
+     * Returns "valid format but not good data" exception.
+     *
+     * @param string $action
+     * @param string $user
+     *
+     * @return JsonResponse Unprocessable entity 422
+     */
     protected function missingParametersError($action, $user)
     {
         return new JsonResponse(array(
