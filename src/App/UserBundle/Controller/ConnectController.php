@@ -57,7 +57,6 @@ class ConnectController extends Controller
             $key = time();
             $session = $request->getSession();
             $session->set('_hwi_oauth.registration_error.'.$key, $error);
-
             return $this->redirectToRoute('hwi_oauth_connect_registration', array('key' => $key));
         }
 
@@ -65,8 +64,6 @@ class ConnectController extends Controller
             // TODO: this is a potential security risk (see http://trac.symfony-project.org/ticket/9523)
             $error = $error->getMessage();
         }
-
-        // $token =
 
         return $this->render('HWIOAuthBundle:Connect:login.html.'.$this->getTemplatingEngine(), array(
             'error'   => $error,
@@ -204,6 +201,8 @@ class ConnectController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            print_r('lol');die;
+
             show_confirmation_page:
 
             /** @var $currentToken OAuthToken */
@@ -358,7 +357,6 @@ class ConnectController extends Controller
         $token->setAuthenticated(true);
 
         $this->setToken($token);
-
         if ($fakeLogin) {
             // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
             $this->container->get('event_dispatcher')->dispatch(

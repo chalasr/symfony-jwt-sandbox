@@ -46,7 +46,7 @@ security:
 
         oauth_area:
             context: user
-            pattern: ^/
+            pattern: ^/oauth
             oauth:
                 resource_owners:
                     facebook: "/oauth/check-facebook"
