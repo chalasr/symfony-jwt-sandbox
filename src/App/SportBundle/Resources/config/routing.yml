@@ -1,5 +1,0 @@
-app_users_list:
-    path:     /users
-    defaults: { _controller: AppSportBundle:Default:getUsersList }
-    requirements:
-        _format: json

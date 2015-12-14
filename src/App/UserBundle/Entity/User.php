@@ -14,7 +14,7 @@ use Sonata\UserBundle\Entity\BaseUser;
 class User extends BaseUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -28,7 +28,7 @@ class User extends BaseUser
      * @ORM\Column(name="facebook_id", type="string", nullable=true)
      */
     protected $facebookId;
-    
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -45,7 +45,7 @@ class User extends BaseUser
     protected $groups;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -64,5 +64,4 @@ class User extends BaseUser
 
         return $this->facebookId;
     }
-
 }

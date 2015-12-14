@@ -1,0 +1,9 @@
+oauth_login:
+    path: /oauth/login
+    defaults: { _controller: AppUserBundle:Security:authenticateByOAuth }
+    methods: POST
+
+users_list:
+    path:     /users
+    defaults: { _controller: AppUserBundle:Security:getAllUsers }
+    methods: [GET, POST]

@@ -8,38 +8,7 @@ app_admin:
     prefix: /
     resource: "routing_admin.yml"
 
-app_api_demo:
+app_demo:
     host: "api.%domain%"
     path: /
-    defaults: { _controller: AppSportBundle:Default:index }
-
-app_oauth_login:
-    path: /oauth/login
-    defaults: { _controller: AppSportBundle:Default:authenticateByOAuth }
-
-app_secured:
-    path:  /secured/test
-    defaults: { _controller: AppSportBundle:Default:secured }
-
-# Eventual FOSOAuthServerBundle routing
-# fos_oauth_server_token:
-#     resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
-#
-# fos_oauth_server_authorize:
-#     resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
-#
-# HWO OAUTH
-# hwi_oauth_redirect:
-#     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
-#     prefix:   /oauth/connect
-#
-# hwi_oauth_login:
-#   resource: "@AppUserBundle/Resources/config/routing/login.yml"
-#   prefix: /oauth
-#
-# facebook_login:
-#     pattern: /oauth/check-facebook
-#
-# hwi_oauth_logout:
-#     path: /oauth/logout
-#
+    defaults: { _controller: AppUserBundle:Security:demo }

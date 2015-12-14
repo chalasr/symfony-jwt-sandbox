@@ -2,22 +2,18 @@ imports:
     - { resource: parameters.yml }
 
 security:
-
     providers:
         fos_userbundle:
             id: fos_user.user_manager
-
     encoders:
             FOS\UserBundle\Model\UserInterface: sha512
-
     acl:
         connection: default
-
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
+        # Sonata
         admin:
             pattern:            /admin(.*)
             context:            user
@@ -30,7 +26,7 @@ security:
             logout:
                 path:           /admin/logout
             anonymous:          true
-
+        # Signin
         login:
             pattern:  ^/v1/login
             stateless: true
@@ -43,23 +39,12 @@ security:
                 password_parameter: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
-        oauth_area:
-            context: user
-            pattern: ^/oauth
-            oauth:
-                resource_owners:
-                    facebook: "/oauth/check-facebook"
-                login_path: /oauth/connect
-                check_path: /oauth/check-facebook
-                failure_path: /oauth/connect
-                oauth_user_provider:
-                    service: chalasr.oauth.user_provider
-            logout:
-                path:           /oauth/logout
-                target:         /
+        # OAuth
+        oauth:
+            pattern: ^/v1/oauth/login
             anonymous: true
-
+            stateless: true
+        # REST API
         api:
             pattern:   ^/v1/
             stateless: true
@@ -70,20 +55,18 @@ security:
                 query_parameter:
                     enabled: true
                     name:    bearer
-
     access_control:
         # URL of FOSUserBundle which need to be available to anonymous users
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-
         # Admin login page needs to be access without credential
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         # Secured part of the Admin
         - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
-
-        # RESTFUL API
+        # REST API
+        - { path: ^/v1/oauth/login , role: [IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY] }
         - { path: ^/v1/, role: [ROLE_ADMIN, ROLE_USER, IS_AUTHENTICATED_FULLY] }
         - { path: ^/ , role: [IS_AUTHENTICATED_FULLY, IS_AUTHENTICATED_ANONYMOUSLY] }

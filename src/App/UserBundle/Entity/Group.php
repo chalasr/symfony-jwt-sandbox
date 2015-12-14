@@ -14,12 +14,11 @@ use Sonata\UserBundle\Entity\BaseGroup;
 class Group extends BaseGroup
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
 }

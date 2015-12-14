@@ -1,6 +1,8 @@
-app_sport:
-    resource: "@AppSportBundle/Resources/config/routing.yml"
+app_security:
+    resource: "@AppUserBundle/Resources/config/routing.yml"
     prefix:   /
+    requirements:
+        _format: json
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

@@ -82,17 +82,6 @@ jms_serializer:
     metadata:
         auto_detection: true
 
-# FOS OAuth Server
-fos_oauth_server:
-    db_driver: orm
-    client_class:        App\UserBundle\Entity\Client
-    access_token_class:  App\UserBundle\Entity\AccessToken
-    refresh_token_class: App\UserBundle\Entity\RefreshToken
-    auth_code_class:     App\UserBundle\Entity\AuthCode
-    service:
-        options:
-            supported_scopes: read
-
 # FOS Rest
 fos_rest:
     format_listener:
@@ -119,12 +108,3 @@ lexik_jwt_authentication:
     public_key_path:  %jwt_public_key_path%
     pass_phrase:      %jwt_key_pass_phrase%
     token_ttl:        %jwt_token_ttl%
-
-# HWI OAuth Bundle
-hwi_oauth:
-  firewall_name: oauth_area
-  resource_owners:
-    facebook:
-      type: facebook
-      client_id: %facebook_app_id%
-      client_secret: %facebook_app_secret%
