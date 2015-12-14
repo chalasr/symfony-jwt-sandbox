@@ -22,14 +22,13 @@ class User extends BaseUser
      */
     protected $id;
 
-
     /**
      * @var string
      *
      * @ORM\Column(name="facebook_id", type="string", nullable=true)
      */
     protected $facebookId;
-
+    
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
