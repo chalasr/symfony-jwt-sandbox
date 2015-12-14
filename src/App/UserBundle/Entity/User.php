@@ -22,6 +22,14 @@ class User extends BaseUser
      */
     protected $id;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_id", type="string", nullable=true)
+     */
+    protected $facebookId;
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -44,6 +52,18 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getFacebookId()
+    {
+        return $this->facebookId;
+    }
+
+    public function setFacebookId($facebookId)
+    {
+        $this->facebookId = $facebookId;
+
+        return $this->facebookId;
     }
 
 }

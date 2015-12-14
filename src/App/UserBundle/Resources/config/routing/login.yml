@@ -1,0 +1,3 @@
+hwi_oauth_connect:
+    path: /
+    defaults: { _controller: AppUserBundle:Connect:connect }

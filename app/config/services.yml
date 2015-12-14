@@ -1,0 +1,7 @@
+parameters:
+    oauth.user_provider.class: App\UserBundle\Provider\UserProvider
+
+services:
+    chalasr.oauth.user_provider:
+        class: %oauth.user_provider.class%
+        arguments: [@fos_user.user_manager,{facebook: facebookId}]

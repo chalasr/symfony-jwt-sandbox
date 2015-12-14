@@ -20,6 +20,20 @@ app_api_demo:
 # fos_oauth_server_authorize:
 #     resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
 #
-# app_secured:
-#     path:  /secured/test
-#     defaults: { _controller: AppSportBundle:Default:secured }
+app_secured:
+    path:  /secured/test
+    defaults: { _controller: AppSportBundle:Default:secured }
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /oauth/connect
+
+hwi_oauth_login:
+  resource: "@AppUserBundle/Resources/config/routing/login.yml"
+  prefix: /oauth
+
+facebook_login:
+    pattern: /oauth/check-facebook
+
+hwi_oauth_logout:
+    path: /oauth/logout

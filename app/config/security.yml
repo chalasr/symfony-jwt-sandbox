@@ -44,19 +44,21 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-        secured_area:
-            anonymous: ~
-            pattern: ^/secured
+        oauth_area:
+            context: user
+            pattern: ^/
             oauth:
                 resource_owners:
-                    facebook:      /secured/check-facebook
-                login_path:        /secured/login-facebook
-                check_path:        /secured/login-check
-                use_forward:       false
-                failure_path:      /secured/login-facebook
-
+                    facebook: "/oauth/check-facebook"
+                login_path: /oauth/connect
+                check_path: /oauth/check-facebook
+                failure_path: /oauth/connect
                 oauth_user_provider:
-                    service: hwi_oauth.user.provider
+                    service: chalasr.oauth.user_provider
+            logout:
+                path:           /oauth/logout
+                target:         /
+            anonymous: true
 
         api:
             pattern:   ^/v1/

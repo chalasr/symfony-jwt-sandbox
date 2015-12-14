@@ -122,9 +122,9 @@ lexik_jwt_authentication:
 
 # HWI OAuth Bundle
 hwi_oauth:
-  firewall_name: secured_area
+  firewall_name: oauth_area
   resource_owners:
     facebook:
       type: facebook
-      client_id: fake #TODO %oauth.facebook.id%
-      client_secret: fake #TODO %oauth.facebook.secret%
+      client_id: %facebook_app_id%
+      client_secret: %facebook_app_secret%
