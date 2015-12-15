@@ -18,7 +18,3 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
     domain: localhost
-    jwt_private_key_path: '%kernel.root_dir%/jwt/private.pem'
-    jwt_public_key_path: '%kernel.root_dir%/jwt/public.pem'
-    jwt_key_pass_phrase: Ypu41db4896lVXF
-    jwt_token_ttl: 86400

@@ -23,36 +23,70 @@ class SecurityController extends Controller
      */
     public function __construct()
     {
-        $this->rules = array(
-            'oauth' => array(
-                'id'    => 'required',
-                'name'  => 'required',
-                'email' => 'required',
-            ),
-            'basic' => array(
-                'email' => 'required',
-                'password' => 'required',
-            ),
-            'register' => array(
-                'password' => 'required',
-                'email'    => 'required',
-            ),
-        );
+        $this->rules = [
+            'register' => ['password', 'email'],
+            'basic'    => ['email', 'password'],
+            'oauth'    => ['id', 'name', 'email'],
+        ];
     }
 
     /**
-     * Register/login user from Facebook.
+     * Register new user account.
      *
      * @ApiDoc(
+     * 	 section="Security",
      *   parameters={
-     *     {"name"="id",   "dataType"="integer", "required"=true, "description"="Facebook user ID"},
-     *     {"name"="name", "dataType"="string", "required"=true, "description"="Full name"},
-     *     {"name"="email", "dataType"="string", "required"=true, "description"="Email used for signin"},
-     *   }
+     * 	   {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
+     *     {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
+     *     {"name"="first_name", "dataType"="string", "required"=false, "description"="First name"},
+     *     {"name"="last_name", "dataType"="string", "required"=false, "description"="Last name"},
+     *   },
+     * 	 statusCodes={
+     * 	   201="Created (new user created and token successfully generated)",
+     * 	   422="Unprocessable Entity (missing parameters)"
+     * 	 },
      * )
-     * @param Request $request Response from Facebook login
+     */
+    public function registerUserAccountAction(Request $request)
+    {
+        $data = $request->request->all();
+        $userManager = $this->getUserManager();
+
+        if (false == $this->validator($data, 'register')) {
+            return $this->missingParametersError('register');
+        }
+
+        if ($userManager->findUserByEmail($data['email']) !== null) {
+            return $this->resourceAlreadyExistsError('email', $data['email']);
+        }
+
+        if ($data['last_name'] !== null || $data['first_name'] !== null) {
+            $data['name'] = sprintf('%s %s', $data['first_name'], $data['last_name']);
+        } else {
+            $data['name'] = $data['email'];
+        }
+
+        return $this->generateToken($this->createUser($data), 201);
+    }
+
+    /**
+     * Register/login user from OAuth.
      *
-     * @return JsonResponse $token
+     * @ApiDoc(
+     * 	 section="Security",
+     *   parameters={
+     *     {"name"="id", "dataType"="integer", "required"=true, "description"="Facebook ID"},
+     *     {"name"="name", "dataType"="string", "required"=true, "description"="Username"},
+     *     {"name"="email", "dataType"="string", "required"=true, "description"="Email credential"},
+     *     {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname"},
+     *     {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname"},
+     *   },
+     * 	 statusCodes={
+     * 	   200="OK (token successfully generated for existing user)",
+     * 	   201="Created (new user created and access token successfully generated)",
+     * 	   422="Unprocessable Entity (missing parameters)"
+     * 	 },
+     * )
      */
     public function authenticateByOAuthAction(Request $request)
     {
@@ -83,48 +117,36 @@ class SecurityController extends Controller
     }
 
     /**
-     * Create user account from Request.
+     * Authenticate User by email/password.
      *
      * @ApiDoc(
+     *   section="Security",
      *   parameters={
      * 	   {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
      *     {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
-     *   }
+     *   },
+     * 	 statusCodes={
+     * 	   200="OK (token successfully generated for newly created user)",
+     * 	   422="Unprocessable Entity (missing parameters)"
+     * 	 },
      * )
-     *
-     * @param Request $request
-     *
-     * @return User $user Newly created
      */
-    public function registerUserFromRequestAction(Request $request)
+    public function authenticateUserAction()
     {
-        $data = $request->request->all();
-        $userManager = $this->getUserManager();
-
-        if (false == $this->validator($data, 'register')) {
-            return $this->missingParametersError('register');
-        }
-
-        if ($userManager->findUserByEmail($data['email']) !== null) {
-            return $this->resourceAlreadyExistsError('email', $data['email']);
-        }
-
-        if (isset($data['last_name']) && isset($data['first_name'])) {
-            $data['name'] = sprintf('%s %s', $data['first_name'], $data['last_name']);
-        } else {
-            $data['name'] = $data['email'];
-        }
-
-        return $this->generateToken($this->createUser($data), 201);
+        // Handled by Security Component.
     }
 
     /**
-     * Get users list.
+     * Get list of users.
      *
-     * @ApiDoc()
-     *
-     * @return JsonResponse $query results
-     *
+     * @ApiDoc(
+     * 	 section="User",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	   200="OK (list all users)",
+     * 	   401="Unauthorized (this resource require an access token)"
+     * 	 },
+     * )
      */
     public function getAllUsersAction()
     {
@@ -154,7 +176,6 @@ class SecurityController extends Controller
      * @param string $username
      * @param string $password
      * @param bool   $isOAuth
-     *
      * @return User $user
      */
     protected function createUser($data, $isOAuth = false)
@@ -187,14 +208,14 @@ class SecurityController extends Controller
      *
      * @param array  $data
      * @param string $type Origin of signup
-     *
      * @return bool $validator
      */
     protected function validator($data, $type = 'basic')
     {
         $validator = true;
-        foreach ($this->rules[$type] as $k => $v) {
-            if (false === isset($data[$k]) || null == $data[$k]) {
+
+        foreach ($this->rules[$type] as $prop) {
+            if (false === isset($data[$prop]) || null == $data[$prop]) {
                 $validator = false;
                 break;
             }
@@ -207,7 +228,6 @@ class SecurityController extends Controller
      * Generates token from user.
      *
      * @param User $user
-     *
      * @return JsonResponse $token
      */
     protected function generateToken($user, $statusCode = 200)
@@ -222,12 +242,11 @@ class SecurityController extends Controller
      *
      * @param string $action
      * @param string $user
-     *
      * @return JsonResponse Unprocessable entity 422
      */
     protected function missingParametersError($action, $origin = null)
     {
-        $required = implode('\', \'', array_keys($this->rules[null == $origin ? $action : $origin]));
+        $required = implode('\', \'', array_values($this->rules[null == $origin ? $action : $origin]));
 
         return new JsonResponse(array(
             'message' => sprintf('Some mandatory parameters are missing for %s user (required: \'%s\')', $action, $required),
@@ -239,7 +258,6 @@ class SecurityController extends Controller
      *
      * @param string $prop The property used
      * @param string $val  Value of property
-     *
      * @return JsonResponse Unprocessable entity 422
      */
     protected function resourceAlreadyExistsError($prop, $val)

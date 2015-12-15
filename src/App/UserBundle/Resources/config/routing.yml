@@ -1,14 +1,19 @@
+sign_up:
+    path: /signup
+    defaults: { _controller: AppUserBundle:Security:registerUserAccount }
+    methods: POST
+
+sign_in:
+    path: /login_check
+    defaults: { _controller: AppUserBundle:Security:authenticateUser }
+    methods: POST
+
 oauth_login:
     path: /oauth/login
     defaults: { _controller: AppUserBundle:Security:authenticateByOAuth }
     methods: POST
 
-sign_up:
-    path: /signup
-    defaults: { _controller: AppUserBundle:Security:registerUserFromRequest }
-    methods: POST
-
 users_list:
     path:     /users
     defaults: { _controller: AppUserBundle:Security:getAllUsers }
-    methods: [GET, POST]
+    methods: GET
