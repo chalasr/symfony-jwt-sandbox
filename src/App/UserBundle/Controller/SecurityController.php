@@ -63,10 +63,18 @@ class SecurityController extends Controller
         }
 
         $userManager = $this->getUserManager();
-        $existing = $userManager->findUserBy(['facebookId' => $data['id']]);
+        $existingByFacebookId = $userManager->findUserBy(['facebookId' => $data['id']]);
+        $existingByEmail = $userManager->findUserBy(['email' => $data['email']]);
 
-        if ($existing !== null) {
-            return $this->generateToken($existing, 200);
+        if ($existingByFacebookId !== null) {
+            return $this->generateToken($existingByFacebookId, 200);
+        }
+
+        if ($existingByEmail !== null) {
+            $existingByEmail->setFacebookId($data['id']);
+            $userManager->updateUser($existingByEmail);
+
+            return $this->generateToken($existingByEmail, 200);
         }
 
         $data['password'] = strtolower(str_replace(' ', '', $data['name']));
@@ -103,6 +111,8 @@ class SecurityController extends Controller
 
         if (isset($data['last_name']) && isset($data['first_name'])) {
             $data['name'] = sprintf('%s %s', $data['first_name'], $data['last_name']);
+        } else {
+            $data['name'] = $data['email'];
         }
 
         return $this->generateToken($this->createUser($data), 201);
@@ -206,7 +216,6 @@ class SecurityController extends Controller
             'token' => $this->get('lexik_jwt_authentication.jwt_manager')->create($user),
         ));
     }
-
 
     /**
      * Returns an error caused by valid format but not good data.
