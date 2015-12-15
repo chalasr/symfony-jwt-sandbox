@@ -26,13 +26,14 @@ class SecurityController extends Controller
             'oauth' => array(
                 'id'    => 'required',
                 'name'  => 'required',
+                'email' => 'required',
             ),
             'basic' => array(
-                'username' => 'required',
+                'email' => 'required',
                 'password' => 'required',
             ),
             'register' => array(
-                'username' => 'required',
+                'email' => 'required',
                 'password' => 'required',
                 'email'    => 'required',
             ),
@@ -57,7 +58,8 @@ class SecurityController extends Controller
         }
 
         $userManager = $this->getUserManager();
-        $username = $password = strtolower(str_replace(' ', '', $data['name']));
+        $username = $data['name'];
+        $password = strtolower(str_replace(' ', '', $username));
         $existing = $userManager->findUserBy(['facebookId' => $data['id']]);
 
         if ($existing !== null) {
@@ -131,6 +133,7 @@ class SecurityController extends Controller
 
         $user = $userManager->createUser();
         $user->setUsername($username);
+        $user->setEmail($data['email']);
         $user->setPlainPassword($password);
         $user->setEnabled(true);
 
@@ -139,9 +142,6 @@ class SecurityController extends Controller
         }
         if (isset($data['last_name'])) {
             $user->setLastname($data['last_name']);
-        }
-        if (isset($data['email'])) {
-            $user->setEmail($data['email'] == null ? 'unknown' : $data['email']);
         }
 
         if (true === $isOAuth) {
@@ -165,7 +165,7 @@ class SecurityController extends Controller
     {
         $validator = true;
         foreach ($this->rules[$type] as $k => $v) {
-            if (false === isset($data[$k])) {
+            if (false === isset($data[$k]) || null == $data[$k]) {
                 $validator = false;
                 break;
             }
@@ -175,7 +175,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Generate token from user.
+     * Generates token from user.
      *
      * @param User $user
      *

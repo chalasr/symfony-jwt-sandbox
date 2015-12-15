@@ -14,7 +14,7 @@
 
     function MainCtrl($scope, $rootScope, $http, authService, AuthenticationService) {
       $scope.credentials = {
-        username: 'sutunam',
+        email: 'admin@sportroops.dev',
         password: ''
       };
 

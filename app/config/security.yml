@@ -4,7 +4,7 @@ imports:
 security:
     providers:
         fos_userbundle:
-            id: fos_user.user_manager
+            id: fos_user.user_provider.username_email
     encoders:
             FOS\UserBundle\Model\UserInterface: sha512
     acl:
@@ -35,7 +35,7 @@ security:
                 provider: fos_userbundle
                 check_path: /v1/login_check
                 require_previous_session: false
-                username_parameter: username
+                username_parameter: email
                 password_parameter: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
