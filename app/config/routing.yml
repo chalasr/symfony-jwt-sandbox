@@ -14,3 +14,7 @@ app_demo:
     host: "api.%domain%"
     path: /
     defaults: { _controller: AppUserBundle:Security:demo }
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /doc/v1
