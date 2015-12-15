@@ -3,11 +3,11 @@
 namespace App\UserBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 /**
  * Mangages users from mobile app in API.
@@ -176,6 +176,7 @@ class SecurityController extends Controller
      * @param string $username
      * @param string $password
      * @param bool   $isOAuth
+     *
      * @return User $user
      */
     protected function createUser($data, $isOAuth = false)
@@ -208,6 +209,7 @@ class SecurityController extends Controller
      *
      * @param array  $data
      * @param string $type Origin of signup
+     *
      * @return bool $validator
      */
     protected function validator($data, $type = 'basic')
@@ -228,6 +230,7 @@ class SecurityController extends Controller
      * Generates token from user.
      *
      * @param User $user
+     *
      * @return JsonResponse $token
      */
     protected function generateToken($user, $statusCode = 200)
@@ -242,6 +245,7 @@ class SecurityController extends Controller
      *
      * @param string $action
      * @param string $user
+     *
      * @return JsonResponse Unprocessable entity 422
      */
     protected function missingParametersError($action, $origin = null)
@@ -258,6 +262,7 @@ class SecurityController extends Controller
      *
      * @param string $prop The property used
      * @param string $val  Value of property
+     *
      * @return JsonResponse Unprocessable entity 422
      */
     protected function resourceAlreadyExistsError($prop, $val)
