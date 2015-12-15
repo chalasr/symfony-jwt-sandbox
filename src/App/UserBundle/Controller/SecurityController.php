@@ -116,7 +116,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Create user account.
+     * Create new User.
      *
      * @param array  $data
      * @param string $username
@@ -216,10 +216,10 @@ class SecurityController extends Controller
      *
      * @return JsonResponse Unprocessable entity 422
      */
-    protected function missingParametersError($action, $user)
+    protected function missingParametersError($action)
     {
         return new JsonResponse(array(
-            'message' => sprintf('Some mandatory parameters are missing for %s user', $action, $user),
+            'message' => sprintf('Some mandatory parameters are missing for %s user', $action),
         ), 422);
     }
 }
