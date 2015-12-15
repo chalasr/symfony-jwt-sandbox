@@ -152,7 +152,7 @@ class SecurityController extends Controller
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
-        $query = $repo->createQuerybuilder('u')
+        $query = $repo->createQueryBuilder('u')
         ->select('u.id', 'u.username', 'u.email')
         ->getQuery();
 
@@ -170,7 +170,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Create new User.
+     * Creates new User.
      *
      * @param array  $data
      * @param string $username
@@ -278,7 +278,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Returns User Manager.
+     * Returns authentication provider.
      *
      * @return UserManager $userManager
      */
