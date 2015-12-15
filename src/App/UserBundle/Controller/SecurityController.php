@@ -31,7 +31,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Register new user account.
+     * Register new user and process authentication.
      *
      * @ApiDoc(
      * 	 section="Security",
@@ -70,7 +70,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Register/login user from OAuth.
+     * Register/Authenticate user from OAuth Response.
      *
      * @ApiDoc(
      * 	 section="Security",
@@ -117,7 +117,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Authenticate User by email/password.
+     * Proceses user authentication from email/password.
      *
      * @ApiDoc(
      *   section="Security",
@@ -137,7 +137,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Get list of users.
+     * Lists all users.
      *
      * @ApiDoc(
      * 	 section="User",
