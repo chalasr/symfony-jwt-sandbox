@@ -43,9 +43,14 @@ class SecurityController extends Controller
     /**
      * Register/login user from Facebook.
      *
+     * @ApiDoc(
+     *   parameters={
+     *     {"name"="id",   "dataType"="integer", "required"=true, "description"="Facebook user ID"},
+     *     {"name"="name", "dataType"="string", "required"=true, "description"="Full name"},
+     *     {"name"="email", "dataType"="string", "required"=true, "description"="Email used for signin"},
+     *   }
+     * )
      * @param Request $request Response from Facebook login
-     *
-     * @method POST
      *
      * @return JsonResponse $token
      */
@@ -72,9 +77,14 @@ class SecurityController extends Controller
     /**
      * Create user account from Request.
      *
-     * @param Request $request
+     * @ApiDoc(
+     *   parameters={
+     * 	   {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
+     *     {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
+     *   }
+     * )
      *
-     * @method POST
+     * @param Request $request
      *
      * @return User $user Newly created
      */
@@ -87,7 +97,9 @@ class SecurityController extends Controller
             return $this->missingParametersError('register');
         }
 
-        $existing = $userManager->findUserByEmail($data['email']);
+        if ($userManager->findUserByEmail($data['email']) !== null) {
+            return $this->resourceAlreadyExistsError('email', $data['email']);
+        }
 
         if (isset($data['last_name']) && isset($data['first_name'])) {
             $data['name'] = sprintf('%s %s', $data['first_name'], $data['last_name']);
@@ -99,9 +111,10 @@ class SecurityController extends Controller
     /**
      * Get users list.
      *
-     * @method GET
+     * @ApiDoc()
      *
      * @return JsonResponse $query results
+     *
      */
     public function getAllUsersAction()
     {
@@ -196,7 +209,7 @@ class SecurityController extends Controller
 
 
     /**
-     * Returns "valid format but not good data" exception.
+     * Returns an error caused by valid format but not good data.
      *
      * @param string $action
      * @param string $user
@@ -205,10 +218,25 @@ class SecurityController extends Controller
      */
     protected function missingParametersError($action, $origin = null)
     {
-        $required = implode('", "', array_keys($this->rules[null == $origin ? $action : $origin]));
+        $required = implode('\', \'', array_keys($this->rules[null == $origin ? $action : $origin]));
 
         return new JsonResponse(array(
-            'message' => sprintf('Some mandatory parameters are missing for %s user ("%s" required) ', $action, $required),
+            'message' => sprintf('Some mandatory parameters are missing for %s user (required: \'%s\')', $action, $required),
+        ), 422);
+    }
+
+    /**
+     * Returns an error caused by already existing entity on try to create a new.
+     *
+     * @param string $prop The property used
+     * @param string $val  Value of property
+     *
+     * @return JsonResponse Unprocessable entity 422
+     */
+    protected function resourceAlreadyExistsError($prop, $val)
+    {
+        return new JsonResponse(array(
+            'message' => sprintf('User with %s \'%s\' already exists', $prop, $val),
         ), 422);
     }
 
