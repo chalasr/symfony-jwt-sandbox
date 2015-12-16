@@ -89,6 +89,25 @@ lexik_jwt_authentication:
     pass_phrase:      %jwt_key_pass_phrase%
     token_ttl:        %jwt_token_ttl%
 
+# FOS Rest
+fos_rest:
+    format_listener:
+        rules:
+            - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: false }
+    view:
+        view_response_listener: force
+        formats:
+            json: true
+            xml:  false
+    routing_loader:
+        default_format: json
+    serializer:
+        serialize_null: true
+    param_fetcher_listener: true
+    body_listener: true
+    access_denied_listener:
+        json: true
+
 gesdinet_jwt_refresh_token:
     ttl: 2592000
     firewall: api

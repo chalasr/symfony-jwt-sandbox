@@ -27,7 +27,7 @@ class SecurityController extends Controller
     {
         $this->rules = [
             'register' => ['password', 'email'],
-            'basic'    => ['email', 'password'],
+            'basic'    => ['password', 'email'],
             'oauth'    => ['id', 'name', 'email', 'access_token'],
         ];
     }
