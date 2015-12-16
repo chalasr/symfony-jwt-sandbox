@@ -71,59 +71,61 @@ class SecurityController extends Controller
         return $this->generateToken($this->createUser($data), 201);
     }
 
-    /**
-     * Register/Authenticate user from OAuth Response.
-     *
-     * @ApiDoc(
-     * 	 section="Security",
-     *   parameters={
-     *     {"name"="id", "dataType"="integer", "required"=true, "description"="Facebook ID"},
-     *     {"name"="access_token", "dataType"="string", "required"=true, "description"="Facebook access_token"},
-     *     {"name"="name", "dataType"="string", "required"=true, "description"="Username"},
-     *     {"name"="email", "dataType"="string", "required"=true, "description"="Email credential"},
-     *     {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname"},
-     *     {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname"},
-     *   },
-     * 	 statusCodes={
-     * 	   200="OK (token successfully generated for existing user)",
-     * 	   201="Created (new user created and access token successfully generated)",
-     * 	   422="Unprocessable Entity (missing parameters)"
-     * 	 },
-     * )
-     */
-    public function authenticateByOAuthAction(Request $request)
-    {
-        $data = $request->request->all();
+     /**
+      * Register/Authenticate user from OAuth Response.
+      *
+      * @ApiDoc(
+      * 	 section="Security",
+      *   parameters={
+      *     {"name"="id", "dataType"="integer", "required"=true, "description"="Facebook ID"},
+      *     {"name"="access_token", "dataType"="string", "required"=true, "description"="Facebook access_token"},
+      *     {"name"="name", "dataType"="string", "required"=true, "description"="Username"},
+      *     {"name"="email", "dataType"="string", "required"=true, "description"="Email credential"},
+      *     {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname"},
+      *     {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname"},
+      *   },
+      * 	 statusCodes={
+      * 	   200="OK (token successfully generated for existing user)",
+      * 	   201="Created (new user created and access token successfully generated)",
+      * 	   422="Unprocessable Entity (missing parameters)"
+      * 	 },
+      * )
+      */
+     public function authenticateByOAuthAction(Request $request)
+     {
+         $data = $request->request->all();
 
-        if (false == $this->validator($data, 'oauth')) {
-            return $this->missingParametersError('authenticate', 'oauth');
-        }
+         if (false == $this->validator($data, 'oauth')) {
+             return $this->missingParametersError('authenticate', 'oauth');
+         }
 
-        if (false === $this->isValidFacebookAccount($data['id'], $data['access_token'])) {
-            return new JsonResponse(array(
-                'message' => 'The given facebook_id has no valid account associated',
-            ), 401);
-        }
+         if (false === $this->isValidFacebookAccount($data['id'], $data['access_token'])) {
+             return new JsonResponse(array(
+                 'message' => 'The given facebook_id has no valid account associated',
+             ), 401);
+         }
 
-        $userManager = $this->getUserManager();
-        $existingByFacebookId = $userManager->findUserBy(['facebookId' => $data['id']]);
-        $existingByEmail = $userManager->findUserBy(['email' => $data['email']]);
+         $userManager = $this->getUserManager();
+         $passwordGenerator = $this->get('fos_user.util.token_generator');
+         $existingByFacebookId = $userManager->findUserBy(['facebookId' => $data['id']]);
+         $existingByEmail = $userManager->findUserBy(['email' => $data['email']]);
 
-        if ($existingByFacebookId !== null) {
-            return $this->generateToken($existingByFacebookId, 200);
-        }
+         if ($existingByFacebookId !== null) {
+             return $this->generateToken($existingByFacebookId, 200);
+         }
 
-        if ($existingByEmail !== null) {
-            $existingByEmail->setFacebookId($data['id']);
-            $userManager->updateUser($existingByEmail);
+         if ($existingByEmail !== null) {
+             $existingByEmail->setFacebookId($data['id']);
+             $userManager->updateUser($existingByEmail);
 
-            return $this->generateToken($existingByEmail, 200);
-        }
+             return $this->generateToken($existingByEmail, 200);
+         }
 
-        $data['password'] = strtolower(str_replace(' ', '', $data['name']));
+         $data['password'] = strtolower(str_replace(' ', '', $data['name']));
+         $password = substr($passwordGenerator->generateToken(), 0, 8); // 8 chars
 
-        return $this->generateToken($this->createUser($data, true), 201);
-    }
+         return $this->generateToken($this->createUser($data, true), 201);
+     }
 
     /**
      * Reset expired Token.
@@ -252,17 +254,20 @@ class SecurityController extends Controller
      */
     protected function generateToken($user, $statusCode = 200)
     {
+        $dispatcher = $this->get('event_dispatcher');
+
         $response = array(
             'token'         => $this->get('lexik_jwt_authentication.jwt_manager')->create($user),
             'refresh_token' => $this->attachRefreshToken($user),
-            'user'          => array(
-                'id'         => $user->getId(),
-                'username'   => $user->getUsername(),
-                'first_name' => $user->getFirstname(),
-                'last_name'  => $user->getLastname(),
-                'email'      => $user->getEmail(),
-                'roles'      => $user->getRoles(),
-            ),
+        );
+
+        $response['user'] = array(
+            'id'         => $user->getId(),
+            'username'   => $user->getUsername(),
+            'first_name' => $user->getFirstname(),
+            'last_name'  => $user->getLastname(),
+            'email'      => $user->getEmail(),
+            'roles'      => $user->getRoles(),
         );
 
         if (null !== $user->getFacebookId()) {
@@ -275,7 +280,7 @@ class SecurityController extends Controller
     /**
      * Provides a refresh token.
      *
-     * @param  UserManager $user
+     * @param UserManager $user
      *
      * @return string refresh_token
      */
@@ -301,9 +306,11 @@ class SecurityController extends Controller
 
     /**
      * Verifiy facebook account from id/access_token.
-     * @param  int     $facebookId           Facebook account id
-     * @param  string  $facebookAccessToken  Facebook access_token
-     * @return boolean                       Facebook account status
+     *
+     * @param int    $facebookId          Facebook account id
+     * @param string $facebookAccessToken Facebook access_token
+     *
+     * @return bool Facebook account status
      */
     protected function isValidFacebookAccount($facebookId, $facebookAccessToken)
     {
@@ -313,7 +320,7 @@ class SecurityController extends Controller
         $request  = $client->request('GET', $endpoint);
         $response = json_decode($client->getResponse()->getContent());
 
-        return ($response->id == $facebookId);
+        return $response->id == $facebookId;
     }
 
     /**

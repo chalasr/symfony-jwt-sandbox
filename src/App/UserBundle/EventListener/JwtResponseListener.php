@@ -6,14 +6,14 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * JWTResponseListener
+ * JWTResponseListener.
  *
  * @author Nicolas Cabot <n.cabot@lexik.fr>
  */
-class JWTResponseListener
+class JwtResponseListener
 {
     /**
-     * Add public data to the authentication response
+     * Add public data to the authentication response.
      *
      * @param AuthenticationSuccessEvent $event
      */
