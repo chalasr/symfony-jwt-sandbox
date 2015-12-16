@@ -3,6 +3,7 @@
 namespace App\UserBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Goutte\Client as HttpClient;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -125,6 +126,24 @@ class SecurityController extends Controller
     }
 
     /**
+     * Reset expired Token.
+     *
+     * @ApiDoc(
+     * 	section="Security",
+     * 	parameters={
+     *     {"name"="token", "dataType"="string", "required"=true, "description"="Expired token"},
+     *     {"name"="refresh_token", "dataType"="string", "required"=true, "description"="Refresh token"},
+     *  }
+     * )
+     */
+    public function refreshTokenAction(Request $request)
+    {
+        return $this->forward('gesdinet.jwtrefreshtoken:refresh', array(
+            'request'  => $request,
+        ));
+    }
+
+    /**
      * Lists all users.
      *
      * @ApiDoc(
@@ -233,11 +252,48 @@ class SecurityController extends Controller
      */
     protected function generateToken($user, $statusCode = 200)
     {
+        $token = $this->get('lexik_jwt_authentication.jwt_manager')->create($user);
+        $refreshToken = $this->attachRefreshToken($user);
+
         return new JsonResponse(array(
-            'token' => $this->get('lexik_jwt_authentication.jwt_manager')->create($user),
+            'token'         => $token,
+            'refresh_token' => $refreshToken,
         ));
     }
 
+    /**
+     * Provides a refresh token.
+     *
+     * @param  UserManager $user
+     *
+     * @return string refresh_token
+     */
+    protected function attachRefreshToken($user)
+    {
+        $refreshTokenManager = $this->get('gesdinet.jwtrefreshtoken.refresh_token_manager');
+        $refreshToken = $refreshTokenManager->getLastFromUsername($user->getUsername());
+
+        if (!$refreshToken instanceof RefreshToken) {
+            $datetime = new \DateTime();
+            $datetime->modify('+2592000 seconds');
+
+            $refreshToken = $refreshTokenManager->create();
+            $refreshToken->setUsername($user->getUsername());
+            $refreshToken->setRefreshToken();
+            $refreshToken->setValid($datetime);
+
+            $refreshTokenManager->save($refreshToken);
+        }
+
+        return $refreshToken->getRefreshToken();
+    }
+
+    /**
+     * Verifiy facebook account from id/access_token.
+     * @param  int     $facebookId           Facebook account id
+     * @param  string  $facebookAccessToken  Facebook access_token
+     * @return boolean                       Facebook account status
+     */
     protected function isValidFacebookAccount($facebookId, $facebookAccessToken)
     {
         $client = new HttpClient();
@@ -246,7 +302,7 @@ class SecurityController extends Controller
         $request  = $client->request('GET', $endpoint);
         $response = json_decode($client->getResponse()->getContent());
 
-        return $response->id == $facebookId;
+        return ($response->id == $facebookId);
     }
 
     /**
