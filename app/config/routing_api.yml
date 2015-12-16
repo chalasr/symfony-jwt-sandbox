@@ -4,6 +4,10 @@ app_security:
     requirements:
         _format: json
 
+gesdinet_jwt_refresh_token:
+    path:     /refresh_token
+    defaults: { _controller: gesdinet.jwtrefreshtoken:refresh }
+
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 

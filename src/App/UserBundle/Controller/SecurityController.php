@@ -240,6 +240,11 @@ class SecurityController extends Controller
         ));
     }
 
+    protected function isValidFacebookUser($facebookId, $facebookAccessToken)
+    {
+        // $url = 'https://graph.facebook.com/me?access_token='
+    }
+
     /**
      * Returns an error caused by valid format but not good data.
      *

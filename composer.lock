@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d7213def2db8958da91679eefeadf91f",
-    "content-hash": "430c1ae5b4085e5eb31787c58e8139f2",
+    "hash": "65258d8f20df6c9698b41d6571c420c8",
+    "content-hash": "a9baf4701c0204ed58933de5ab941e5e",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -981,6 +981,58 @@
             "time": "2015-06-01 00:57:03"
         },
         {
+            "name": "gesdinet/jwt-refresh-token-bundle",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gesdinet/JWTRefreshTokenBundle.git",
+                "reference": "ddf66e4641f657f8cb21fcba746f46269fe7ed35"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gesdinet/JWTRefreshTokenBundle/zipball/ddf66e4641f657f8cb21fcba746f46269fe7ed35",
+                "reference": "ddf66e4641f657f8cb21fcba746f46269fe7ed35",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "~1.4",
+                "doctrine/orm": "^2.4.8",
+                "lexik/jwt-authentication-bundle": "^1.1",
+                "php": ">=5.3.3",
+                "symfony/symfony": "~2.3"
+            },
+            "require-dev": {
+                "henrikbjorn/phpspec-code-coverage": "~1.0",
+                "phpspec/phpspec": "~2.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gesdinet\\JWTRefreshTokenBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marcos Gómez Vilches",
+                    "email": "marcos@gesdinet.com"
+                }
+            ],
+            "description": "Implements a refresh token system over Json Web Tokens in Symfony",
+            "keywords": [
+                "jwt refresh token bundle symfony json web"
+            ],
+            "time": "2015-10-11 20:49:54"
+        },
+        {
             "name": "incenteev/composer-parameter-handler",
             "version": "v2.1.2",
             "source": {
@@ -1382,12 +1434,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenuBundle.git",
-                "reference": "675a8f87d972713b1abec06e5ed63043e7fd5aec"
+                "reference": "ff3434782588fa371adf8361f5d2e9fd162d5508"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/675a8f87d972713b1abec06e5ed63043e7fd5aec",
-                "reference": "675a8f87d972713b1abec06e5ed63043e7fd5aec",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/ff3434782588fa371adf8361f5d2e9fd162d5508",
+                "reference": "ff3434782588fa371adf8361f5d2e9fd162d5508",
                 "shasum": ""
             },
             "require": {
@@ -1431,7 +1483,7 @@
             "keywords": [
                 "menu"
             ],
-            "time": "2015-11-13 10:51:46"
+            "time": "2015-12-15 13:29:15"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -1512,27 +1564,27 @@
         },
         {
             "name": "lexik/jwt-authentication-bundle",
-            "version": "dev-master",
+            "version": "v1.3.1",
             "target-dir": "Lexik/Bundle/JWTAuthenticationBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "4da7e56a7c4d8b5b0d4845aa8fe86edd732bcfa7"
+                "reference": "f2a431baac672272835d77038196551666c1da7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/4da7e56a7c4d8b5b0d4845aa8fe86edd732bcfa7",
-                "reference": "4da7e56a7c4d8b5b0d4845aa8fe86edd732bcfa7",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/f2a431baac672272835d77038196551666c1da7d",
+                "reference": "f2a431baac672272835d77038196551666c1da7d",
                 "shasum": ""
             },
             "require": {
-                "namshi/jose": "~6.0",
-                "php": ">=5.4.8",
-                "symfony/framework-bundle": "~2.3|~3.0"
+                "namshi/jose": "~2.2",
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": "~2.3",
+                "symfony/symfony": "~2.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.1",
-                "symfony/phpunit-bridge": "~2.7|~3.0"
+                "phpunit/phpunit": "~4.1"
             },
             "suggest": {
                 "gesdinet/jwt-refresh-token-bundle": "Implements a refresh token system over Json Web Tokens in Symfony"
@@ -1540,7 +1592,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "1.0-dev"
                 }
             },
             "autoload": {
@@ -1581,7 +1633,7 @@
                 "jwt",
                 "rest"
             ],
-            "time": "2015-12-03 10:13:36"
+            "time": "2015-10-21 14:19:05"
         },
         {
             "name": "michelf/php-markdown",
@@ -1713,38 +1765,31 @@
         },
         {
             "name": "namshi/jose",
-            "version": "6.0.4",
+            "version": "2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/namshi/jose.git",
-                "reference": "7176b9245040e44197ef34db3461b9abc24a6f47"
+                "reference": "403927c45e786dd4c851bc475b50a8a03068afa4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/namshi/jose/zipball/7176b9245040e44197ef34db3461b9abc24a6f47",
-                "reference": "7176b9245040e44197ef34db3461b9abc24a6f47",
+                "url": "https://api.github.com/repos/namshi/jose/zipball/403927c45e786dd4c851bc475b50a8a03068afa4",
+                "reference": "403927c45e786dd4c851bc475b50a8a03068afa4",
                 "shasum": ""
             },
             "require": {
-                "ext-date": "*",
-                "ext-hash": "*",
-                "ext-json": "*",
-                "ext-openssl": "*",
-                "ext-pcre": "*",
-                "ext-spl": "*",
-                "php": ">=5.4.8",
-                "phpseclib/phpseclib": "1.0.0"
+                "lib-openssl": "*",
+                "php": ">=5.3.3",
+                "phpseclib/phpseclib": "~0.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.5",
-                "satooshi/php-coveralls": "dev-master",
-                "sllh/php-cs-fixer-styleci-bridge": "^1.4"
+                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Namshi\\JOSE": "src/",
-                    "Namshi\\JOSE\\Test": "test/"
+                    "Namshi\\JOSE": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1766,7 +1811,7 @@
                 "jwt",
                 "token"
             ],
-            "time": "2015-12-14 06:48:22"
+            "time": "2015-06-16 11:41:59"
         },
         {
             "name": "nelmio/api-doc-bundle",
@@ -1945,16 +1990,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "1.0.0",
+            "version": "0.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "844134df95e42b93ed5506a2d11ca5accda99412"
+                "reference": "d15bba1edcc7c89e09cc74c5d961317a8b947bf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/844134df95e42b93ed5506a2d11ca5accda99412",
-                "reference": "844134df95e42b93ed5506a2d11ca5accda99412",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/d15bba1edcc7c89e09cc74c5d961317a8b947bf4",
+                "reference": "d15bba1edcc7c89e09cc74c5d961317a8b947bf4",
                 "shasum": ""
             },
             "require": {
@@ -1964,15 +2009,19 @@
                 "phing/phing": "~2.7",
                 "phpunit/phpunit": "~4.0",
                 "sami/sami": "~2.0",
-                "squizlabs/php_codesniffer": "~2.0"
+                "squizlabs/php_codesniffer": "~1.5"
             },
             "suggest": {
                 "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
-                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
-                "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations.",
-                "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP < 5.0.0."
+                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a wide variety of cryptographic operations.",
+                "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP < 4.3.3."
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Crypt": "phpseclib/",
@@ -2035,7 +2084,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2015-08-04 02:22:12"
+            "time": "2015-01-28 21:50:33"
         },
         {
             "name": "psr/log",
@@ -2240,12 +2289,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "dc535f0616b56761bf5c172d0dae9de3a5b43cde"
+                "reference": "76e0b766d20e766b9bd6066fc0e9a515145949ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/dc535f0616b56761bf5c172d0dae9de3a5b43cde",
-                "reference": "dc535f0616b56761bf5c172d0dae9de3a5b43cde",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/76e0b766d20e766b9bd6066fc0e9a515145949ff",
+                "reference": "76e0b766d20e766b9bd6066fc0e9a515145949ff",
                 "shasum": ""
             },
             "require": {
@@ -2318,7 +2367,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2015-12-14 06:05:37"
+            "time": "2015-12-15 10:24:37"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -3725,8 +3774,7 @@
         "sonata-project/user-bundle": 20,
         "sonata-project/doctrine-orm-admin-bundle": 20,
         "jms/serializer-bundle": 20,
-        "nelmio/api-doc-bundle": 20,
-        "lexik/jwt-authentication-bundle": 20
+        "nelmio/api-doc-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
