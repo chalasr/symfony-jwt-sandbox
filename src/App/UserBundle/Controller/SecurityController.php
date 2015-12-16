@@ -44,7 +44,7 @@ class SecurityController extends Controller
      *     {"name"="last_name", "dataType"="string", "required"=false, "description"="Last name"},
      *   },
      * 	 statusCodes={
-     * 	   201="Created (new user created and token successfully generated)",
+     * 	   201="Created (new user created, token generated, returns them with refresh_token)",
      * 	   422="Unprocessable Entity (missing parameters)"
      * 	 },
      * )
@@ -85,8 +85,8 @@ class SecurityController extends Controller
       *     {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname"},
       *   },
       * 	 statusCodes={
-      * 	   200="OK (token successfully generated for existing user)",
-      * 	   201="Created (new user created and access token successfully generated)",
+      * 	   200="OK (token generated for existing user, returns it with available user infos ans refresh_token)",
+      * 	   201="Created (new user created, access token generated, returns them with refresh_token)",
       * 	   422="Unprocessable Entity (missing parameters)"
       * 	 },
       * )
@@ -107,22 +107,20 @@ class SecurityController extends Controller
 
          $userManager = $this->getUserManager();
          $passwordGenerator = $this->get('fos_user.util.token_generator');
+
          $existingByFacebookId = $userManager->findUserBy(['facebookId' => $data['id']]);
          $existingByEmail = $userManager->findUserBy(['email' => $data['email']]);
-
-         if ($existingByFacebookId !== null) {
+         if (null !== $existingByFacebookId) {
              return $this->generateToken($existingByFacebookId, 200);
          }
-
-         if ($existingByEmail !== null) {
+         if (null !== $existingByEmail) {
              $existingByEmail->setFacebookId($data['id']);
              $userManager->updateUser($existingByEmail);
 
              return $this->generateToken($existingByEmail, 200);
          }
 
-         $data['password'] = strtolower(str_replace(' ', '', $data['name']));
-         $password = substr($passwordGenerator->generateToken(), 0, 8); // 8 chars
+         $data['password'] = substr($passwordGenerator->generateToken(), 0, 8); // 8 chars
 
          return $this->generateToken($this->createUser($data, true), 201);
      }
@@ -178,7 +176,7 @@ class SecurityController extends Controller
      *     {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
      *   },
      * 	statusCodes={
-     * 	   200="OK (token successfully generated for newly created user)",
+     * 	   200="OK (user authenticated, returns token, refresh_token and available user infos)",
      * 	   422="Unprocessable Entity (missing parameters)"
      * 	},
      * )
