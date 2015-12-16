@@ -3,6 +3,7 @@
 namespace App\UserBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Goutte\Client as HttpClient;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,7 +27,7 @@ class SecurityController extends Controller
         $this->rules = [
             'register' => ['password', 'email'],
             'basic'    => ['email', 'password'],
-            'oauth'    => ['id', 'name', 'email'],
+            'oauth'    => ['id', 'name', 'email', 'access_token'],
         ];
     }
 
@@ -76,6 +77,7 @@ class SecurityController extends Controller
      * 	 section="Security",
      *   parameters={
      *     {"name"="id", "dataType"="integer", "required"=true, "description"="Facebook ID"},
+     *     {"name"="access_token", "dataType"="string", "required"=true, "description"="Facebook access_token"},
      *     {"name"="name", "dataType"="string", "required"=true, "description"="Username"},
      *     {"name"="email", "dataType"="string", "required"=true, "description"="Email credential"},
      *     {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname"},
@@ -96,6 +98,12 @@ class SecurityController extends Controller
             return $this->missingParametersError('authenticate', 'oauth');
         }
 
+        if (false === $this->isValidFacebookAccount($data['id'], $data['access_token'])) {
+            return new JsonResponse(array(
+                'message' => 'The given facebook_id has no valid account associated'
+            ), 401);
+        }
+
         $userManager = $this->getUserManager();
         $existingByFacebookId = $userManager->findUserBy(['facebookId' => $data['id']]);
         $existingByEmail = $userManager->findUserBy(['email' => $data['email']]);
@@ -114,26 +122,6 @@ class SecurityController extends Controller
         $data['password'] = strtolower(str_replace(' ', '', $data['name']));
 
         return $this->generateToken($this->createUser($data, true), 201);
-    }
-
-    /**
-     * Proceses user authentication from email/password.
-     *
-     * @ApiDoc(
-     *   section="Security",
-     *   parameters={
-     * 	   {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
-     *     {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
-     *   },
-     * 	 statusCodes={
-     * 	   200="OK (token successfully generated for newly created user)",
-     * 	   422="Unprocessable Entity (missing parameters)"
-     * 	 },
-     * )
-     */
-    public function authenticateUserAction()
-    {
-        // Handled by Security Component.
     }
 
     /**
@@ -160,13 +148,23 @@ class SecurityController extends Controller
     }
 
     /**
-     * Render AngularJS demo application.
-     *
-     * @return resource Rendered view
-     */
-    public function demoAction()
+    * Proceses user authentication from email/password.
+    *
+    * @ApiDoc(
+    *   section="Security",
+    *   parameters={
+    * 	   {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
+    *     {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
+    *   },
+    * 	statusCodes={
+    * 	   200="OK (token successfully generated for newly created user)",
+    * 	   422="Unprocessable Entity (missing parameters)"
+    * 	},
+    * )
+    */
+    public function authenticateUserAction()
     {
-        return $this->render('AppUserBundle:Default:list.html.twig');
+      // Handled by Security Component.
     }
 
     /**
@@ -240,9 +238,15 @@ class SecurityController extends Controller
         ));
     }
 
-    protected function isValidFacebookUser($facebookId, $facebookAccessToken)
+    protected function isValidFacebookAccount($facebookId, $facebookAccessToken)
     {
-        // $url = 'https://graph.facebook.com/me?access_token='
+        $client = new HttpClient();
+
+        $endpoint = sprintf('https://graph.facebook.com/me?access_token=%s', $facebookAccessToken);
+        $request  = $client->request('GET', $endpoint);
+        $response = json_decode($client->getResponse()->getContent());
+
+        return ($response->id == $facebookId);
     }
 
     /**
