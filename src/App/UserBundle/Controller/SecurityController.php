@@ -100,7 +100,7 @@ class SecurityController extends Controller
 
         if (false === $this->isValidFacebookAccount($data['id'], $data['access_token'])) {
             return new JsonResponse(array(
-                'message' => 'The given facebook_id has no valid account associated'
+                'message' => 'The given facebook_id has no valid account associated',
             ), 401);
         }
 
@@ -148,23 +148,23 @@ class SecurityController extends Controller
     }
 
     /**
-    * Proceses user authentication from email/password.
-    *
-    * @ApiDoc(
-    *   section="Security",
-    *   parameters={
-    * 	   {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
-    *     {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
-    *   },
-    * 	statusCodes={
-    * 	   200="OK (token successfully generated for newly created user)",
-    * 	   422="Unprocessable Entity (missing parameters)"
-    * 	},
-    * )
-    */
+     * Proceses user authentication from email/password.
+     *
+     * @ApiDoc(
+     *   section="Security",
+     *   parameters={
+     * 	   {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
+     *     {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
+     *   },
+     * 	statusCodes={
+     * 	   200="OK (token successfully generated for newly created user)",
+     * 	   422="Unprocessable Entity (missing parameters)"
+     * 	},
+     * )
+     */
     public function authenticateUserAction()
     {
-      // Handled by Security Component.
+        // Handled by Security Component.
     }
 
     /**
@@ -246,7 +246,7 @@ class SecurityController extends Controller
         $request  = $client->request('GET', $endpoint);
         $response = json_decode($client->getResponse()->getContent());
 
-        return ($response->id == $facebookId);
+        return $response->id == $facebookId;
     }
 
     /**
