@@ -58,13 +58,7 @@ security:
         api:
             pattern:   ^/v1/
             stateless: true
-            lexik_jwt:
-                authorization_header:
-                    enabled: true
-                    prefix:  Bearer
-                query_parameter:
-                    enabled: true
-                    name:    bearer
+            lexik_jwt: ~
     access_control:
         # Admin login page needs to be access without credential
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

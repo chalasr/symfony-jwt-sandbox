@@ -1,0 +1,18 @@
+web:
+  image: chalasr/symfony-dev
+  volumes:
+    - /Users/Robin/Sites/sutunam/dev/sportroops-com:/var/www
+  ports:
+    - "8000:8000"
+  tty: true
+  links:
+    - db
+db:
+    image: mysql
+    ports:
+        - 3306:3306
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: sutucompta
+        MYSQL_USER: root
+        MYSQL_PASSWORD: root

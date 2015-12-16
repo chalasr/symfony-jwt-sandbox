@@ -252,13 +252,24 @@ class SecurityController extends Controller
      */
     protected function generateToken($user, $statusCode = 200)
     {
-        $token = $this->get('lexik_jwt_authentication.jwt_manager')->create($user);
-        $refreshToken = $this->attachRefreshToken($user);
+        $response = array(
+            'token'         => $this->get('lexik_jwt_authentication.jwt_manager')->create($user),
+            'refresh_token' => $this->attachRefreshToken($user),
+            'user'          => array(
+                'id'         => $user->getId(),
+                'username'   => $user->getUsername(),
+                'first_name' => $user->getFirstname(),
+                'last_name'  => $user->getLastname(),
+                'email'      => $user->getEmail(),
+                'roles'      => $user->getRoles(),
+            ),
+        );
 
-        return new JsonResponse(array(
-            'token'         => $token,
-            'refresh_token' => $refreshToken,
-        ));
+        if (null !== $user->getFacebookId()) {
+            $response['user']['facebook_id'] = $user->getFacebookId();
+        }
+
+        return new JsonResponse($response, $statusCode);
     }
 
     /**

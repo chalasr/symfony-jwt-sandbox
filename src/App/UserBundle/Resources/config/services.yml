@@ -1,0 +1,8 @@
+parameters:
+    api.event.jwt_response_listener.class: App\UserBundle\EventListener\JWTResponseListener
+
+services:
+    api.event.jwt_response_listener:
+        class: %api.event.jwt_response_listener.class%
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
