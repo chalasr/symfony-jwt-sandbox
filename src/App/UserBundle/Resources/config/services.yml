@@ -1,5 +1,5 @@
 parameters:
-    api.event.jwt_response_listener.class: App\UserBundle\EventListener\JWTResponseListener
+    api.event.jwt_response_listener.class: App\UserBundle\EventListener\JwtResponseListener
 
 services:
     api.event.jwt_response_listener:
