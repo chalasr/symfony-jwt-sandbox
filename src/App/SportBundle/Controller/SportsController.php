@@ -3,12 +3,14 @@
 namespace App\SportBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Request\ParamFetcher;
 use Goutte\Client as HttpClient;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\SportBundle\Entity\Sport;
 
 /**
  * Sports REST Resource.
@@ -20,15 +22,15 @@ class SportsController extends Controller
     /**
      * Get sports.
      *
+     * @Rest\Get("/sports")
      * @ApiDoc(
      *   section="Sport",
      * 	 resource=true,
      * 	 statusCodes={
-     * 	   200="OK (list all sports)",
-     * 	   401="Unauthorized (require an access token)"
+     * 	   200="OK",
+     * 	   401="Unauthorized"
      * 	 },
      * )
-     * @Rest\Get("/sports")
      *
      * @return $results User entities
      */
@@ -38,7 +40,7 @@ class SportsController extends Controller
 
         $sports = $em->getRepository('AppSportBundle:Sport');
         $query = $sports->createQueryBuilder('s')
-        ->select('s.id', 's.name')
+        ->select('s.id', 's.name', 's.isActive')
         ->getQuery();
         $results = $query->getResult();
 
@@ -48,18 +50,43 @@ class SportsController extends Controller
     /**
      * Create a new Sport entity.
      *
-     * @ApiDoc()
      * @Rest\Post("/sports")
-     * @param  Request $request
-     * @return $data
+     * @Rest\RequestParam(name="name", requirements="[a-zA-Z\s]+")
+     * @ApiDoc(
+     *   section="Sport",
+     * 	 resource=true,
+     * 	 parameters={
+     * 	   {"name"="name", "dataType"="string", "required"=true, "description"="Name"},
+     * 	 },
+     * 	 statusCodes={
+     * 	   201="Created",
+     * 	   400="Bad Request",
+     * 	   401="Unauthorized",
+     * 	 },
+     * )
+     *
+     * @param  ParamFetcher $paramFetcher
+     *
+     * @return JsonResponse $response  Created Sport
      */
-    public function createSportAction(Request $request)
+    public function createSportAction(ParamFetcher $paramFetcher)
     {
         $em = $this->getEntityManager();
-        $data = $request->request->all();
-        // TODO Create the new sport.
-        //
-        return $data;
+
+        $sport = new Sport();
+        $sport->setName($paramFetcher->get('name'));
+        $sport->setIsActive(1);
+
+        $em->persist($sport);
+        $em->flush();
+
+        $response = array(
+            'id'     => $sport->getId(),
+            'name'   => $sport->getName(),
+            'active' => $sport->getIsActive(),
+        );
+
+        return new JsonResponse($response, 201);
     }
 
     /**

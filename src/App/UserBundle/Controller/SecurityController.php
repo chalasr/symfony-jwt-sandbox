@@ -27,7 +27,7 @@ class SecurityController extends Controller
         $this->rules = [
             'register' => ['password', 'email'],
             'basic'    => ['password', 'email'],
-            'oauth'    => ['id', 'name', 'email', 'access_token'],
+            'oauth'    => ['id', 'email', 'access_token'],
         ];
     }
 
@@ -67,6 +67,10 @@ class SecurityController extends Controller
             $data['name'] = $data['email'];
         }
 
+        if ($userManager->findUserByUsername($data['name']) !== null) {
+          return $this->resourceAlreadyExistsError('name', $data['name']);
+        }
+
         return $this->generateToken($this->createUser($data), 201);
     }
 
@@ -78,7 +82,6 @@ class SecurityController extends Controller
       *   parameters={
       *     {"name"="id", "dataType"="integer", "required"=true, "description"="Facebook ID"},
       *     {"name"="access_token", "dataType"="string", "required"=true, "description"="Facebook access_token"},
-      *     {"name"="name", "dataType"="string", "required"=true, "description"="Username"},
       *     {"name"="email", "dataType"="string", "required"=true, "description"="Email credential"},
       *     {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname"},
       *     {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname"},

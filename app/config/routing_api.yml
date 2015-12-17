@@ -7,7 +7,7 @@ app_security:
 app_refresh_token:
     path:     /refresh_token
     methods: POST
-    defaults: { _controller: AppUserBundle:Security:refreshToken }
+    defaults: { _controller: gesdinet.jwtrefreshtoken:refresh }
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

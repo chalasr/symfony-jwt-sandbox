@@ -104,7 +104,7 @@ fos_rest:
         default_format: json
     serializer:
         serialize_null: true
-    param_fetcher_listener: true
+    param_fetcher_listener: force
     body_listener: true
     access_denied_listener:
         json: true
