@@ -51,13 +51,10 @@ class SportsController extends Controller
      * Create a new Sport entity.
      *
      * @Rest\Post("/sports")
-     * @Rest\RequestParam(name="name", requirements="[a-zA-Z\s]+")
+     * @Rest\RequestParam(name="name", requirements="[a-zA-Z\s]+", description="Name")
      * @ApiDoc(
      *   section="Sport",
      * 	 resource=true,
-     * 	 parameters={
-     * 	   {"name"="name", "dataType"="string", "required"=true, "description"="Name"},
-     * 	 },
      * 	 statusCodes={
      * 	   201="Created",
      * 	   400="Bad Request",
@@ -83,7 +80,7 @@ class SportsController extends Controller
         $response = array(
             'id'     => $sport->getId(),
             'name'   => $sport->getName(),
-            'active' => $sport->getIsActive(),
+            'isActive' => $sport->getIsActive(),
         );
 
         return new JsonResponse($response, 201);

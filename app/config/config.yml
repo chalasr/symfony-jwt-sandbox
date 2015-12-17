@@ -74,7 +74,9 @@ swiftmailer:
 
 
 # Nelmio API Doc
-nelmio_api_doc: ~
+nelmio_api_doc:
+    sandbox:
+        body_format: json
 
 # JMS Serializer
 jms_serializer:
@@ -110,5 +112,5 @@ fos_rest:
         json: true
 
 gesdinet_jwt_refresh_token:
-    ttl: 2592000
+    ttl: 1291000
     firewall: api
