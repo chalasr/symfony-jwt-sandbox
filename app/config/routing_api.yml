@@ -11,3 +11,6 @@ app_refresh_token:
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+sports_resource:
+    resource: App\SportBundle\Controller\SportsController

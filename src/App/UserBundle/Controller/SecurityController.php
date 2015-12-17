@@ -2,7 +2,6 @@
 
 namespace App\UserBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Goutte\Client as HttpClient;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -120,7 +119,7 @@ class SecurityController extends Controller
              return $this->generateToken($existingByEmail, 200);
          }
 
-         $data['password'] = substr($passwordGenerator->generateToken(), 0, 8); // 8 chars
+         $data['password'] = substr($passwordGenerator->generateToken(), 0, 8);
 
          return $this->generateToken($this->createUser($data, true), 201);
      }
@@ -163,7 +162,7 @@ class SecurityController extends Controller
         ->select('u.id', 'u.username', 'u.email')
         ->getQuery();
 
-        return new JsonResponse($query->getResult());
+        return $query->getResult();
     }
 
     /**
