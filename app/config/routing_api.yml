@@ -1,10 +1,10 @@
-app_security:
+api_security:
     resource: "@AppUserBundle/Resources/config/routing.yml"
     prefix:   /
     requirements:
         _format: json
 
-app_refresh_token:
+api_refresh_token:
     path:     /refresh_token
     methods: POST
     defaults: { _controller: gesdinet.jwtrefreshtoken:refresh }

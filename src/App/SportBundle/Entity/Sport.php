@@ -5,7 +5,7 @@ namespace App\SportBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Sport
+ * Sport.
  *
  * @ORM\Table(name="sports")
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Sport
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -29,16 +29,16 @@ class Sport
     protected $name;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="isActive", type="boolean")
      */
     protected $isActive;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -46,7 +46,7 @@ class Sport
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -60,7 +60,7 @@ class Sport
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -70,9 +70,9 @@ class Sport
     }
 
     /**
-     * Set isActive
+     * Set isActive.
      *
-     * @param boolean $isActive
+     * @param bool $isActive
      *
      * @return Sport
      */
@@ -84,9 +84,9 @@ class Sport
     }
 
     /**
-     * Get isActive
+     * Get isActive.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsActive()
     {

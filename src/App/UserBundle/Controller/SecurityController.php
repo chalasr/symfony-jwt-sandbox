@@ -68,7 +68,7 @@ class SecurityController extends Controller
         }
 
         if ($userManager->findUserByUsername($data['name']) !== null) {
-          return $this->resourceAlreadyExistsError('name', $data['name']);
+            return $this->resourceAlreadyExistsError('name', $data['name']);
         }
 
         return $this->generateToken($this->createUser($data), 201);

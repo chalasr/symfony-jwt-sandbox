@@ -2,15 +2,13 @@
 
 namespace App\SportBundle\Controller;
 
+use App\SportBundle\Entity\Sport;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use Goutte\Client as HttpClient;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use App\SportBundle\Entity\Sport;
 
 /**
  * Sports REST Resource.
@@ -51,7 +49,9 @@ class SportsController extends Controller
      * Create a new Sport entity.
      *
      * @Rest\Post("/sports")
-     * @Rest\RequestParam(name="name", requirements="[a-zA-Z\s]+", description="Name")
+     * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")
+     * @Rest\RequestParam(name="isActive", requirements="true|false", nullable=true, description="is Active")
+     * @Rest\View
      * @ApiDoc(
      *   section="Sport",
      * 	 resource=true,
@@ -62,7 +62,7 @@ class SportsController extends Controller
      * 	 },
      * )
      *
-     * @param  ParamFetcher $paramFetcher
+     * @param ParamFetcher $paramFetcher
      *
      * @return JsonResponse $response  Created Sport
      */
@@ -72,14 +72,14 @@ class SportsController extends Controller
 
         $sport = new Sport();
         $sport->setName($paramFetcher->get('name'));
-        $sport->setIsActive(1);
+        $sport->setIsActive(false === $paramFetcher->get('isActive') ? false : true);
 
         $em->persist($sport);
         $em->flush();
 
         $response = array(
-            'id'     => $sport->getId(),
-            'name'   => $sport->getName(),
+            'id'       => $sport->getId(),
+            'name'     => $sport->getName(),
             'isActive' => $sport->getIsActive(),
         );
 
