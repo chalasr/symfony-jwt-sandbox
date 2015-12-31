@@ -2,6 +2,7 @@
 
 namespace App\SportBundle\Controller;
 
+use App\SportBundle\Entity\Category;
 use App\SportBundle\Entity\Sport;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -11,9 +12,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Sports REST Resource.
+ * Sports resource.
  *
- * @author Robin Chalas
+ * @author Robin Chalas <rchalas@sutunam.com>
  */
 class SportsController extends Controller
 {
@@ -30,17 +31,47 @@ class SportsController extends Controller
      * 	 },
      * )
      *
-     * @return $results User entities
+     * @return Doctrine\ORM\QueryBuilder $results
      */
     public function getSportsListAction()
     {
         $em = $this->getEntityManager();
+        $entities = $em->getRepository('AppSportBundle:Sport')->findAll();
+        $results = array();
 
-        $sports = $em->getRepository('AppSportBundle:Sport');
-        $query = $sports->createQueryBuilder('s')
-        ->select('s.id', 's.name', 's.isActive')
-        ->getQuery();
-        $results = $query->getResult();
+        foreach ($entities as $entity) {
+            $results[] = $entity->toArray();
+        }
+
+        return $results;
+    }
+
+    /**
+     * Get Category associations from Sport entity.
+     *
+     * @Rest\Get("/sports/{id}/categories")
+     * @ApiDoc(
+     *   section="Sport",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	   200="OK",
+     * 	   401="Unauthorized"
+     * 	 },
+     * )
+     *
+     * @param int $id Sport entity
+     *
+     * @return Doctrine\ORM\QueryBuilder $results
+     */
+    public function getCategoriesBySport($id)
+    {
+        $em = $this->getEntityManager();
+        $sport = $em->getRepository('AppSportBundle:Sport')->find($id);
+        $results = array();
+
+        foreach ($sport->getCategories() as $category) {
+            $results[] = $category->toArray(['sports']);
+        }
 
         return $results;
     }

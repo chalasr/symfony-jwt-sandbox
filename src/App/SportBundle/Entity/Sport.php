@@ -36,6 +36,44 @@ class Sport
     protected $isActive;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="sports", cascade={"all"})
+     * @ORM\JoinTable(name="sports_categories")
+     */
+    protected $categories;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * To array.
+     *
+     * @return string
+     */
+    public function toArray()
+    {
+        $sport = array(
+            'id'         => $this->getId(),
+            'name'       => $this->getName(),
+            'isActive'   => $this->getIsActive(),
+            'categories' => array(),
+        );
+
+        foreach ($this->getCategories() as $cat) {
+            $sport['categories'][] = array(
+                'id'   => $cat->getId(),
+                'name' => $cat->getName(),
+            );
+        }
+
+        return $sport;
+    }
+
+    /**
      * Get id.
      *
      * @return int
@@ -91,5 +129,39 @@ class Sport
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Add category
+     *
+     * @param \App\SportBundle\Entity\Category $category
+     *
+     * @return Sport
+     */
+    public function addCategory(\App\SportBundle\Entity\Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \App\SportBundle\Entity\Category $category
+     */
+    public function removeCategory(\App\SportBundle\Entity\Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }
