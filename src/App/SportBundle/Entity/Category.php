@@ -56,7 +56,7 @@ class Category
      *
      * @param array $exclude Excluded parameters
      *
-     * @return string
+     * @return array
      */
     public function toArray($excludes = null)
     {

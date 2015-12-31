@@ -52,7 +52,7 @@ class Sport
     /**
      * To array.
      *
-     * @return string
+     * @return array
      */
     public function toArray()
     {
