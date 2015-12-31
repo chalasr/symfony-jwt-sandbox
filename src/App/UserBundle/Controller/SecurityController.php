@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Mangages users from mobile app in API.
  *
- * @author Robin Chalas
+ * @author Robin Chalas <rchalas@sutunam.com>
  */
 class SecurityController extends Controller
 {
@@ -156,6 +156,8 @@ class SecurityController extends Controller
      * 	   401="Unauthorized (this resource require an access token)"
      * 	 },
      * )
+     *
+     * @return Doctrine\ORM\QueryBuilder $results
      */
     public function getAllUsersAction()
     {
@@ -169,7 +171,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Proceses user authentication from email/password.
+     * Processes user authentication from email/password.
      *
      * @ApiDoc(
      *   section="Security",

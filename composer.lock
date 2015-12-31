@@ -585,16 +585,16 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "v1.0.1",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "0bcb2e79d8571787f18b7eb036ed3d004908e604"
+                "reference": "90b2128806bfde671b6952ab8bea493942c1fdae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/0bcb2e79d8571787f18b7eb036ed3d004908e604",
-                "reference": "0bcb2e79d8571787f18b7eb036ed3d004908e604",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/90b2128806bfde671b6952ab8bea493942c1fdae",
+                "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
                 "shasum": ""
             },
             "require": {
@@ -606,7 +606,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -648,7 +648,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2014-12-20 21:24:13"
+            "time": "2015-11-06 14:35:42"
         },
         {
             "name": "doctrine/instantiator",
@@ -2549,12 +2549,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "77562ccc24831a25ee13dd4c3b7e04e9f2fa8b5c"
+                "reference": "d499812e8fe7c33cd322addd35d6b669fe00d4b5"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/d499812e8fe7c33cd322addd35d6b669fe00d4b5",
-                "reference": "77562ccc24831a25ee13dd4c3b7e04e9f2fa8b5c",
+                "reference": "d499812e8fe7c33cd322addd35d6b669fe00d4b5",
                 "shasum": ""
             },
             "require": {
@@ -2627,7 +2627,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2015-12-16 13:54:55"
+            "time": "2015-12-17 10:49:00"
         },
         {
             "name": "sonata-project/block-bundle",
