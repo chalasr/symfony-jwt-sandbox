@@ -1,3 +1,4 @@
+# Security related routing (users and sessions management)
 api_security:
     resource: "@AppUserBundle/Resources/config/routing.yml"
     prefix:   /
@@ -11,6 +12,11 @@ api_refresh_token:
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+#
 
+# One Controller per collection
+# Here the SportsController containing all Resources related to Sport (/v1/sports collection)
 sports_resource:
+    # Inside this controller, routes are registered manually using the @Rest annotation (@Rest\Get|Post|Put|..)
+    # @see http://symfony.com/doc/current/bundles/FOSRestBundle/7-manual-route-definition.html
     resource: App\SportBundle\Controller\SportsController
