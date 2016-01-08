@@ -1,6 +1,10 @@
+parameters:
+    admin.patched_model_type.class: App\AdminBundle\Form\Type\PatchedModelType
+    admin.sports.class: App\AdminBundle\Admin\SportAdmin
+    admin.categories.class: App\AdminBundle\Admin\CategoryAdmin
 services:
     sonata.admin.sports:
-        class: App\AdminBundle\Admin\SportAdmin
+        class: "%admin.sports.class%"
         tags:
             - { name: sonata.admin, manager_type: orm, group: "Sports", label: "Sports" }
         arguments:
@@ -9,10 +13,15 @@ services:
             - AppAdminBundle:SportAdmin
 
     sonata.admin.categories:
-        class: App\AdminBundle\Admin\CategoryAdmin
+        class: "%admin.categories.class%"
         tags:
             - { name: sonata.admin, manager_type: orm, group: "Catégories", label: "Catégories" }
         arguments:
             - ~
             - App\SportBundle\Entity\Category
             - AppAdminBundle:CategoryAdmin
+
+    sonata.admin.form.type.model_choice:
+        class: "%admin.patched_model_type.class%"
+        tags:
+            - { name: form.type, alias: sonata_type_model }
