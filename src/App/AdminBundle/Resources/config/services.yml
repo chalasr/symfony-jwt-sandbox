@@ -1,4 +1,9 @@
 services:
-#    app_admin.example:
-#        class: App\AdminBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    sonata.admin.sport:
+        class: App\AdminBundle\Admin\SportAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Sports", label: "Liste des sports" }
+        arguments:
+            - ~
+            - App\SportBundle\Entity\Sport
+            - AppAdminBundle:SportAdmin

@@ -2,6 +2,7 @@
 
 namespace App\SportBundle\Entity;
 
+use App\Util\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="sports")
  * @ORM\Entity
  */
-class Sport
+class Sport implements EntityInterface
 {
     /**
      * @var int
@@ -47,6 +48,11 @@ class Sport
     public function __construct()
     {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getName() ?: 'New Sport';
     }
 
     /**
