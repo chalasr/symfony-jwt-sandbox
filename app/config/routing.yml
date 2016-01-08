@@ -1,14 +1,17 @@
+# Routing API loaded if referer's host is prefixed by "api."
 app_api:
   prefix: /v1/
   resource: "routing_api.yml"
   requirements:
       _format: json
 
+# Routing Admin loaded if referer's host is "admin."
 app_admin:
     host: "%domain%"
     prefix: /
     resource: "routing_admin.yml"
 
+# Demo for API
 app_demo:
     host: "api.%domain%"
     path: /
@@ -16,6 +19,7 @@ app_demo:
         _controller: FrameworkBundle:Template:template
         template:    AppUserBundle:Default:list.html.twig
 
+# Documentation of API , created by @ApiDoc annotation, accessible at /doc/v1
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /doc/v1

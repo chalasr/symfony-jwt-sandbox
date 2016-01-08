@@ -80,7 +80,7 @@ class SportsController extends Controller
      * Create a new Sport entity.
      *
      * @Rest\Post("/sports")
-     * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")
+     * @Rest\Param(name="name", requirements="[^/]+", allowBlank=false, description="Name")
      * @Rest\RequestParam(name="isActive", requirements="true|false", nullable=true, description="is Active")
      * @Rest\View
      * @ApiDoc(
