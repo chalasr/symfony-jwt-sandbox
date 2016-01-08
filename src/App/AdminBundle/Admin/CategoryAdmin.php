@@ -5,7 +5,6 @@ namespace App\AdminBundle\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
 
 class CategoryAdmin extends AbstractAdmin
 {
@@ -30,7 +29,7 @@ class CategoryAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('id', null, array(
-                'label' => 'id'
+                'label' => 'id',
             ))
             ->add('name', null, array(
                 'label' => 'Nom',
@@ -52,9 +51,9 @@ class CategoryAdmin extends AbstractAdmin
             ])
             ->add('_action', 'actions', [
                 'actions' => array(
-                    'edit' => [],
+                    'edit'   => [],
                     'delete' => [],
-                )
+                ),
             ])
         ;
     }

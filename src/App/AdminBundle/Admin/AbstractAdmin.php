@@ -10,13 +10,13 @@ class AbstractAdmin extends Admin
      * Get parameters from an Admin class.
      *
      * @param $param
-     * @param String $type
-     * 
+     * @param string $type
+     *
      * @return array
      */
-    protected function _getParameter($param, $type='array')
+    protected function _getParameter($param, $type = 'array')
     {
-        if($type == 'single'){
+        if ($type == 'single') {
             return $this->getConfigurationPool()->getContainer()->getParameter($param);
         }
         //get value from config
@@ -24,11 +24,20 @@ class AbstractAdmin extends Admin
         $rs = array();
 
         //process values
-        foreach($values as $val){
+        foreach ($values as $val) {
             $rs[$val['label']] = $val['value'];
         }
+
         return $rs;
     }
 
-
+    /**
+     * Get create label.
+     *
+     * @return string
+     */
+    public function getCreateLabel()
+    {
+        return sprintf('%s Création', $this->translator->trans($this->getClassnameLabel(), [], 'AppAdminBundle'));
+    }
 }

@@ -5,8 +5,12 @@ namespace App\AdminBundle\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
 
+/**
+ * Sport admin class.
+ *
+ * @author Robin Chalas <rchalas@sutunam.com>
+ */
 class SportAdmin extends AbstractAdmin
 {
     protected $baseRoutePattern = 'sports';
@@ -20,11 +24,11 @@ class SportAdmin extends AbstractAdmin
             ->add('name', null, array(
                 'label' => 'Nom',
             ))
-            ->add('categories', null , array(
-                'label' => 'Categories'
+            ->add('categories', null, array(
+                'label' => 'Categories',
             ))
-            ->add('isActive', null , array(
-                'label' => 'Actif'
+            ->add('isActive', null, array(
+                'label' => 'Actif',
             ));
     }
 
@@ -35,13 +39,13 @@ class SportAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('id', null, array(
-                'label' => 'id'
+                'label' => 'id',
             ))
             ->add('name', null, array(
                 'label' => 'Nom',
             ))
-            ->add('isActive', null , array(
-                'label' => 'Actif'
+            ->add('isActive', null, array(
+                'label' => 'Actif',
             ));
     }
 
@@ -57,17 +61,17 @@ class SportAdmin extends AbstractAdmin
             ->add('name', null, [
                 'label' => 'Nom',
             ])
-            ->add('categories', null , [
-                'label' => 'Categories'
+            ->add('categories', null, [
+                'label' => 'Categories',
             ])
-            ->add('isActive', null , [
-                'label' => 'Actif'
+            ->add('isActive', null, [
+                'label' => 'Actif',
             ])
             ->add('_action', 'actions', [
                 'actions' => array(
-                    'edit' => [],
+                    'edit'   => [],
                     'delete' => [],
-                )
+                ),
             ])
         ;
     }

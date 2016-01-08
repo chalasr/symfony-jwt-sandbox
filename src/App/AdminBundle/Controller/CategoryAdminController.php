@@ -4,6 +4,6 @@ namespace App\AdminBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
 
-class SportAdminController extends Controller
+class CategoryAdminController extends Controller
 {
 }
