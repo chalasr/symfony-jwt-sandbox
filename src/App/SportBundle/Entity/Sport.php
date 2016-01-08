@@ -43,7 +43,7 @@ class Sport implements EntityInterface
     protected $categories;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -52,7 +52,7 @@ class Sport implements EntityInterface
 
     public function __toString()
     {
-        return $this->getName() ?: 'New Sport';
+        return $this->getName() ?: 'Nouveau Sport';
     }
 
     /**
@@ -138,7 +138,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Add category
+     * Add category.
      *
      * @param \App\SportBundle\Entity\Category $category
      *
@@ -152,7 +152,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Remove category
+     * Remove category.
      *
      * @param \App\SportBundle\Entity\Category $category
      */
@@ -162,7 +162,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Get categories
+     * Get categories.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
