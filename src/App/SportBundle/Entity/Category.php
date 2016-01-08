@@ -48,7 +48,7 @@ class Category
      */
     public function __toString()
     {
-        return $this->getName();
+        return $this->getName() ?: 'Nouvelle Catégorie';
     }
 
     /**
@@ -115,7 +115,7 @@ class Category
     }
 
     /**
-     * Add sport
+     * Add sport.
      *
      * @param \App\SportBundle\Entity\Sport $sport
      *
@@ -129,7 +129,7 @@ class Category
     }
 
     /**
-     * Remove sport
+     * Remove sport.
      *
      * @param \App\SportBundle\Entity\Sport $sport
      */
@@ -139,7 +139,7 @@ class Category
     }
 
     /**
-     * Get sports
+     * Get sports.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
