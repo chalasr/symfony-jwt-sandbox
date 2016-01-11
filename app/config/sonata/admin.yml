@@ -44,7 +44,9 @@ sonata_admin:
                 position: left
                 type: sonata.admin.block.admin_list
     templates:
-        layout:               AppAdminBundle:Default:standard_layout.html.twig
+        layout:                    AppAdminBundle:Default:standard_layout.html.twig
+        short_object_description:  SonataAdminBundle:Helper:short-object-description.html.twig
+
 
     admin_services:
         # Prototype

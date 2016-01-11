@@ -12,6 +12,7 @@
         "symfony/symfony": "^2.8",
         "doctrine/orm": "~2.5",
         "doctrine/doctrine-bundle": "~1.4",
+        "doctrine/cache": ">=1.4 <1.6",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",

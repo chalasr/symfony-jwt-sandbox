@@ -4,6 +4,7 @@ namespace App\SportBundle\Entity;
 
 use App\Util\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Sport.
@@ -37,10 +38,23 @@ class Sport implements EntityInterface
     protected $isActive;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Category", inversedBy="sports", cascade={"all"})
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string", nullable=true, length=255)
+     */
+    protected $icon;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="sports", cascade={"persist"})
      * @ORM\JoinTable(name="sports_categories")
      */
     protected $categories;
+
+    /**
+     * Unmapped uploaded file.
+     * @var string
+     */
+    private $file;
 
     /**
      * Constructor.
@@ -50,6 +64,11 @@ class Sport implements EntityInterface
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * To string.
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->getName() ?: 'Nouveau Sport';
@@ -169,5 +188,65 @@ class Sport implements EntityInterface
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     *
+     * @return Sport
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Upload attachment file
+     */
+    public function uploadIcon($path)
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        $this->getFile()->move($path, $this->getFile()->getClientOriginalName());
+        $this->setIcon($this->getFile()->getClientOriginalName());
+
+        $this->setFile(null);
     }
 }
