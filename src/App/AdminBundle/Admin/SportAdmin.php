@@ -29,6 +29,7 @@ class SportAdmin extends AbstractAdmin
             ))
             ->add('isActive', null, array(
                 'label' => 'Actif',
+                'required' => false,
             ));
     }
 
