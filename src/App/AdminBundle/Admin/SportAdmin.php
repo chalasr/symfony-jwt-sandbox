@@ -51,7 +51,7 @@ class SportAdmin extends AbstractAdmin
                 'label' => 'Categories',
             ))
             ->add('isActive', null, array(
-                'label' => 'Actif',
+                'label'    => 'Actif',
                 'required' => false,
             ))
             ->add('file', 'file', $iconFieldOptions)

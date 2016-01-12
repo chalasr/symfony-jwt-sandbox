@@ -12,7 +12,7 @@ trait InjectableTrait
     /**
      * Shortcut method to retrieve a service.
      *
-     * @param  string $id
+     * @param string $id
      *
      * @return object The service
      */

@@ -51,7 +51,12 @@ class Sport implements EntityInterface
     protected $categories;
 
     /**
-     * Unmapped uploaded file.
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="sports", cascade={"persist"})
+     * @ORM\JoinTable(name="sports_tags")
+     */
+    protected $tags;
+
+    /**
      * @var string
      */
     private $file;
@@ -62,6 +67,7 @@ class Sport implements EntityInterface
     public function __construct()
     {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -86,12 +92,21 @@ class Sport implements EntityInterface
             'name'       => $this->getName(),
             'isActive'   => $this->getIsActive(),
             'categories' => array(),
+            'tags'       => array(),
         );
 
         foreach ($this->getCategories() as $cat) {
             $sport['categories'][] = array(
                 'id'   => $cat->getId(),
                 'name' => $cat->getName(),
+            );
+        }
+
+        //convert tags to array
+        foreach ($this->getTags() as $tag) {
+            $sport['tags'][] = array(
+                'id'   => $tag->getId(),
+                'name' => $tag->getName(),
             );
         }
 
@@ -191,7 +206,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Set icon
+     * Set icon.
      *
      * @param string $icon
      *
@@ -205,7 +220,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Get icon
+     * Get icon.
      *
      * @return string
      */
@@ -213,7 +228,6 @@ class Sport implements EntityInterface
     {
         return $this->icon;
     }
-
 
     /**
      * Sets file.
@@ -236,7 +250,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Upload attachment file
+     * Upload attachment file.
      */
     public function uploadIcon($path)
     {
@@ -248,5 +262,39 @@ class Sport implements EntityInterface
         $this->setIcon($this->getFile()->getClientOriginalName());
 
         $this->setFile(null);
+    }
+
+    /**
+     * Add tag.
+     *
+     * @param \App\SportBundle\Entity\Tag $tag
+     *
+     * @return Sport
+     */
+    public function addTag(\App\SportBundle\Entity\Tag $tag)
+    {
+        $this->tags[] = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Remove tag.
+     *
+     * @param \App\SportBundle\Entity\Tag $tag
+     */
+    public function removeTag(\App\SportBundle\Entity\Tag $tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * Get tags.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }

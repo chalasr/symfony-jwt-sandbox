@@ -36,7 +36,7 @@ class SportsController extends Controller
     public function getSportsListAction()
     {
         $em = $this->getEntityManager();
-        $entities = $em->getRepository('AppSportBundle:Sport')->findAll();
+        $entities = $em->getRepository('AppSportBundle:Sport')->findBy(['isActive' => 1]);
         $results = array();
 
         foreach ($entities as $entity) {
