@@ -50,7 +50,6 @@ class Sport implements EntityInterface
      */
     protected $categories;
 
-
     /**
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="sports", cascade={"persist"})
      * @ORM\JoinTable(name="sports_tags")
@@ -93,7 +92,7 @@ class Sport implements EntityInterface
             'name'       => $this->getName(),
             'isActive'   => $this->getIsActive(),
             'categories' => array(),
-            'tags' => array(),
+            'tags'       => array(),
         );
 
         foreach ($this->getCategories() as $cat) {
@@ -207,7 +206,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Set icon
+     * Set icon.
      *
      * @param string $icon
      *
@@ -221,7 +220,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Get icon
+     * Get icon.
      *
      * @return string
      */
@@ -229,7 +228,6 @@ class Sport implements EntityInterface
     {
         return $this->icon;
     }
-
 
     /**
      * Sets file.
@@ -252,7 +250,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Upload attachment file
+     * Upload attachment file.
      */
     public function uploadIcon($path)
     {
@@ -266,9 +264,8 @@ class Sport implements EntityInterface
         $this->setFile(null);
     }
 
-
     /**
-     * Add tag
+     * Add tag.
      *
      * @param \App\SportBundle\Entity\Tag $tag
      *
@@ -282,7 +279,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Remove tag
+     * Remove tag.
      *
      * @param \App\SportBundle\Entity\Tag $tag
      */
@@ -292,7 +289,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Get tags
+     * Get tags.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

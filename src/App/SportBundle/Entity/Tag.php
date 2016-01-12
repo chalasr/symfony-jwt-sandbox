@@ -1,6 +1,6 @@
 <?php
 // src/App/SportBundle/Entity/Tag.php
-namespace App\SportBundle\Entity;;
+namespace App\SportBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,7 +22,6 @@ class Tag
      */
     protected $name;
 
-
     /**
      * @ORM\ManyToMany(targetEntity="Sport", mappedBy="tags")
      */
@@ -37,18 +36,17 @@ class Tag
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
 
-
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -62,7 +60,7 @@ class Tag
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -101,7 +99,7 @@ class Tag
     }
 
     /**
-     * Add sport
+     * Add sport.
      *
      * @param \App\SportBundle\Entity\Sport $sport
      *
@@ -115,7 +113,7 @@ class Tag
     }
 
     /**
-     * Remove sport
+     * Remove sport.
      *
      * @param \App\SportBundle\Entity\Sport $sport
      */
@@ -125,7 +123,7 @@ class Tag
     }
 
     /**
-     * Get sports
+     * Get sports.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
