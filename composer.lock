@@ -140,6 +140,18 @@
         },
         {
             "name": "doctrine/cache",
+<<<<<<< HEAD
+            "version": "v1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/cache.git",
+                "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/f8af318d14bdb0eff0336795b428b547bd39ccb6",
+                "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6",
+=======
             "version": "v1.5.4",
             "source": {
                 "type": "git",
@@ -150,23 +162,24 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/cache/zipball/47cdc76ceb95cc591d9c79a36dc3794975b5d136",
                 "reference": "47cdc76ceb95cc591d9c79a36dc3794975b5d136",
+>>>>>>> 4cc8834c88d5a16a12649b66d6b4bde209c5d10e
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": "~5.5|~7.0"
             },
             "conflict": {
                 "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=3.7",
+                "phpunit/phpunit": "~4.8|~5.0",
                 "predis/predis": "~1.0",
                 "satooshi/php-coveralls": "~0.6"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.5.x-dev"
+                    "dev-master": "1.6.x-dev"
                 }
             },
             "autoload": {
@@ -206,7 +219,11 @@
                 "cache",
                 "caching"
             ],
+<<<<<<< HEAD
+            "time": "2015-12-31 16:37:02"
+=======
             "time": "2015-12-19 05:03:47"
+>>>>>>> 4cc8834c88d5a16a12649b66d6b4bde209c5d10e
         },
         {
             "name": "doctrine/collections",
@@ -1692,12 +1709,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenuBundle.git",
+<<<<<<< HEAD
+                "reference": "4f8504404eb3d4f067eba9768922e04461a40cd0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/4f8504404eb3d4f067eba9768922e04461a40cd0",
+                "reference": "4f8504404eb3d4f067eba9768922e04461a40cd0",
+=======
                 "reference": "96a6b9630e0f150f38ae167b3ef22955d8cdfab5"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/96a6b9630e0f150f38ae167b3ef22955d8cdfab5",
                 "reference": "96a6b9630e0f150f38ae167b3ef22955d8cdfab5",
+>>>>>>> 4cc8834c88d5a16a12649b66d6b4bde209c5d10e
                 "shasum": ""
             },
             "require": {
@@ -1741,7 +1767,11 @@
             "keywords": [
                 "menu"
             ],
+<<<<<<< HEAD
+            "time": "2015-12-31 11:52:24"
+=======
             "time": "2016-01-11 09:37:38"
+>>>>>>> 4cc8834c88d5a16a12649b66d6b4bde209c5d10e
         },
         {
             "name": "kriswallsmith/assetic",
@@ -2639,12 +2669,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
+<<<<<<< HEAD
+                "reference": "3e302f807e156c7eda82e5144b6400646b1e31c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/3e302f807e156c7eda82e5144b6400646b1e31c8",
+                "reference": "3e302f807e156c7eda82e5144b6400646b1e31c8",
+=======
                 "reference": "03d3ee058cc94670aa3da8817c5ad29b315f6f45"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/03d3ee058cc94670aa3da8817c5ad29b315f6f45",
                 "reference": "03d3ee058cc94670aa3da8817c5ad29b315f6f45",
+>>>>>>> 4cc8834c88d5a16a12649b66d6b4bde209c5d10e
                 "shasum": ""
             },
             "require": {
@@ -2717,7 +2756,11 @@
                 "bootstrap",
                 "sonata"
             ],
+<<<<<<< HEAD
+            "time": "2016-01-07 13:55:06"
+=======
             "time": "2016-01-11 07:44:28"
+>>>>>>> 4cc8834c88d5a16a12649b66d6b4bde209c5d10e
         },
         {
             "name": "sonata-project/block-bundle",
@@ -2974,12 +3017,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle.git",
+<<<<<<< HEAD
+                "reference": "e2044367a94de8c74239a1c987aa4c7428a2d565"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/e2044367a94de8c74239a1c987aa4c7428a2d565",
+                "reference": "e2044367a94de8c74239a1c987aa4c7428a2d565",
+=======
                 "reference": "f3abdfcfaca3f61b37e7b194fd4aa48c172796db"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/f3abdfcfaca3f61b37e7b194fd4aa48c172796db",
                 "reference": "f3abdfcfaca3f61b37e7b194fd4aa48c172796db",
+>>>>>>> 4cc8834c88d5a16a12649b66d6b4bde209c5d10e
                 "shasum": ""
             },
             "require": {
@@ -3040,7 +3092,11 @@
                 "generator",
                 "sonata"
             ],
+<<<<<<< HEAD
+            "time": "2015-12-28 06:09:23"
+=======
             "time": "2016-01-09 12:12:21"
+>>>>>>> 4cc8834c88d5a16a12649b66d6b4bde209c5d10e
         },
         {
             "name": "sonata-project/easy-extends-bundle",
