@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="tag")
+ * @ORM\Table(name="tags_sport")
  */
 class Tag
 {
@@ -22,12 +22,19 @@ class Tag
      */
     protected $name;
 
-    /**
-     * @ @ORM\ManyToOne(targetEntity="Sport", inversedBy="tags")
-     * @ @ORM\JoinColumn(name="sport_id", referencedColumnName="id")
-     */
-    private $sport;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Sport", mappedBy="tags")
+     */
+    protected $sports;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->sports = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -38,6 +45,7 @@ class Tag
     {
         return $this->id;
     }
+
 
     /**
      * Set name
@@ -64,26 +72,65 @@ class Tag
     }
 
     /**
-     * Set sport
+     * To array.
+     *
+     * @param array $exclude Excluded parameters
+     *
+     * @return array
+     */
+    public function toArray($excludes = null)
+    {
+        $tags = array(
+            'id'     => $this->getId(),
+            'name'   => $this->getName(),
+            'sports' => array(),
+        );
+
+        foreach ($this->getSports() as $sport) {
+            $tags['sports'][] = array(
+                'id'   => $sport->getId(),
+                'name' => $sport->getName(),
+            );
+        }
+
+        foreach ($excludes as $value) {
+            unset($tags[$value]);
+        }
+
+        return $tags;
+    }
+
+    /**
+     * Add sport
      *
      * @param \App\SportBundle\Entity\Sport $sport
      *
      * @return Tag
      */
-    public function setSport(\App\SportBundle\Entity\Sport $sport = null)
+    public function addSport(\App\SportBundle\Entity\Sport $sport)
     {
-        $this->sport = $sport;
+        $this->sports[] = $sport;
 
         return $this;
     }
 
     /**
-     * Get sport
+     * Remove sport
      *
-     * @return \App\SportBundle\Entity\Sport
+     * @param \App\SportBundle\Entity\Sport $sport
      */
-    public function getSport()
+    public function removeSport(\App\SportBundle\Entity\Sport $sport)
     {
-        return $this->sport;
+        $this->sports->removeElement($sport);
+    }
+
+    /**
+     * Get sports
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSports()
+    {
+        return $this->sports;
     }
 }

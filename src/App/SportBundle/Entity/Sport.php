@@ -50,8 +50,10 @@ class Sport implements EntityInterface
      */
     protected $categories;
 
+
     /**
-     * @ORM\OneToMany(targetEntity="Tag", mappedBy="Sport", cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="sports", cascade={"persist"})
+     * @ORM\JoinTable(name="sports_tags")
      */
     protected $tags;
 
@@ -91,12 +93,21 @@ class Sport implements EntityInterface
             'name'       => $this->getName(),
             'isActive'   => $this->getIsActive(),
             'categories' => array(),
+            'tags' => array(),
         );
 
         foreach ($this->getCategories() as $cat) {
             $sport['categories'][] = array(
                 'id'   => $cat->getId(),
                 'name' => $cat->getName(),
+            );
+        }
+
+        //convert tags to array
+        foreach ($this->getTags() as $tag) {
+            $sport['tags'][] = array(
+                'id'   => $tag->getId(),
+                'name' => $tag->getName(),
             );
         }
 
@@ -254,6 +265,7 @@ class Sport implements EntityInterface
 
         $this->setFile(null);
     }
+
 
     /**
      * Add tag
