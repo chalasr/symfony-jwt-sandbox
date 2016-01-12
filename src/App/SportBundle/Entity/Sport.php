@@ -4,12 +4,13 @@ namespace App\SportBundle\Entity;
 
 use App\Util\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Sport.
  *
  * @ORM\Table(name="sports")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
  */
 class Sport implements EntityInterface
 {
@@ -37,10 +38,28 @@ class Sport implements EntityInterface
     protected $isActive;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Category", inversedBy="sports", cascade={"all"})
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string", nullable=true, length=255)
+     */
+    protected $icon;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="sports", cascade={"persist"})
      * @ORM\JoinTable(name="sports_categories")
      */
     protected $categories;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="sports", cascade={"persist"})
+     * @ORM\JoinTable(name="sports_tags")
+     */
+    protected $tags;
+
+    /**
+     * @var string
+     */
+    private $file;
 
     /**
      * Constructor.
@@ -48,8 +67,14 @@ class Sport implements EntityInterface
     public function __construct()
     {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * To string.
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->getName() ?: 'Nouveau Sport';
@@ -65,14 +90,23 @@ class Sport implements EntityInterface
         $sport = array(
             'id'         => $this->getId(),
             'name'       => $this->getName(),
-            'isActive'   => $this->getIsActive(),
+            'icon'       => $this->getIcon(),
             'categories' => array(),
+            'tags'       => array(),
         );
 
         foreach ($this->getCategories() as $cat) {
             $sport['categories'][] = array(
                 'id'   => $cat->getId(),
                 'name' => $cat->getName(),
+            );
+        }
+
+        //convert tags to array
+        foreach ($this->getTags() as $tag) {
+            $sport['tags'][] = array(
+                'id'   => $tag->getId(),
+                'name' => $tag->getName(),
             );
         }
 
@@ -169,5 +203,98 @@ class Sport implements EntityInterface
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Set icon.
+     *
+     * @param string $icon
+     *
+     * @return Sport
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get icon.
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Upload attachment file.
+     */
+    public function uploadIcon($path)
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        $this->getFile()->move($path, $this->getFile()->getClientOriginalName());
+        $this->setIcon($this->getFile()->getClientOriginalName());
+
+        $this->setFile(null);
+    }
+
+    /**
+     * Add tag.
+     *
+     * @param \App\SportBundle\Entity\Tag $tag
+     *
+     * @return Sport
+     */
+    public function addTag(\App\SportBundle\Entity\Tag $tag)
+    {
+        $this->tags[] = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Remove tag.
+     *
+     * @param \App\SportBundle\Entity\Tag $tag
+     */
+    public function removeTag(\App\SportBundle\Entity\Tag $tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * Get tags.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }

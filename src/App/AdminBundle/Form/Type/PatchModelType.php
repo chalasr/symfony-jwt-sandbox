@@ -5,7 +5,7 @@ namespace App\AdminBundle\Form\Type;
 use App\AdminBundle\Form\DataTransformer\PatchedModelsToArrayTransformer;
 use Sonata\AdminBundle\Form\Type\ModelType;
 
-class PatchedModelType extends ModelType
+class PatchModelType extends ModelType
 {
     /**
      * {@inheritdoc}

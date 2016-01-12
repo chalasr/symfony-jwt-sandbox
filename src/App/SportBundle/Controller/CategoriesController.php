@@ -2,7 +2,7 @@
 
 namespace App\SportBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use App\Util\Controller\AbstractRestController as Controller;
 
 /**
  * Categories resource.

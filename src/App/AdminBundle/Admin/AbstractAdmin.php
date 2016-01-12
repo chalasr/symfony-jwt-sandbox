@@ -2,33 +2,28 @@
 
 namespace App\AdminBundle\Admin;
 
+use App\Util\DependencyInjection\InjectableTrait;
 use Sonata\AdminBundle\Admin\Admin;
 
-class AbstractAdmin extends Admin
+/**
+ * Abstract Admin.
+ *
+ * @author Robin Chalas <rchalas@sutucompta>
+ */
+abstract class AbstractAdmin extends Admin
 {
+    use InjectableTrait;
+
     /**
-     * Get parameters from an Admin class.
+     * Shortcut method to locate a resource.
      *
-     * @param $param
-     * @param string $type
+     * @param string $resource
      *
-     * @return array
+     * @return string Resource path
      */
-    protected function _getParameter($param, $type = 'array')
+    protected function locate($resource)
     {
-        if ($type == 'single') {
-            return $this->getConfigurationPool()->getContainer()->getParameter($param);
-        }
-        //get value from config
-        $values = $this->getConfigurationPool()->getContainer()->getParameter($param);
-        $rs = array();
-
-        //process values
-        foreach ($values as $val) {
-            $rs[$val['label']] = $val['value'];
-        }
-
-        return $rs;
+        return $this->get('kernel')->locateResource($resource);
     }
 
     /**
