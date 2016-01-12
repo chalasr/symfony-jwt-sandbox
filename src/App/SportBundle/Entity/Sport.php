@@ -2,7 +2,9 @@
 
 namespace App\SportBundle\Entity;
 
+use App\Util\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Sport.
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="sports")
  * @ORM\Entity
  */
-class Sport
+class Sport implements EntityInterface
 {
     /**
      * @var int
@@ -36,7 +38,14 @@ class Sport
     protected $isActive;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Category", inversedBy="sports", cascade={"all"})
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string", nullable=true, length=255)
+     */
+    protected $icon;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="sports", cascade={"persist"})
      * @ORM\JoinTable(name="sports_categories")
      */
     protected $categories;
@@ -47,12 +56,27 @@ class Sport
     protected $tags;
 
     /**
-     * Constructor
+     * @var string
+     */
+    private $file;
+
+    /**
+     * Constructor.
      */
     public function __construct()
     {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * To string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName() ?: 'Nouveau Sport';
     }
 
     /**
@@ -138,7 +162,7 @@ class Sport
     }
 
     /**
-     * Add category
+     * Add category.
      *
      * @param \App\SportBundle\Entity\Category $category
      *
@@ -152,7 +176,7 @@ class Sport
     }
 
     /**
-     * Remove category
+     * Remove category.
      *
      * @param \App\SportBundle\Entity\Category $category
      */
@@ -162,12 +186,72 @@ class Sport
     }
 
     /**
-     * Get categories
+     * Get categories.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     *
+     * @return Sport
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Upload attachment file
+     */
+    public function uploadIcon($path)
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        $this->getFile()->move($path, $this->getFile()->getClientOriginalName());
+        $this->setIcon($this->getFile()->getClientOriginalName());
+
+        $this->setFile(null);
     }
 }
