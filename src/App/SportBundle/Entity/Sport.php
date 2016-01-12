@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * Sport.
  *
  * @ORM\Table(name="sports")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
  */
 class Sport implements EntityInterface
 {
@@ -90,7 +90,7 @@ class Sport implements EntityInterface
         $sport = array(
             'id'         => $this->getId(),
             'name'       => $this->getName(),
-            'isActive'   => $this->getIsActive(),
+            'icon'       => $this->getIcon(),
             'categories' => array(),
             'tags'       => array(),
         );
