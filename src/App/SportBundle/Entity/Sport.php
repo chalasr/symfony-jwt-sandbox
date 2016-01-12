@@ -51,7 +51,7 @@ class Sport implements EntityInterface
     protected $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity="Tag", mappedBy="person", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Tag", mappedBy="Sport", cascade={"remove"})
      */
     protected $tags;
 
@@ -253,5 +253,39 @@ class Sport implements EntityInterface
         $this->setIcon($this->getFile()->getClientOriginalName());
 
         $this->setFile(null);
+    }
+
+    /**
+     * Add tag
+     *
+     * @param \App\SportBundle\Entity\Tag $tag
+     *
+     * @return Sport
+     */
+    public function addTag(\App\SportBundle\Entity\Tag $tag)
+    {
+        $this->tags[] = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Remove tag
+     *
+     * @param \App\SportBundle\Entity\Tag $tag
+     */
+    public function removeTag(\App\SportBundle\Entity\Tag $tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }
