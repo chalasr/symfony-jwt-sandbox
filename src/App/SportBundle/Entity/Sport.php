@@ -42,11 +42,17 @@ class Sport
     protected $categories;
 
     /**
+     * @ORM\OneToMany(targetEntity="Tag", mappedBy="person", cascade={"remove"})
+     */
+    protected $tags;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
