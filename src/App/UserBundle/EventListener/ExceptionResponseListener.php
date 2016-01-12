@@ -24,9 +24,8 @@ class ExceptionResponseListener
         }
 
         $exception =  $event->getException();
-
-        $statusCode = 500;
         $message = $exception->getMessage();
+        $statusCode = 500;
 
         if ($exception instanceof NotFoundHttpException) {
             $statusCode = $exception->getStatusCode();
@@ -35,14 +34,6 @@ class ExceptionResponseListener
             $statusCode = 400;
             $message = $exception->getMessage();
             $message = str_replace('"', '\'', $message);
-            // if (false !== strpos($message, 'Request parameter')) { // 19 = property 1st char
-            //     print_r($message);die;
-            //     $validationMessage = [];
-            //     $valueStart = strpos($message, 'value');
-            //     $validationMessage['property'] = substr($message, 18, $valueStart-19);
-            //     $validationMessage['message']  = substr($message, strpos($message, '(')+1, 31);
-            //     $message = $validationMessage;
-            // }
         } elseif ($exception instanceof ConflictHttpException) {
             $statusCode = $exception->getStatusCode();
             $message = $exception->getMessage();
