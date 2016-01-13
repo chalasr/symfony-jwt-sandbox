@@ -2,6 +2,7 @@
 
 namespace App\Util\Doctrine\Repository;
 
+use App\Util\Doctrine\Entity\AbstractEntity;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -47,7 +48,7 @@ class AbstractRepository extends EntityRepository
     public function findOrFail($id)
     {
         if (null == $entity = $this->find($id)) {
-            return self::fail($id);
+            return self::notFound($id);
         }
 
         return $entity;
@@ -68,10 +69,52 @@ class AbstractRepository extends EntityRepository
         $entities = $this->findBy($criteria, $orderBy);
 
         if (count($entities) == 0) {
-            return self::fail();
+            return self::notFound();
         }
 
         return $entities;
+    }
+
+    /**
+     * Find resource by criteria or create a new.
+     *
+     * @param array $criteria
+     * @param mixed $orderBy
+     * @param mixed $limit
+     * @param mixed $offset
+     *
+     * @return object
+     */
+    public function findOneByOrFail(array $criteria, array $orderBy = null)
+    {
+        $entity = $this->findOneBy($criteria, $orderBy);
+
+        if (null == $entity) {
+            return self::notFound();
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Check for existing resource by criteria and fail
+     *
+     * @param array $criteria
+     * @param mixed $orderBy
+     * @param mixed $limit
+     * @param mixed $offset
+     *
+     * @return object
+     */
+    public function findOneByAndFail(array $criteria, array $orderBy = null)
+    {
+        $entity = $this->findOneBy($criteria, $orderBy);
+
+        if (null !== $entity) {
+            return self::alreadyExists($entity->getId());
+        }
+
+        return $entity;
     }
 
     /**
@@ -96,48 +139,6 @@ class AbstractRepository extends EntityRepository
     }
 
     /**
-     * Find resource by criteria or create a new.
-     *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
-     *
-     * @return object
-     */
-    public function findOneByOrFail(array $criteria, array $orderBy = null)
-    {
-        $entity = $this->findOneBy($criteria, $orderBy);
-
-        if (null == $entity) {
-            return self::fail();
-        }
-
-        return $entity;
-    }
-
-    /**
-     * Find resource by criteria or create a new.
-     *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
-     *
-     * @return object
-     */
-    public function findOneByAndFail(array $criteria, array $orderBy = null)
-    {
-        $entity = $this->findOneBy($criteria, $orderBy);
-
-        if (null !== $entity) {
-            return self::fail($entity->getId(), 'A resource already exists');
-        }
-
-        return $entity;
-    }
-
-    /**
      * Check for existing resource by criteria.
      *
      * @param array $criteria
@@ -152,7 +153,7 @@ class AbstractRepository extends EntityRepository
         $entities = $this->findBy($criteria, $orderBy);
 
         if (count($entities) > 0) {
-            return self::fail(null, 'A resource already exists');
+            return self::alreadyExists();
         }
 
         return $entities;
@@ -180,14 +181,32 @@ class AbstractRepository extends EntityRepository
     }
 
     /**
-     * Fails.
+     * Fails on resource not found.
      *
      * @param mixed  $id
      * @param string $message
      *
      * @throws NotFoundHttpException
      */
-    public static function fail($id = null, $message = 'Unable to find resource')
+    public static function notFound($id = null, $message = 'Unable to find resource')
+    {
+        if (null !== $id) {
+            $endMessage = sprintf(' with id %d', $id);
+            $message .= $endMessage;
+        }
+
+        throw new NotFoundHttpException($message);
+    }
+
+    /**
+     * Fails on resource already exists.
+     *
+     * @param mixed  $id
+     * @param string $message
+     *
+     * @throws NotFoundHttpException
+     */
+    public static function alreadyExists($id = null, $message = 'A resource already exists')
     {
         if (null !== $id) {
             $endMessage = sprintf(' with id %d', $id);
@@ -227,7 +246,7 @@ class AbstractRepository extends EntityRepository
      *
      * @return EntityInterface
      */
-    public static function update(EntityInterface $entity, array $properties)
+    public static function update(AbstractEntity $entity, array $properties)
     {
         foreach ($properties as $property => $value) {
             $setter = 'set'.ucfirst($property);
@@ -244,7 +263,7 @@ class AbstractRepository extends EntityRepository
      *
      * @param EntityInterface $entity
      */
-    public static function delete(EntityInterface $entity)
+    public static function delete(AbstractEntity $entity)
     {
         self::$_manager->remove($entity);
         self::$_manager->flush();

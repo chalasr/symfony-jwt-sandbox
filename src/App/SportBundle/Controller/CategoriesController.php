@@ -74,7 +74,7 @@ class CategoriesController extends Controller
         $category = ['name' => $name];
         $repo->findOneByAndFail($category);
 
-        return $repo::create($category)->toArray();
+        return $repo->create($category)->toArray();
     }
 
     /**
@@ -166,7 +166,7 @@ class CategoriesController extends Controller
         ;
 
         $category = $repo->findOrFail($id);
-        $repo::delete($category);
+        $repo->delete($category);
 
         return ['success' => true];
     }

@@ -75,7 +75,7 @@ class SportsController extends Controller
         $repo->findOneByAndFail($sport);
         $sport['isActive'] = false === $paramFetcher->get('isActive') ? false : true;
 
-        $sport = $repo::create($sport);
+        $sport = $repo->create($sport);
 
         // Use JsonResponse to specify status code.
         return new JsonResponse($sport->toArray(), 201);

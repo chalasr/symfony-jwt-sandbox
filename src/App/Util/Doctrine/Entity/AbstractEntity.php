@@ -8,8 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
  * Abstract Entity.
  *
  * @author Robin Chalas <rchalas@sutunam.com>
- *
- * @ORM\Entity(repositoryClass="App\Util\Doctrine\Repository\AbstractRepository")
  */
 abstract class AbstractEntity
 {
