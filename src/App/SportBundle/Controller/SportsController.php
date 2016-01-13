@@ -2,7 +2,6 @@
 
 namespace App\SportBundle\Controller;
 
-use App\SportBundle\Entity\Category;
 use App\SportBundle\Entity\Sport;
 use App\Util\Controller\AbstractRestController as Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -31,7 +30,7 @@ class SportsController extends Controller
      * 	 },
      * )
      *
-     * @return Doctrine\ORM\QueryBuilder $results
+     * @return array
      */
     public function getSportsListAction()
     {
@@ -42,42 +41,12 @@ class SportsController extends Controller
         foreach ($entities as $entity) {
             $results[] = $entity->toArray();
         }
-        return $results;
-    }
-
-    /**
-     * Get Category associations from Sport entity.
-     *
-     * @Rest\Get("/sports/{id}/categories")
-     * @ApiDoc(
-     *   section="Sport",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	   200="OK",
-     * 	   401="Unauthorized"
-     * 	 },
-     * )
-     *
-     * @param int $id Sport entity
-     *
-     * @return Doctrine\ORM\QueryBuilder $results
-     */
-    public function getCategoriesBySport($id)
-    {
-        $em = $this->getEntityManager();
-        $sport = $em->getRepository('AppSportBundle:Sport')->findOrFail($id);
-
-        $results = array();
-
-        foreach ($sport->getCategories() as $category) {
-            $results[] = $category->toArray(['sports']);
-        }
 
         return $results;
     }
 
     /**
-     * Create a new Sport entity.
+     * Creates a new Sport entity.
      *
      * @Rest\Post("/sports")
      * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")
@@ -95,26 +64,21 @@ class SportsController extends Controller
      *
      * @param ParamFetcher $paramFetcher
      *
-     * @return JsonResponse $response  Created Sport
+     * @return JsonResponse
      */
     public function createSportAction(ParamFetcher $paramFetcher)
     {
         $em = $this->getEntityManager();
+        $repo = $em->getRepository('AppSportBundle:Sport');
+        $sport = ['name' => $paramFetcher->get('name')];
 
-        $sport = new Sport();
-        $sport->setName($paramFetcher->get('name'));
-        $sport->setIsActive(false === $paramFetcher->get('isActive') ? false : true);
+        $repo->findOneByAndFail($sport);
+        $sport['isActive'] = false === $paramFetcher->get('isActive') ? false : true;
 
-        $em->persist($sport);
-        $em->flush();
+        $sport = $repo::create($sport);
 
-        $response = array(
-            'id'       => $sport->getId(),
-            'name'     => $sport->getName(),
-            'isActive' => $sport->getIsActive(),
-        );
-
-        return new JsonResponse($response, 201);
+        // Use JsonResponse to specify status code.
+        return new JsonResponse($sport->toArray(), 201);
     }
 
     /**

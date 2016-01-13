@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Util\Entity;
+namespace App\Util\Doctrine\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -54,28 +54,7 @@ class AbstractRepository extends EntityRepository
     }
 
     /**
-     * Find resource by criteria or create a new.
-     *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
-     *
-     * @return object
-     */
-    public function findByOrCreate(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-        $entities = $this->findBy($criteria, $orderBy, $limit, $offset);
-
-        if (count($entities) == 0) {
-            return self::create($criteria);
-        }
-
-        return $entities;
-    }
-
-    /**
-     * Find resource by criteria or create a new.
+     * Find resource by criteria or fail.
      *
      * @param array $criteria
      * @param mixed $orderBy
@@ -128,10 +107,73 @@ class AbstractRepository extends EntityRepository
      */
     public function findOneByOrFail(array $criteria, array $orderBy = null)
     {
-        $entities = $this->findOneBy($criteria, $orderBy);
+        $entity = $this->findOneBy($criteria, $orderBy);
+
+        if (null == $entity) {
+            return self::fail();
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Find resource by criteria or create a new.
+     *
+     * @param array $criteria
+     * @param mixed $orderBy
+     * @param mixed $limit
+     * @param mixed $offset
+     *
+     * @return object
+     */
+    public function findOneByAndFail(array $criteria, array $orderBy = null)
+    {
+        $entity = $this->findOneBy($criteria, $orderBy);
+
+        if (null !== $entity) {
+            return self::fail($entity->getId(), 'A resource already exists');
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Check for existing resource by criteria.
+     *
+     * @param array $criteria
+     * @param mixed $orderBy
+     * @param mixed $limit
+     * @param mixed $offset
+     *
+     * @return object
+     */
+    public function findByAndFail(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        $entities = $this->findBy($criteria, $orderBy);
+
+        if (count($entities) > 0) {
+            return self::fail(null, 'A resource already exists');
+        }
+
+        return $entities;
+    }
+
+    /**
+     * Find resource by criteria or create a new.
+     *
+     * @param array $criteria
+     * @param mixed $orderBy
+     * @param mixed $limit
+     * @param mixed $offset
+     *
+     * @return object
+     */
+    public function findByOrCreate(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        $entities = $this->findBy($criteria, $orderBy, $limit, $offset);
 
         if (count($entities) == 0) {
-            return self::fail();
+            return self::create($criteria);
         }
 
         return $entities;
@@ -160,14 +202,14 @@ class AbstractRepository extends EntityRepository
      *
      * @param array $properties
      *
-     * @return int
+     * @return EntityInterface
      */
     public static function create(array $properties)
     {
         $entity = new self::$_className();
 
         foreach ($properties as $property => $value) {
-            $setter = 'set' . ucfirst($property);
+            $setter = 'set'.ucfirst($property);
             $entity->$setter($value);
         }
 
@@ -175,5 +217,36 @@ class AbstractRepository extends EntityRepository
         self::$_manager->flush();
 
         return $entity;
+    }
+
+    /**
+     * Updates an existing resource.
+     *
+     * @param EntityInterface $entity
+     * @param array           $properties
+     *
+     * @return EntityInterface
+     */
+    public static function update(EntityInterface $entity, array $properties)
+    {
+        foreach ($properties as $property => $value) {
+            $setter = 'set'.ucfirst($property);
+            $entity->$setter($value);
+        }
+
+        self::$_manager->flush();
+
+        return $entity;
+    }
+
+    /**
+     * Deletes a resource.
+     *
+     * @param EntityInterface $entity
+     */
+    public static function delete(EntityInterface $entity)
+    {
+        self::$_manager->remove($entity);
+        self::$_manager->flush();
     }
 }
