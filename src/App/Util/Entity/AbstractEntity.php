@@ -3,8 +3,6 @@
 namespace App\Util\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EntityManagerInterface
-
 
 /**
  * Abstract Entity.
@@ -13,16 +11,14 @@ use EntityManagerInterface
  *
  * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
  */
-class AbstractEntity
+abstract class AbstractEntity
 {
-    public static $_repository;
-
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
@@ -33,6 +29,6 @@ class AbstractEntity
      */
     public function getId()
     {
-        return $this->getId();
+        return $this->id;
     }
 }

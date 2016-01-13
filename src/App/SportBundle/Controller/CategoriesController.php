@@ -2,16 +2,13 @@
 
 namespace App\SportBundle\Controller;
 
-
 use App\SportBundle\Entity\Category;
-use App\SportBundle\Entity\Sport;
+use App\Util\Controller\AbstractRestController as Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-
-use App\Util\Controller\AbstractRestController as Controller;
 
 /**
  * Categories resource.
@@ -35,17 +32,16 @@ class CategoriesController extends Controller
      *
      * @return Doctrine\ORM\QueryBuilder $results
      */
-    public  function getCategoriesListAction(){
+    public function getCategoriesListAction()
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $entities = $em->getRepository('AppSportBundle:Category')->findAll();
         $results = array();
         foreach ($entities as $entity) {
-
-            $results[] = array('id'=>$entity->getId(),'name'=>$entity->getName());
+            $results[] = array('id' => $entity->getId(), 'name' => $entity->getName());
         }
 
         return new JsonResponse($results, 201);
-
     }
 
     /**
@@ -70,10 +66,10 @@ class CategoriesController extends Controller
      */
     public function createCategoryAction(ParamFetcher $paramFetcher)
     {
-        $response=array(
-            'status'=>false,
-            'message'=>"Duplicate name",
-            'data'=>array()
+        $response = array(
+            'status'  => false,
+            'message' => 'Duplicate name',
+            'data'    => array(),
         );
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -81,15 +77,14 @@ class CategoriesController extends Controller
         $category->setName($paramFetcher->get('name'));
 
         $exists = $em->getRepository('AppSportBundle:Category')->findBy(array(
-            'name' => $category->getName()
+            'name' => $category->getName(),
         ));
-        if(!$exists) {
+        if (!$exists) {
             $em->persist($category);
             $em->flush();
-            $response['status']=true;
-            $response['message']='sucessful';
+            $response['status'] = true;
+            $response['message'] = 'sucessful';
         }
-
 
         return new JsonResponse($response);
     }
@@ -113,17 +108,17 @@ class CategoriesController extends Controller
      */
     public function getCategoryAction($id)
     {
-        $response=array();
-        $em = $em = $this->getDoctrine()->getEntityManager();
+        $response = array();
+        $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('AppSportBundle:Category')->findOneBy(array('id'=>$id));
-        if($entity){
-            $response['id']=$entity->getId();
-            $response['name']=$entity->getName();
+        $entity = $em->getRepository('AppSportBundle:Category')->findOneBy(array('id' => $id));
+        if ($entity) {
+            $response['id'] = $entity->getId();
+            $response['name'] = $entity->getName();
         }
+
         return new JsonResponse($response);
     }
-
 
     /**
      * update Category entity.
@@ -138,26 +133,25 @@ class CategoriesController extends Controller
      * 	   401="Unauthorized"
      * 	 },
      * )
-     *
 
-     * @param int $id Category entity
+     * @param int          $id           Category entity
      * @param ParamFetcher $paramFetcher
      *
      * @return JsonResponse $response get Category
      */
-    public function updateCategoryAction($id,ParamFetcher $paramFetcher)
+    public function updateCategoryAction($id, ParamFetcher $paramFetcher)
     {
-        $response=array();
+        $response = array();
         $em = $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('AppSportBundle:Category')->findOneBy(array('id'=>$id));
-        if($entity){
-            $response['id']=$entity->getId();
-            $response['name']=$entity->getName();
+        $entity = $em->getRepository('AppSportBundle:Category')->findOneBy(array('id' => $id));
+        if ($entity) {
+            $response['id'] = $entity->getId();
+            $response['name'] = $entity->getName();
         }
+
         return new JsonResponse($response);
     }
-
 
     /**
      * delete Category entity.
@@ -171,31 +165,29 @@ class CategoriesController extends Controller
      * 	   401="Unauthorized"
      * 	 },
      * )
-     *
-
+     * 
      * @param int $id Category entity
      *
      * @return JsonResponse $response get Category
      */
     public function deleteCategoryAction($id)
     {
-        $response=array(
-            'status'=>false,
-            'message'=>"",
+        $response = array(
+            'status'  => false,
+            'message' => '',
         );
         $em = $this->getDoctrine()->getEntityManager();
         $category = $em->getRepository('AppSportBundle:Category')->find($id);
 
         if (!$category) {
-            $response['message']='No category found for id '.$id;
-        }else{
+            $response['message'] = 'No category found for id '.$id;
+        } else {
             $em->remove($category);
             $em->flush();
-            $response['status']=true;
-            $response['message']="Done";
+            $response['status'] = true;
+            $response['message'] = 'Done';
         }
 
         return new JsonResponse($response);
-
     }
 }

@@ -42,7 +42,6 @@ class SportsController extends Controller
         foreach ($entities as $entity) {
             $results[] = $entity->toArray();
         }
-
         return $results;
     }
 
@@ -140,7 +139,7 @@ class SportsController extends Controller
         $em = $this->getEntityManager();
         $sport = $em
             ->getRepository('AppSportBundle:Sport')
-            ->findOneByOrCreate(['name' => $name])
+            ->findOneByOrFail(['name' => $name])
         ;
         $iconName = $sport->getIcon();
 

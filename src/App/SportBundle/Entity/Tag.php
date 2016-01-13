@@ -1,22 +1,17 @@
 <?php
-// src/App/SportBundle/Entity/Tag.php
+
 namespace App\SportBundle\Entity;
 
+use App\Util\Entity\AbstractEntity;
+use App\Util\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
  * @ORM\Table(name="tags_sport")
  */
-class Tag
+class Tag extends AbstractEntity implements EntityInterface
 {
-    /**
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -36,13 +31,11 @@ class Tag
     }
 
     /**
-     * Get id.
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function getId()
+    public function __toString()
     {
-        return $this->id;
+        return $this->getName() ?: 'New Tag';
     }
 
     /**

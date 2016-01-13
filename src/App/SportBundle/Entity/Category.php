@@ -2,28 +2,20 @@
 
 namespace App\SportBundle\Entity;
 
+use App\Util\Entity\AbstractEntity;
+use App\Util\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * Category.
  *
  * @ORM\Table(name="categories_sport")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
  * @UniqueEntity("name")
- *
  */
-class Category
+class Category extends AbstractEntity implements EntityInterface
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
     /**
      * @var string
      *
@@ -81,16 +73,6 @@ class Category
         }
 
         return $category;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
