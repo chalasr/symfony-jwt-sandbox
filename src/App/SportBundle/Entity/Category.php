@@ -3,12 +3,15 @@
 namespace App\SportBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Category.
  *
  * @ORM\Table(name="categories_sport")
  * @ORM\Entity
+ * @UniqueEntity("name")
+ *
  */
 class Category
 {
@@ -24,7 +27,7 @@ class Category
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     protected $name;
 

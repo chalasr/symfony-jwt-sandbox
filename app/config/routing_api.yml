@@ -20,3 +20,6 @@ sports_resource:
     # Inside this controller, routes are registered manually using the @Rest annotation (@Rest\Get|Post|Put|..)
     # @see http://symfony.com/doc/current/bundles/FOSRestBundle/7-manual-route-definition.html
     resource: App\SportBundle\Controller\SportsController
+
+categories_resource:
+    resource: App\SportBundle\Controller\CategoriesController
