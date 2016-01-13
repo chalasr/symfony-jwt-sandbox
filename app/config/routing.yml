@@ -7,13 +7,13 @@ app_api:
 
 # Routing Admin loaded if referer's host is "admin."
 app_admin:
-    host: "%domain%"
+    host: "api.%domain%"
     prefix: /
     resource: "routing_admin.yml"
 
 # Demo for API
 app_demo:
-    host: "api.%domain%"
+    host: "%domain%"
     path: /
     defaults:
         _controller: FrameworkBundle:Template:template

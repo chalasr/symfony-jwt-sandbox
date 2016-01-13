@@ -16,3 +16,14 @@ api_refresh_token:
 
 sports:
     resource: "@AppSportBundle/Resources/config/routing.yml"
+
+# One Controller per collection
+# Here the SportsController containing all Resources related to Sport (/v1/sports collection)
+sports_resource:
+    # Inside this controller, routes are registered manually using the @Rest annotation (@Rest\Get|Post|Put|..)
+    # @see http://symfony.com/doc/current/bundles/FOSRestBundle/7-manual-route-definition.html
+    resource: App\SportBundle\Controller\SportsController
+
+categories_resource:
+    resource: App\SportBundle\Controller\CategoriesController
+

@@ -10,11 +10,6 @@ namespace App\Util\Entity;
 interface EntityInterface
 {
     /**
-     * Get id.
-     */
-    public function getId();
-
-    /**
      * To string.
      */
     public function __toString();
