@@ -2,7 +2,7 @@
 
 namespace App\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation as Http;
 
 /**
  * Controller of Sport admin class.
@@ -20,8 +20,11 @@ class SportAdminController extends AbstractAdminController
      */
     public function showIconAction($name)
     {
+        if (!$name) {
+            return new Http\JsonResponse(['error' => 'No icon found for this sport']);
+        }
         $path = $this->locate('@AppSportBundle/Resources/public/icons/'.$name);
-        $response = new Response();
+        $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path));
         $response->headers->set('Content-Disposition', 'inline; filename="'.$name.'";');
         $response->headers->set('Content-length', filesize($path));

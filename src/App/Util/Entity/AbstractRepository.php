@@ -84,12 +84,54 @@ class AbstractRepository extends EntityRepository
      *
      * @return object
      */
+    public function findByOrFail(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        $entities = $this->findBy($criteria, $orderBy);
+
+        if (count($entities) == 0) {
+            return self::fail();
+        }
+
+        return $entities;
+    }
+
+    /**
+     * Find resource by criteria or create a new.
+     *
+     * @param array $criteria
+     * @param mixed $orderBy
+     * @param mixed $limit
+     * @param mixed $offset
+     *
+     * @return object
+     */
     public function findOneByOrCreate(array $criteria, array $orderBy = null)
     {
         $entities = $this->findOneBy($criteria, $orderBy);
 
         if (count($entities) == 0) {
             return self::create($criteria);
+        }
+
+        return $entities;
+    }
+
+    /**
+     * Find resource by criteria or create a new.
+     *
+     * @param array $criteria
+     * @param mixed $orderBy
+     * @param mixed $limit
+     * @param mixed $offset
+     *
+     * @return object
+     */
+    public function findOneByOrFail(array $criteria, array $orderBy = null)
+    {
+        $entities = $this->findOneBy($criteria, $orderBy);
+
+        if (count($entities) == 0) {
+            return self::fail();
         }
 
         return $entities;
@@ -125,8 +167,8 @@ class AbstractRepository extends EntityRepository
         $entity = new self::$_className();
 
         foreach ($properties as $property => $value) {
-            $setter = 'set'.ucfirst($property);
-            $entity->$setter($val);
+            $setter = 'set' . ucfirst($property);
+            $entity->$setter($value);
         }
 
         self::$_manager->persist($entity);

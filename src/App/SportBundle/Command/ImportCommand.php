@@ -2,19 +2,17 @@
 
 namespace App\SportBundle\Command;
 
+use App\SportBundle\Entity\Sport;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\SportBundle\Entity\Sport;
-
 
 class ImportCommand extends ContainerAwareCommand
 {
     protected $options = array(
-        'filename' => 'sports.csv',
-        'ignoreFirstl' => true
+        'filename'     => 'sports.csv',
+        'ignoreFirstl' => true,
     );
 
     protected function configure()
@@ -28,20 +26,22 @@ class ImportCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $now = new \DateTime();
-        $mes = '<comment>Start : ' . $now->format('d-m-Y G:i:s') . ' ---</comment>';
+        $mes = '<comment>Start : '.$now->format('d-m-Y G:i:s').' ---</comment>';
         $this->_logOut($mes, $output);
 
         $ignoreFirstl = $this->options['ignoreFirstl'];
 
-        $path = $this->getContainer()->get('kernel')->locateResource('@AppSportBundle/Resources/public/sports.csv' . $this->options['filename'];
+        $path = $this->getContainer()->get('kernel')->locateResource('@AppSportBundle/Resources/public/sports.csv'.$this->options['filename']);
 
         $rows = array();
-        if (($handle = fopen($path, "r")) !== FALSE) {
+        if (($handle = fopen($path, 'r')) !== false) {
             $i = 0;
             $pageSize = 100;
-            while (($data = fgetcsv($handle, null, ",", '"')) !== FALSE) {
-                $i++;
-                if ($ignoreFirstl && $i == 1) { continue; }
+            while (($data = fgetcsv($handle, null, ',', '"')) !== false) {
+                ++$i;
+                if ($ignoreFirstl && $i == 1) {
+                    continue;
+                }
                 $rows[] = $data;
                 if ($i % $pageSize == 0) {
                     $this->import($input, $output, $rows);
@@ -56,15 +56,17 @@ class ImportCommand extends ContainerAwareCommand
         }
 
         $now = new \DateTime();
-        $output->writeln('<comment>End : ' . $now->format('d-m-Y G:i:s') . ' ---</comment>', $output);
+        $output->writeln('<comment>End : '.$now->format('d-m-Y G:i:s').' ---</comment>', $output);
     }
 
     /**
      * Import.
-     * @param  InputInterface  $input
-     * @param  OutputInterface $output
-     * @param  array           $data
-     * @return [type]                  [description]
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param array           $data
+     *
+     * @return [type] [description]
      */
     protected function import(InputInterface $input, OutputInterface $output, $data)
     {
@@ -72,7 +74,7 @@ class ImportCommand extends ContainerAwareCommand
         $repo = $em->getRepository('AppSportBundle:Sport');
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
-        for ($i = 0; $i < count($data); $i++) {
+        for ($i = 0; $i < count($data); ++$i) {
             new Sport();
             $personne->setName($data[$i][0]);
             $personne->setIcon($data[$i][3]);
@@ -81,7 +83,7 @@ class ImportCommand extends ContainerAwareCommand
             $personne->setJournal($data[$i][13]);
             try {
                 $em->persist($personne);
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $this->_log($e->getMessage());
             }
         }
@@ -91,21 +93,23 @@ class ImportCommand extends ContainerAwareCommand
     }
 
     /**
-     * Parse a csv file
+     * Parse a csv file.
      *
      * @return array
      */
     private function parseCSV()
     {
         $ignoreFirstl = $this->options['ignoreFirstl'];
-        $path = __DIR__ . '/../Data/' . $this->options['filename'];
+        $path = __DIR__.'/../Data/'.$this->options['filename'];
         $rows = array();
 
-        if (($handle = fopen($path, "r")) !== FALSE) {
+        if (($handle = fopen($path, 'r')) !== false) {
             $i = 0;
-            while (($data = fgetcsv($handle, null, ",", '"')) !== FALSE) {
-                $i++;
-                if ($ignoreFirstl && $i == 1) { continue; }
+            while (($data = fgetcsv($handle, null, ',', '"')) !== false) {
+                ++$i;
+                if ($ignoreFirstl && $i == 1) {
+                    continue;
+                }
                 $rows[] = $data;
             }
             fclose($handle);
