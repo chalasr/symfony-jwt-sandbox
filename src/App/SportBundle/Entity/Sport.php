@@ -2,8 +2,8 @@
 
 namespace App\SportBundle\Entity;
 
-use App\Util\Entity\EntityInterface;
 use App\Util\Entity\AbstractEntity;
+use App\Util\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -104,7 +104,6 @@ class Sport extends AbstractEntity implements EntityInterface
 
         return $sport;
     }
-
 
     /**
      * Set name.
