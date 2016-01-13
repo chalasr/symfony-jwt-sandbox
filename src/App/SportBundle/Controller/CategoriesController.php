@@ -2,19 +2,16 @@
 
 namespace App\SportBundle\Controller;
 
-<<<<<<< HEAD
+
 use App\SportBundle\Entity\Category;
 use App\SportBundle\Entity\Sport;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-=======
 use App\Util\Controller\AbstractRestController as Controller;
->>>>>>> 9f3869d1195b28d4fb6ac43cb082d21d162d0e80
 
 /**
  * Categories resource.

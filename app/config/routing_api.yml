@@ -14,6 +14,8 @@ api_refresh_token:
     defaults: { _controller: gesdinet.jwtrefreshtoken:refresh }
 
 
+sports:
+    resource: "@AppSportBundle/Resources/config/routing.yml"
 
 # One Controller per collection
 # Here the SportsController containing all Resources related to Sport (/v1/sports collection)
@@ -25,5 +27,3 @@ sports_resource:
 categories_resource:
     resource: App\SportBundle\Controller\CategoriesController
 
-sports:
-    resource: "@AppSportBundle/Resources/config/routing.yml"
