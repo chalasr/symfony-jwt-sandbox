@@ -2,16 +2,16 @@
 
 namespace App\SportBundle\Entity;
 
-use App\Util\Entity\AbstractEntity;
-use App\Util\Entity\EntityInterface;
+use App\Util\Doctrine\Entity\AbstractEntity;
+use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Category.
  *
+ * @ORM\Entity
  * @ORM\Table(name="categories_sport")
- * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
  * @UniqueEntity("name")
  */
 class Category extends AbstractEntity implements EntityInterface
