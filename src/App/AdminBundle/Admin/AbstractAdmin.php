@@ -17,7 +17,7 @@ abstract class AbstractAdmin extends Admin
     /**
      * Shortcut method to locate a resource.
      *
-     * @param  string $resource
+     * @param string $resource
      *
      * @return string Resource path
      */

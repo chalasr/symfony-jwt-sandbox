@@ -4,10 +4,10 @@ namespace App\SportBundle\Controller;
 
 use App\SportBundle\Entity\Category;
 use App\SportBundle\Entity\Sport;
+use App\Util\Controller\AbstractRestController as Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,7 +36,7 @@ class SportsController extends Controller
     public function getSportsListAction()
     {
         $em = $this->getEntityManager();
-        $entities = $em->getRepository('AppSportBundle:Sport')->findAll();
+        $entities = $em->getRepository('AppSportBundle:Sport')->findBy(['isActive' => 1]);
         $results = array();
 
         foreach ($entities as $entity) {
@@ -66,7 +66,8 @@ class SportsController extends Controller
     public function getCategoriesBySport($id)
     {
         $em = $this->getEntityManager();
-        $sport = $em->getRepository('AppSportBundle:Sport')->find($id);
+        $sport = $em->getRepository('AppSportBundle:Sport')->findOrFail($id);
+
         $results = array();
 
         foreach ($sport->getCategories() as $category) {
@@ -118,12 +119,34 @@ class SportsController extends Controller
     }
 
     /**
-     * Returns Entity Manager.
+     * Get Icon image from Sport entity.
      *
-     * @return EntityManager $entityManager
+     * @Rest\Get("/sports/{name}/icon")
+     * @ApiDoc(
+     *   section="Sport",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	   200="OK",
+     * 	   401="Unauthorized"
+     * 	 },
+     * )
+     *
+     * @param int $id Sport entity
+     *
+     * @return Response
      */
-    protected function getEntityManager()
+    public function getIconBySportAction($name)
     {
-        return $this->getDoctrine()->getEntityManager();
+        $em = $this->getEntityManager();
+        $sport = $em
+            ->getRepository('AppSportBundle:Sport')
+            ->findOneByOrCreate(['name' => $name])
+        ;
+        $iconName = $sport->getIcon();
+
+        return $this->forward('AppAdminBundle:SportAdmin:showIcon', array(
+            'name'           => $iconName,
+            '_sonata_admin'  => 'sonata.admin.sports',
+        ));
     }
 }

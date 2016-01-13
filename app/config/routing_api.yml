@@ -1,4 +1,7 @@
 # Security related routing (users and sessions management)
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
 api_security:
     resource: "@AppUserBundle/Resources/config/routing.yml"
     prefix:   /
@@ -10,9 +13,7 @@ api_refresh_token:
     methods: POST
     defaults: { _controller: gesdinet.jwtrefreshtoken:refresh }
 
-fos_user_security:
-    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
-#
+
 
 # One Controller per collection
 # Here the SportsController containing all Resources related to Sport (/v1/sports collection)
@@ -23,3 +24,6 @@ sports_resource:
 
 categories_resource:
     resource: App\SportBundle\Controller\CategoriesController
+
+sports:
+    resource: "@AppSportBundle/Resources/config/routing.yml"

@@ -20,10 +20,10 @@ class SportAdminController extends AbstractAdminController
      */
     public function showIconAction($name)
     {
-        $path = $this->locate('@AppSportBundle/Resources/public/icons/' . $name);
+        $path = $this->locate('@AppSportBundle/Resources/public/icons/'.$name);
         $response = new Response();
         $response->headers->set('Content-type', mime_content_type($path));
-        $response->headers->set('Content-Disposition', 'inline; filename="' . $name . '";');
+        $response->headers->set('Content-Disposition', 'inline; filename="'.$name.'";');
         $response->headers->set('Content-length', filesize($path));
         $response->sendHeaders();
         $response->setContent(readfile($path));

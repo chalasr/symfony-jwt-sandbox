@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * Sport.
  *
  * @ORM\Table(name="sports")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
  */
 class Sport implements EntityInterface
 {
@@ -49,7 +49,6 @@ class Sport implements EntityInterface
      * @ORM\JoinTable(name="sports_categories")
      */
     protected $categories;
-
 
     /**
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="sports", cascade={"persist"})
@@ -91,9 +90,9 @@ class Sport implements EntityInterface
         $sport = array(
             'id'         => $this->getId(),
             'name'       => $this->getName(),
-            'isActive'   => $this->getIsActive(),
+            'icon'       => $this->getIcon(),
             'categories' => array(),
-            'tags' => array(),
+            'tags'       => array(),
         );
 
         foreach ($this->getCategories() as $cat) {
@@ -207,7 +206,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Set icon
+     * Set icon.
      *
      * @param string $icon
      *
@@ -221,7 +220,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Get icon
+     * Get icon.
      *
      * @return string
      */
@@ -229,7 +228,6 @@ class Sport implements EntityInterface
     {
         return $this->icon;
     }
-
 
     /**
      * Sets file.
@@ -252,7 +250,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Upload attachment file
+     * Upload attachment file.
      */
     public function uploadIcon($path)
     {
@@ -266,9 +264,8 @@ class Sport implements EntityInterface
         $this->setFile(null);
     }
 
-
     /**
-     * Add tag
+     * Add tag.
      *
      * @param \App\SportBundle\Entity\Tag $tag
      *
@@ -282,7 +279,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Remove tag
+     * Remove tag.
      *
      * @param \App\SportBundle\Entity\Tag $tag
      */
@@ -292,7 +289,7 @@ class Sport implements EntityInterface
     }
 
     /**
-     * Get tags
+     * Get tags.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
