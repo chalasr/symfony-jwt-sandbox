@@ -6,6 +6,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * Listens for exceptions and transform Response.
+ *
+ * @author Robin Chalas <rchalas@sutunam.com>
+ */
 class ExceptionResponseListener
 {
     /**
