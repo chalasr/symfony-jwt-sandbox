@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Util\Entity;
+namespace App\Util\Doctrine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Robin Chalas <rchalas@sutunam.com>
  *
- * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
+ * @ORM\Entity(repositoryClass="App\Util\Doctrine\Repository\AbstractRepository")
  */
 abstract class AbstractEntity
 {

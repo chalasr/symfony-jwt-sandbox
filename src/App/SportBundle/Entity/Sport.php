@@ -2,16 +2,16 @@
 
 namespace App\SportBundle\Entity;
 
-use App\Util\Entity\AbstractEntity;
-use App\Util\Entity\EntityInterface;
+use App\Util\Doctrine\Entity\AbstractEntity;
+use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Sport.
  *
+ * @ORM\Entity
  * @ORM\Table(name="sports")
- * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
  */
 class Sport extends AbstractEntity implements EntityInterface
 {

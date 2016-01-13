@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Util\Entity;
+namespace App\Util\Doctrine\Entity;
 
 /**
  * Entity interface.

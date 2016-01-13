@@ -2,12 +2,12 @@
 
 namespace App\SportBundle\Entity;
 
-use App\Util\Entity\AbstractEntity;
-use App\Util\Entity\EntityInterface;
+use App\Util\Doctrine\Entity\AbstractEntity;
+use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
+ * @ORM\Entity
  * @ORM\Table(name="tags_sport")
  */
 class Tag extends AbstractEntity implements EntityInterface
@@ -39,6 +39,31 @@ class Tag extends AbstractEntity implements EntityInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function toArray(array $excludes = null)
+    {
+        $tag = array(
+            'id'     => $this->getId(),
+            'name'   => $this->getName(),
+            'sports' => array(),
+        );
+
+        foreach ($this->getSports() as $sport) {
+            $tag['sports'][] = array(
+                'id'   => $sport->getId(),
+                'name' => $sport->getName(),
+            );
+        }
+
+        foreach ($excludes as $value) {
+            unset($tag[$value]);
+        }
+
+        return $tag;
+    }
+
+    /**
      * Set name.
      *
      * @param string $name
@@ -60,35 +85,6 @@ class Tag extends AbstractEntity implements EntityInterface
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * To array.
-     *
-     * @param array $exclude Excluded parameters
-     *
-     * @return array
-     */
-    public function toArray($excludes = null)
-    {
-        $tags = array(
-            'id'     => $this->getId(),
-            'name'   => $this->getName(),
-            'sports' => array(),
-        );
-
-        foreach ($this->getSports() as $sport) {
-            $tags['sports'][] = array(
-                'id'   => $sport->getId(),
-                'name' => $sport->getName(),
-            );
-        }
-
-        foreach ($excludes as $value) {
-            unset($tags[$value]);
-        }
-
-        return $tags;
     }
 
     /**
