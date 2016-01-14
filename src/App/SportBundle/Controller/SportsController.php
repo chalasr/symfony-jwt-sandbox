@@ -39,7 +39,7 @@ class SportsController extends Controller
         $results = array();
 
         foreach ($entities as $entity) {
-            $results[] = $entity->toArray();
+            $results[] = $entity->toArray(['isActive']);
         }
 
         return $results;
