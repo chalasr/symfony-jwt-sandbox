@@ -67,9 +67,10 @@ class Category extends AbstractEntity implements EntityInterface
                 'name' => $sport->getName(),
             );
         }
-
-        foreach ($excludes as $value) {
-            unset($category[$value]);
+        if(is_array($excludes)){
+            foreach ($excludes as $value) {
+                unset($category[$value]);
+            }
         }
 
         return $category;
