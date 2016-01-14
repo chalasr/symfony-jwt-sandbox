@@ -33,7 +33,7 @@ class ImportCommand extends ContainerAwareCommand
 
         $ignoreFirstl = $this->options['ignoreFirstl'];
 
-        $path = $this->getContainer()->get('kernel')->locateResource('@AppSportBundle/Resources/public/sports.csv' . $this->options['filename'];
+        $path = $this->getContainer()->get('kernel')->locateResource('@AppSportBundle/Resources/public/sports.csv' . $this->options['filename']);
 
         $rows = array();
         if (($handle = fopen($path, "r")) !== FALSE) {
