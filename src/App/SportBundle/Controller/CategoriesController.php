@@ -2,21 +2,19 @@
 
 namespace App\SportBundle\Controller;
 
-
 use App\SportBundle\Entity\Category;
-use App\SportBundle\Entity\Sport;
+use App\Util\Controller\AbstractRestController as Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use App\Util\Controller\AbstractRestController as Controller;
-
 /**
  * Categories resource.
  *
- * @author Robin Chalas <rchalas@sutunam.com>
+ * @author Pham Xuan Thuy <phamxuanthuy@sutunam.com>
+ * @author Robin Chalas   <rchalas@sutunam.com>
  */
 class CategoriesController extends Controller
 {
@@ -33,19 +31,22 @@ class CategoriesController extends Controller
      * 	 },
      * )
      *
-     * @return Doctrine\ORM\QueryBuilder $results
+     * @return array
      */
-    public  function getCategoriesListAction(){
-        $em = $this->getDoctrine()->getEntityManager();
+    public function getCategoriesListAction()
+    {
+        $em = $this->getEntityManager();
         $entities = $em->getRepository('AppSportBundle:Category')->findAll();
         $results = array();
         foreach ($entities as $entity) {
-
-            $results[] = array('id'=>$entity->getId(),'name'=>$entity->getName());
+            $results[] = $entity->toArray();
         }
 
         return $results;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
     }
 
     /**
@@ -66,6 +67,7 @@ class CategoriesController extends Controller
      *
      * @param ParamFetcher $paramFetcher
      *
+<<<<<<< HEAD
      * @return Doctrine\ORM\QueryBuilder $result
      */
     public function createCategoryAction(ParamFetcher $paramFetcher)
@@ -85,9 +87,24 @@ class CategoriesController extends Controller
             $result['id']=$category->getId();
             $result['name']=$category->getName();
         }
+=======
+     * @return array
+     */
+    public function createCategoryAction(ParamFetcher $paramFetcher)
+    {
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('AppSportBundle:Category');
+        $name = $paramFetcher->get('name');
+>>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
 
+        $category = ['name' => $name];
+        $repo->findOneByAndFail($category);
 
+<<<<<<< HEAD
         return $result;
+=======
+        return $repo->create($category)->toArray();
+>>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
     }
 
     /**
@@ -105,6 +122,7 @@ class CategoriesController extends Controller
      *
      * @param int $id Category entity
      *
+<<<<<<< HEAD
      *@return Doctrine\ORM\QueryBuilder $result
      */
     public function getCategoryAction($id)
@@ -118,6 +136,16 @@ class CategoriesController extends Controller
             $result['name']=$entity->getName();
         }
         return $result;
+=======
+     * @return array
+     */
+    public function getCategoryAction($id)
+    {
+        $em = $this->getEntityManager();
+        $entity = $em->getRepository('AppSportBundle:Category')->findOrFail($id);
+
+        return $entity->toArray();
+>>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
     }
 
     /**
@@ -134,14 +162,18 @@ class CategoriesController extends Controller
      * 	 },
      * )
      *
-
-     * @param int $id Category entity
+     * @param int          $id
      * @param ParamFetcher $paramFetcher
      *
+<<<<<<< HEAD
      * @return array $response get Category
+=======
+     * @return array
+>>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
      */
-    public function updateCategoryAction($id,ParamFetcher $paramFetcher)
+    public function updateCategoryAction($id, ParamFetcher $paramFetcher)
     {
+<<<<<<< HEAD
         $response=array();
         $em = $em = $this->getDoctrine()->getEntityManager();
 
@@ -153,7 +185,25 @@ class CategoriesController extends Controller
         }
         return $response;
     }
+=======
+        $repo = $this
+            ->getEntityManager()
+            ->getRepository('AppSportBundle:Category')
+        ;
+        $entity = $repo->findOrFail($id);
+        $name = $paramFetcher->get('name');
 
+        if ($entity->getName() == $name) {
+            return $entity->toArray();
+        }
+>>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
+
+        $changes = ['name' => $name];
+        $repo->findOneByAndFail($changes);
+        $entity = $repo->update($entity, $changes);
+
+        return $entity->toArray();
+    }
 
     /**
      * delete Category entity.
@@ -168,13 +218,13 @@ class CategoriesController extends Controller
      * 	 },
      * )
      *
-
      * @param int $id Category entity
      *
      * @return Doctrine\ORM\QueryBuilder $result
      */
     public function deleteCategoryAction($id)
     {
+<<<<<<< HEAD
 
         $em = $this->getDoctrine()->getEntityManager();
         $category = $em->getRepository('AppSportBundle:Category')->find($id);
@@ -189,6 +239,16 @@ class CategoriesController extends Controller
         );
 
         return $result;
+=======
+        $repo = $this
+            ->getEntityManager()
+            ->getRepository('AppSportBundle:Category')
+        ;
 
+        $category = $repo->findOrFail($id);
+        $repo->delete($category);
+>>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
+
+        return ['success' => true];
     }
 }

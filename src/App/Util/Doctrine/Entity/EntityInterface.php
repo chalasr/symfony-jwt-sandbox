@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Util\Entity;
+namespace App\Util\Doctrine\Entity;
 
 /**
  * Entity interface.
@@ -9,11 +9,6 @@ namespace App\Util\Entity;
  */
 interface EntityInterface
 {
-    /**
-     * Get id.
-     */
-    public function getId();
-
     /**
      * To string.
      */

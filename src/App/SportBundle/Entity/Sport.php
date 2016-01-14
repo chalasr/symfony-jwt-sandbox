@@ -2,27 +2,19 @@
 
 namespace App\SportBundle\Entity;
 
-use App\Util\Entity\EntityInterface;
+use App\Util\Doctrine\Entity\AbstractEntity;
+use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Sport.
  *
+ * @ORM\Entity
  * @ORM\Table(name="sports")
- * @ORM\Entity(repositoryClass="App\Util\Entity\AbstractRepository")
  */
-class Sport implements EntityInterface
+class Sport extends AbstractEntity implements EntityInterface
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
     /**
      * @var string
      *
@@ -35,7 +27,7 @@ class Sport implements EntityInterface
      *
      * @ORM\Column(name="isActive", type="boolean")
      */
-    protected $isActive;
+    protected $isActive = false;
 
     /**
      * @var string
@@ -90,7 +82,7 @@ class Sport implements EntityInterface
         $sport = array(
             'id'         => $this->getId(),
             'name'       => $this->getName(),
-            'icon'       => $this->getIcon(),
+            'isActive'   => $this->getIsActive(),
             'categories' => array(),
             'tags'       => array(),
         );
@@ -111,16 +103,6 @@ class Sport implements EntityInterface
         }
 
         return $sport;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

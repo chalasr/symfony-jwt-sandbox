@@ -1,3 +1,4 @@
+**/icons/*
 /app/config/parameters.yml
 /bin/
 /build/
@@ -15,3 +16,4 @@
 /app/sessions/*
 /.idea/
 /misc/
+/icons/*

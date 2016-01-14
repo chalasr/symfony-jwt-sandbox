@@ -2,6 +2,7 @@ parameters:
     admin.patched_model_type.class: App\AdminBundle\Form\Type\PatchedModelType
     admin.sports.class: App\AdminBundle\Admin\SportAdmin
     admin.categories.class: App\AdminBundle\Admin\CategoryAdmin
+    
 services:
     sonata.admin.sports:
         class: "%admin.sports.class%"
