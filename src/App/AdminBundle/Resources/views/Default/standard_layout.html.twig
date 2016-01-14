@@ -125,6 +125,7 @@ file that was distributed with this source code.
                         </a>
                     {% endspaceless %}
                 {% endblock %}
+
                 {% block sonata_nav %}
                     <nav class="navbar navbar-static-top" role="navigation">
                         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
@@ -142,34 +143,20 @@ file that was distributed with this source code.
                                                         {% if not loop.last  %}
                                                             <li>
                                                                 {% if menu.uri is not empty %}
-                                                                    <a href="{{ menu.uri }}">
-                                                                        {% if 'List' in menu.label %}
-                                                                            {% trans with {'%name%': admin.getClassnameLabel()| trans({}, 'AppAdminBundle')} from "AppAdminBundle" into "fr" %}
-                                                                              Liste des %name%s
-                                                                            {% endtrans %}
-                                                                        {% else %}
-                                                                           {{ menu.label|raw }}
-                                                                        {% endif %}
-                                                                    </a>
+                                                                    <a href="{{ menu.uri }}">{{ menu.label|raw|trans({}, 'SonataAdminBundle') }}</a>
                                                                 {% else %}
-                                                                    {{ menu.label|raw|trans({}, 'SonataAdminBundle')}}
+                                                                    {{ menu.label|trans({}, 'SonataAdminBundle') }}
                                                                 {% endif %}
                                                             </li>
                                                         {% else %}
                                                             <li class="active">
                                                                 <span>
-                                                                    {% if 'List' in menu.label %}
-                                                                        {% trans with {'%name%': admin.getClassnameLabel()| trans({}, 'AppAdminBundle')} from "AppAdminBundle" into "fr" %}
-                                                                          Liste des %name%s
-                                                                        {% endtrans %}
+                                                                    {% if action == 'create' %}
+                                                                        {{ "navbar_create"|trans({'%class%': admin.getClassnameLabel()|trans({}, 'messages')}, "messages") }}
+                                                                    {% elseif action == 'list' %}
+                                                                        {{ "navbar_list"|trans({'%class%': admin.getClassnameLabel()|trans({}, 'messages')}, "messages") }}
                                                                     {% else %}
-                                                                        {% if menu.label == '-' or menu.label == '' %}
-                                                                            {% if  action == 'create' %}
-                                                                                Nouveau
-                                                                            {% endif %}
-                                                                        {% else %}
-                                                                            {{ menu.label|raw|trans({}, 'AppAdminBundle')}}
-                                                                        {% endif %}
+                                                                        {{ menu.label|trans({}, "SonataAdminBundle") }}
                                                                     {% endif %}
                                                                 </span>
                                                             </li>

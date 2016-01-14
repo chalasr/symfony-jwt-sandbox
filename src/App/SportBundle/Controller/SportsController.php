@@ -84,7 +84,7 @@ class SportsController extends Controller
     /**
      * Get Icon image from Sport entity.
      *
-     * @Rest\Get("/sports/{name}/icon")
+     * @Rest\Get("/sports/{sport}/icon")
      * @ApiDoc(
      *   section="Sport",
      * 	 resource=true,
@@ -98,15 +98,15 @@ class SportsController extends Controller
      *
      * @return Response
      */
-    public function getIconBySportAction($name)
+    public function getIconBySportAction($sport)
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Sport');
-        if (is_numeric($name)) {
-            $sport = $repo->findOrFail($name);
-        } else {
-            $sport = $repo->findOneByOrFail(['name' => $name]);
-        }
+
+        $sport = is_numeric($sport)
+        ? $repo->findOrFail($sport)
+        : $repo->findOneByOrFail(['name' => $sport]);
+
         $iconName = $sport->getIcon();
 
         return $this->forward('AppAdminBundle:SportAdmin:showIcon', array(

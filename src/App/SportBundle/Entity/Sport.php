@@ -69,7 +69,7 @@ class Sport extends AbstractEntity implements EntityInterface
      */
     public function __toString()
     {
-        return $this->getName() ?: 'Nouveau Sport';
+        return $this->getName() ?: 'New Sport';
     }
 
     /**
@@ -82,8 +82,8 @@ class Sport extends AbstractEntity implements EntityInterface
             'name'       => $this->getName(),
             'isActive'   => $this->getIsActive(),
             'icon'       => array(
-                'name' => $this->getIcon(),
-                'url'  => sprintf('/v1/sports/%d/icon', $this->getId()),
+                'name' => $this->getIcon() ?: null,
+                'url'  => $this->getIcon() ? sprintf('/v1/sports/%d/icon', $this->getId()) : null,
             ),
             'categories' => array(),
             'tags'       => array(),

@@ -1,4 +1,4 @@
-**/icons/*
+/src/App/SportBundle/Resources/public/icons/*
 /app/config/parameters.yml
 /bin/
 /build/
@@ -16,4 +16,4 @@
 /app/sessions/*
 /.idea/
 /misc/
-/icons/*
+/web/app_dev.php

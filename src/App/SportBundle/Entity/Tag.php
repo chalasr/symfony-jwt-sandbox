@@ -35,7 +35,7 @@ class Tag extends AbstractEntity implements EntityInterface
      */
     public function __toString()
     {
-        return $this->getName() ?: 'New Tag';
+        return $this->getName() ?: 'Nouveau Tag';
     }
 
     /**

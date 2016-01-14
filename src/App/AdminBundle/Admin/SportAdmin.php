@@ -93,6 +93,9 @@ class SportAdmin extends AbstractAdmin
             ->add('categories', null, [
                 'label' => 'Categories',
             ])
+            ->add('tags', null, [
+                'label' => 'Categories',
+            ])
             ->add('isActive', null, [
                 'label' => 'Actif',
             ])

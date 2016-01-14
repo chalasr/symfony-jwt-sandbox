@@ -29,7 +29,7 @@ class ImportCommand extends ContainerAwareCommand
     {
         $now = new \DateTime();
         $ignoreFirstl = $this->options['ignoreFirstl'];
-        $path = $this->getContainer()->get('kernel')->locateResource('@AppSportBundle/Resources/public/' . $this->options['filename']);
+        $path = $this->getContainer()->get('kernel')->locateResource('@AppSportBundle/Resources/public/'.$this->options['filename']);
         $output->writeln('<comment>Start : '.$now->format('d-m-Y G:i:s').' ---</comment>');
 
         $rows = array();
@@ -102,7 +102,6 @@ class ImportCommand extends ContainerAwareCommand
         }
 
         $em->flush();
-
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\SportBundle\Controller;
 
-use App\SportBundle\Entity\Category;
+use App\SportBundle\Entity\Tag;
 use App\Util\Controller\AbstractRestController as Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -11,19 +11,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Categories resource.
+ * Tags resource.
  *
  * @author Pham Xuan Thuy <phamxuanthuy@sutunam.com>
  * @author Robin Chalas   <rchalas@sutunam.com>
  */
-class CategoriesController extends Controller
+class TagsController extends Controller
 {
     /**
-     * Get Categories.
+     * Get Tags.
      *
-     * @Rest\Get("/categories")
+     * @Rest\Get("/tags")
      * @ApiDoc(
-     *   section="Category",
+     *   section="Tag",
      * 	 resource=true,
      * 	 statusCodes={
      * 	   200="OK",
@@ -33,10 +33,10 @@ class CategoriesController extends Controller
      *
      * @return array
      */
-    public function getCategoriesListAction()
+    public function getTagsListAction()
     {
         $em = $this->getEntityManager();
-        $entities = $em->getRepository('AppSportBundle:Category')->findAll();
+        $entities = $em->getRepository('AppSportBundle:Tag')->findAll();
         $results = array();
         foreach ($entities as $entity) {
             $results[] = $entity->toArray();
@@ -46,13 +46,13 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Create a new Category entity.
+     * Create a new Tag entity.
      *
-     * @Rest\Post("/categories")
+     * @Rest\Post("/tags")
      * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")
      * @Rest\View
      * @ApiDoc(
-     *   section="Category",
+     *   section="Tag",
      * 	 resource=true,
      * 	 statusCodes={
      * 	   201="Created",
@@ -65,24 +65,24 @@ class CategoriesController extends Controller
      *
      * @return array
      */
-    public function createCategoryAction(ParamFetcher $paramFetcher)
+    public function createTagAction(ParamFetcher $paramFetcher)
     {
         $em = $this->getEntityManager();
-        $repo = $em->getRepository('AppSportBundle:Category');
+        $repo = $em->getRepository('AppSportBundle:Tag');
         $name = $paramFetcher->get('name');
 
-        $category = ['name' => $name];
-        $repo->findOneByAndFail($category);
+        $tag = ['name' => $name];
+        $repo->findOneByAndFail($tag);
 
-        return $repo->create($category)->toArray();
+        return $repo->create($tag)->toArray();
     }
 
     /**
-     * Get Category Json from Category entity.
+     * Get Tag Json from Tag entity.
      *
-     * @Rest\Get("/categories/{id}")
+     * @Rest\Get("/tags/{id}")
      * @ApiDoc(
-     *   section="Category",
+     *   section="Tag",
      * 	 resource=true,
      * 	 statusCodes={
      * 	   200="OK",
@@ -90,25 +90,25 @@ class CategoriesController extends Controller
      * 	 },
      * )
      *
-     * @param int $id Category entity
+     * @param int $id Tag entity
      *
      * @return array
      */
-    public function getCategoryAction($id)
+    public function getTagAction($id)
     {
         $em = $this->getEntityManager();
-        $entity = $em->getRepository('AppSportBundle:Category')->findOrFail($id);
+        $entity = $em->getRepository('AppSportBundle:Tag')->findOrFail($id);
 
         return $entity->toArray();
     }
 
     /**
-     * update Category entity.
+     * update Tag entity.
      *
-     * @Rest\Patch("/categories/{id}")
+     * @Rest\Patch("/tags/{id}")
      * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")
      * @ApiDoc(
-     *   section="Category",
+     *   section="Tag",
      * 	 resource=true,
      * 	 statusCodes={
      * 	   200="OK",
@@ -121,11 +121,11 @@ class CategoriesController extends Controller
      *
      * @return array
      */
-    public function updateCategoryAction($id, ParamFetcher $paramFetcher)
+    public function updateTagAction($id, ParamFetcher $paramFetcher)
     {
         $repo = $this
             ->getEntityManager()
-            ->getRepository('AppSportBundle:Category')
+            ->getRepository('AppSportBundle:Tag')
         ;
         $entity = $repo->findOrFail($id);
         $name = $paramFetcher->get('name');
@@ -142,11 +142,11 @@ class CategoriesController extends Controller
     }
 
     /**
-     * delete Category entity.
+     * delete Tag entity.
      *
-     * @Rest\Delete("/categories/{id}")
+     * @Rest\Delete("/tags/{id}")
      * @ApiDoc(
-     *   section="Category",
+     *   section="Tag",
      * 	 resource=true,
      * 	 statusCodes={
      * 	   200="OK",
@@ -154,19 +154,19 @@ class CategoriesController extends Controller
      * 	 },
      * )
      *
-     * @param int $id Category entity
+     * @param int $id Tag entity
      *
-     * @return JsonResponse $response get Category
+     * @return JsonResponse $response get Tag
      */
-    public function deleteCategoryAction($id)
+    public function deleteTagAction($id)
     {
         $repo = $this
             ->getEntityManager()
-            ->getRepository('AppSportBundle:Category')
+            ->getRepository('AppSportBundle:Tag')
         ;
 
-        $category = $repo->findOrFail($id);
-        $repo->delete($category);
+        $tag = $repo->findOrFail($id);
+        $repo->delete($tag);
 
         return ['success' => true];
     }

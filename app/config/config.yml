@@ -9,7 +9,6 @@ imports:
 
 # Parameters still same between environments
 parameters:
-    locale: fr
     jwt_private_key_path: '%kernel.root_dir%/jwt/private.pem'
     jwt_public_key_path: '%kernel.root_dir%/jwt/public.pem'
     jwt_key_pass_phrase: Ypu41db4896lVXF
@@ -17,7 +16,7 @@ parameters:
 
 # Symfony
 framework:
-    translator:      { fallbacks: [fr] }
+    translator:      { fallbacks: [%locale%] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"

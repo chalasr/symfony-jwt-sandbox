@@ -97,7 +97,7 @@ class AbstractRepository extends EntityRepository
     }
 
     /**
-     * Check for existing resource by criteria and fail
+     * Check for existing resource by criteria and fail.
      *
      * @param array $criteria
      * @param mixed $orderBy
