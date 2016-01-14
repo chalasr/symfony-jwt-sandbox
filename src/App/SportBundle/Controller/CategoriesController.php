@@ -43,10 +43,6 @@ class CategoriesController extends Controller
         }
 
         return $results;
-<<<<<<< HEAD
-
-=======
->>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
     }
 
     /**
@@ -67,27 +63,6 @@ class CategoriesController extends Controller
      *
      * @param ParamFetcher $paramFetcher
      *
-<<<<<<< HEAD
-     * @return Doctrine\ORM\QueryBuilder $result
-     */
-    public function createCategoryAction(ParamFetcher $paramFetcher)
-    {
-        $result=array();
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $category = new Category();
-        $category->setName($paramFetcher->get('name'));
-
-        $exists = $em->getRepository('AppSportBundle:Category')->findBy(array(
-            'name' => $category->getName()
-        ));
-        if(!$exists) {
-            $em->persist($category);
-            $em->flush();
-            $result['id']=$category->getId();
-            $result['name']=$category->getName();
-        }
-=======
      * @return array
      */
     public function createCategoryAction(ParamFetcher $paramFetcher)
@@ -95,16 +70,11 @@ class CategoriesController extends Controller
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Category');
         $name = $paramFetcher->get('name');
->>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
 
         $category = ['name' => $name];
         $repo->findOneByAndFail($category);
 
-<<<<<<< HEAD
-        return $result;
-=======
         return $repo->create($category)->toArray();
->>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
     }
 
     /**
@@ -122,21 +92,6 @@ class CategoriesController extends Controller
      *
      * @param int $id Category entity
      *
-<<<<<<< HEAD
-     *@return Doctrine\ORM\QueryBuilder $result
-     */
-    public function getCategoryAction($id)
-    {
-        $result=array();
-        $em = $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('AppSportBundle:Category')->findOneBy(array('id'=>$id));
-        if($entity){
-            $result['id']=$entity->getId();
-            $result['name']=$entity->getName();
-        }
-        return $result;
-=======
      * @return array
      */
     public function getCategoryAction($id)
@@ -145,7 +100,6 @@ class CategoriesController extends Controller
         $entity = $em->getRepository('AppSportBundle:Category')->findOrFail($id);
 
         return $entity->toArray();
->>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
     }
 
     /**
@@ -165,27 +119,10 @@ class CategoriesController extends Controller
      * @param int          $id
      * @param ParamFetcher $paramFetcher
      *
-<<<<<<< HEAD
-     * @return array $response get Category
-=======
      * @return array
->>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
      */
     public function updateCategoryAction($id, ParamFetcher $paramFetcher)
     {
-<<<<<<< HEAD
-        $response=array();
-        $em = $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('AppSportBundle:Category')->findOneBy(array('id'=>$id));
-        if($entity){
-            $entity->setName($paramFetcher->get('name'));
-            $response['id']=$entity->getId();
-            $response['name']=$entity->getName();
-        }
-        return $response;
-    }
-=======
         $repo = $this
             ->getEntityManager()
             ->getRepository('AppSportBundle:Category')
@@ -196,7 +133,6 @@ class CategoriesController extends Controller
         if ($entity->getName() == $name) {
             return $entity->toArray();
         }
->>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
 
         $changes = ['name' => $name];
         $repo->findOneByAndFail($changes);
@@ -220,26 +156,10 @@ class CategoriesController extends Controller
      *
      * @param int $id Category entity
      *
-     * @return Doctrine\ORM\QueryBuilder $result
+     * @return JsonResponse $response get Category
      */
     public function deleteCategoryAction($id)
     {
-<<<<<<< HEAD
-
-        $em = $this->getDoctrine()->getEntityManager();
-        $category = $em->getRepository('AppSportBundle:Category')->find($id);
-
-        if ($category) {
-            $em->remove($category);
-            $em->flush();
-        }
-        $result=array(
-            'id'=>$category->getId(),
-            'name'=>$category->getName(),
-        );
-
-        return $result;
-=======
         $repo = $this
             ->getEntityManager()
             ->getRepository('AppSportBundle:Category')
@@ -247,7 +167,6 @@ class CategoriesController extends Controller
 
         $category = $repo->findOrFail($id);
         $repo->delete($category);
->>>>>>> 370d1f570040cdfe40cb61ebed45b01f4231f5a0
 
         return ['success' => true];
     }
