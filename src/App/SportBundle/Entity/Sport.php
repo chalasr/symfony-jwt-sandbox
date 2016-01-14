@@ -81,6 +81,10 @@ class Sport extends AbstractEntity implements EntityInterface
             'id'         => $this->getId(),
             'name'       => $this->getName(),
             'isActive'   => $this->getIsActive(),
+            'icon'       => array(
+                'name' => $this->getIcon(),
+                'url'  => sprintf('/v1/sports/%d/icon', $this->getId()),
+            ),
             'categories' => array(),
             'tags'       => array(),
         );
@@ -91,7 +95,7 @@ class Sport extends AbstractEntity implements EntityInterface
 
         //convert tags to array
         foreach ($this->getTags() as $tag) {
-            $sport['tags'][] = $toArray(['sports']);
+            $sport['tags'][] = $tag->toArray(['sports']);
         }
 
         foreach ($excludes as $property) {

@@ -47,13 +47,9 @@ class Category extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * To array.
-     *
-     * @param array $exclude Excluded parameters
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function toArray($excludes = null)
+    public function toArray(array $excludes = null)
     {
         $category = array(
             'id'     => $this->getId(),
@@ -67,10 +63,9 @@ class Category extends AbstractEntity implements EntityInterface
                 'name' => $sport->getName(),
             );
         }
-        if(is_array($excludes)){
-            foreach ($excludes as $value) {
-                unset($category[$value]);
-            }
+
+        foreach ($excludes as $value) {
+            unset($category[$value]);
         }
 
         return $category;
