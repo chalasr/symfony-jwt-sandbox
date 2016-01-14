@@ -39,7 +39,7 @@ class SportsController extends Controller
         $results = array();
 
         foreach ($entities as $entity) {
-            $results[] = $entity->toArray();
+            $results[] = $entity->toArray(['isActive']);
         }
 
         return $results;
@@ -101,10 +101,12 @@ class SportsController extends Controller
     public function getIconBySportAction($name)
     {
         $em = $this->getEntityManager();
-        $sport = $em
-            ->getRepository('AppSportBundle:Sport')
-            ->findOneByOrFail(['name' => $name])
-        ;
+        $repo = $em->getRepository('AppSportBundle:Sport');
+        if (is_numeric($name)) {
+            $sport = $repo->findOrFail($name);
+        } else {
+            $sport = $repo->findOneByOrFail(['name' => $name]);
+        }
         $iconName = $sport->getIcon();
 
         return $this->forward('AppAdminBundle:SportAdmin:showIcon', array(

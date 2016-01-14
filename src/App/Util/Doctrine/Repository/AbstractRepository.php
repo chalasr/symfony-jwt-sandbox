@@ -129,13 +129,13 @@ class AbstractRepository extends EntityRepository
      */
     public function findOneByOrCreate(array $criteria, array $orderBy = null)
     {
-        $entities = $this->findOneBy($criteria, $orderBy);
+        $entity = $this->findOneBy($criteria, $orderBy);
 
-        if (count($entities) == 0) {
+        if (null == $entity) {
             return self::create($criteria);
         }
 
-        return $entities;
+        return $entity;
     }
 
     /**

@@ -116,7 +116,7 @@ class CategoriesController extends Controller
      * 	 },
      * )
      *
-     * @param int          $id
+     * @param int $id
      * @param ParamFetcher $paramFetcher
      *
      * @return array
