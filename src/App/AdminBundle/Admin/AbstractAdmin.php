@@ -52,8 +52,8 @@ abstract class AbstractAdmin extends Admin
         $entityName = $this->translate($this->getClassnameLabel(), [], 'messages');
         if ($this->translator->getLocale() == 'fr') {
             return sprintf('%s %s', $createLabel, $entityName);
-        } else {
-            return sprintf('%s %s', $entityName, $createLabel);
         }
+
+        return sprintf('%s %s', $entityName, $createLabel);
     }
 }
