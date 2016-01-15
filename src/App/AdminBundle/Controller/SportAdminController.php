@@ -29,7 +29,7 @@ class SportAdminController extends AbstractAdminController
         $path = $this->locate('@AppSportBundle/Resources/public'.$iconName);
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path));
-        $response->headers->set('Content-Disposition', 'inline; filename="'.$name.'";');
+        $response->headers->set('Content-Disposition', 'inline; filename="'.$sport.'";');
         $response->headers->set('Content-length', filesize($path));
         $response->sendHeaders();
         $response->setContent(readfile($path));
