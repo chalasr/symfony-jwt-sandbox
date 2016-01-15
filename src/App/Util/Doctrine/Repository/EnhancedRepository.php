@@ -4,29 +4,40 @@ namespace App\Util\Doctrine\Repository;
 
 use App\Util\Doctrine\Entity\AbstractEntity;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Abstract Repository.
+ * Enhanced EntityRepository that pre-handle exceptions.
  *
  * @author Robin Chalas <rchalas@sutunam.com>
  */
-class EnhancedRepository extends EntityRepository
+class EnhancedRepository extends EntityRepository implements ObjectRepository
 {
+    const NOT_FOUND_MESSAGE = 'The resource cannot be found';
+
+    const ALREADY_EXISTS_MESSAGE = 'A resource already exists';
+
     /**
-     * Handles fail in find method.
+     * Finds a resource by identifier.
      *
-     * @param int $id
+     * @param int      $id          The resource identifier
+     * @param int|null $lockMode    One of the \Doctrine\DBAL\LockMode::* constants or NULL
+     * @param int|null $lockVersion The lock version.
      *
-     * @throws NotFoundHttpException
+     * @throws NotFoundHttpException Resource not found
      *
-     * @return AbstractEntity Instance of AbstactEntity
+     * @return object
      */
-    public function findOrFail($id)
+    public function findOrFail($id, $lockMode = null, $lockVersion = null)
     {
-        if (null == $entity = $this->find($id)) {
-            return $this->resourceNotFound($id);
+        $entity = $this->find($id);
+
+        if (null === $entity) {
+            throw new NotFoundHttpException(
+                sprintf('%s (\'id\' = %d)', self::NOT_FOUND_MESSAGE, $id)
+            );
         }
 
         return $entity;
@@ -35,21 +46,23 @@ class EnhancedRepository extends EntityRepository
     /**
      * Find resource by criteria or fail.
      *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
+     * @param array      $criteria
+     * @param array|null $orderBy
+     * @param int|null   $limit
+     * @param int|null   $offset
      *
-     * @throws NotFoundHttpException
+     * @throws NotFoundHttpException Resource not found
      *
-     * @return AbstractEntity Instance of AbstactEntity
+     * @return object
      */
     public function findByOrFail(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         $entities = $this->findBy($criteria, $orderBy);
 
         if (count($entities) == 0) {
-            return $this->resourceNotFound();
+            throw new NotFoundHttpException(
+                sprintf('%s (%s)', self::NOT_FOUND_MESSAGE, $this->implodeCriteria($criteria))
+            );
         }
 
         return $entities;
@@ -58,21 +71,21 @@ class EnhancedRepository extends EntityRepository
     /**
      * Find resource by criteria or create a new.
      *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
+     * @param array      $criteria
+     * @param array|null $orderBy
      *
-     * @throws NotFoundHttpException
+     * @throws NotFoundHttpException Resource not found
      *
-     * @return AbstractEntity Instance of AbstactEntity
+     * @return object
      */
     public function findOneByOrFail(array $criteria, array $orderBy = null)
     {
         $entity = $this->findOneBy($criteria, $orderBy);
 
-        if (null == $entity) {
-            return $this->resourceNotFound();
+        if (null === $entity) {
+            throw new NotFoundHttpException(
+                sprintf('%s (%s)', self::NOT_FOUND_MESSAGE, $this->implodeCriteria($criteria))
+            );
         }
 
         return $entity;
@@ -81,12 +94,10 @@ class EnhancedRepository extends EntityRepository
     /**
      * Check for existing resource by criteria and fail.
      *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
+     * @param array      $criteria
+     * @param array|null $orderBy
      *
-     * @throws UnprocessableEntityHttpException
+     * @throws UnprocessableEntityHttpException Already existing resource
      *
      * @return object
      */
@@ -95,7 +106,9 @@ class EnhancedRepository extends EntityRepository
         $entity = $this->findOneBy($criteria, $orderBy);
 
         if (null !== $entity) {
-            return $this->resourceAlreadyExists($entity->getId());
+            throw new UnprocessableEntityHttpException(
+                sprintf('%s (%s)', self::ALREADY_EXISTS_MESSAGE, $this->implodeCriteria($criteria))
+            );
         }
 
         return $entity;
@@ -104,10 +117,8 @@ class EnhancedRepository extends EntityRepository
     /**
      * Find resource by criteria or create a new.
      *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
+     * @param array      $criteria
+     * @param array|null $orderBy
      *
      * @return object
      */
@@ -115,7 +126,7 @@ class EnhancedRepository extends EntityRepository
     {
         $entity = $this->findOneBy($criteria, $orderBy);
 
-        if (null == $entity) {
+        if (null === $entity) {
             return $this->create($criteria);
         }
 
@@ -123,47 +134,11 @@ class EnhancedRepository extends EntityRepository
     }
 
     /**
-     * Fails on resource not found.
-     *
-     * @param mixed  $id
-     * @param string $message
-     *
-     * @throws NotFoundHttpException
-     */
-    public function resourceNotFound($id = null, $message = 'Unable to find resource')
-    {
-        if (null !== $id) {
-            $endMessage = sprintf(' with id %d', $id);
-            $message .= $endMessage;
-        }
-
-        throw new NotFoundHttpException($message);
-    }
-
-    /**
-     * Fails on resource already exists.
-     *
-     * @param mixed  $id
-     * @param string $message
-     *
-     * @throws NotFoundHttpException
-     */
-    public function resourceAlreadyExists($id = null, $message = 'A resource already exists')
-    {
-        if (null !== $id) {
-            $endMessage = sprintf(' with id %d', $id);
-            $message .= $endMessage;
-        }
-
-        throw new UnprocessableEntityHttpException($message);
-    }
-
-    /**
      * Creates a new resource.
      *
      * @param array $properties
      *
-     * @return EntityInterface
+     * @return object
      */
     public function create(array $properties)
     {
@@ -183,10 +158,10 @@ class EnhancedRepository extends EntityRepository
     /**
      * Updates an existing resource.
      *
-     * @param EntityInterface $entity
-     * @param array           $properties
+     * @param AbstractEntity $entity
+     * @param array          $properties
      *
-     * @return EntityInterface
+     * @return object
      */
     public function update(AbstractEntity $entity, array $properties)
     {
@@ -201,13 +176,32 @@ class EnhancedRepository extends EntityRepository
     }
 
     /**
-     * Deletes a resource.
+     * Deletes a given resource.
      *
-     * @param EntityInterface $entity
+     * @param AbstractEntity $entity
      */
     public function delete(AbstractEntity $entity)
     {
         $this->_em->remove($entity);
         $this->_em->flush();
+    }
+
+    /**
+     * Get criteria as string.
+     *
+     * @param array $criteria The query criteria
+     *
+     * @return string
+     */
+    private function implodeCriteria(array $criteria)
+    {
+        if (true === empty($criteria)) {
+            return 'no fields';
+        }
+
+        $keys = implode(', ', array_keys($criteria));
+        $values = implode(', ', array_values($criteria));
+
+        return sprintf('\'%s\' = \'%s\'', $keys, $values);
     }
 }
