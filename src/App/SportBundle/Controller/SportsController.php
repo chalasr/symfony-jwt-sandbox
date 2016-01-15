@@ -35,11 +35,17 @@ class SportsController extends Controller
     public function getSportsListAction()
     {
         $em = $this->getEntityManager();
-        $entities = $em->getRepository('AppSportBundle:Sport')->findBy(['isActive' => 1]);
+        $repo = $em->getRepository('AppSportBundle:Sport');
+        $entities = $repo->findBy(['isActive' => 1]);
         $results = array();
 
         foreach ($entities as $entity) {
-            $results[] = $entity->toArray(['isActive']);
+            // ($entity);
+            // $entity['icon'] = array(
+            //     'name' => null == $entity['icon'] ? null : $entity['icon']['name'],
+            //     'url'  => null == $entity['icon'] ? sprintf('/v1/sports/%d/icon', $this->getId()) : null,
+            // );
+            $results[] = $entity->asArray(['isActive']);
         }
 
         return $results;
@@ -78,7 +84,7 @@ class SportsController extends Controller
         $sport = $repo->create($sport);
 
         // Use JsonResponse to specify status code.
-        return new JsonResponse($sport->toArray(), 201);
+        return new JsonResponse($sport->asArray(), 201);
     }
 
     /**
@@ -110,8 +116,8 @@ class SportsController extends Controller
         $iconName = $sport->getIcon();
 
         return $this->forward('AppAdminBundle:SportAdmin:showIcon', array(
-            'name'           => $iconName,
-            '_sonata_admin'  => 'sonata.admin.sports',
+            'name'          => $iconName,
+            '_sonata_admin' => 'sonata.admin.sports',
         ));
     }
 }

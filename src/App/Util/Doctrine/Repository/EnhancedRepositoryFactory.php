@@ -7,11 +7,11 @@ use Doctrine\ORM\Repository\RepositoryFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Factory for setting our AbstractRepository in entities of REST bundles.
+ * Factory for setting our EnhancedRepository in entities of REST bundles.
  *
  * @author Robin Chalas <rchalas@sutunam.com>
  */
-class AbstractRepositoryFactory implements RepositoryFactory
+class EnhancedRepositoryFactory implements RepositoryFactory
 {
     private $repositories;
     private $container;
@@ -44,7 +44,7 @@ class AbstractRepositoryFactory implements RepositoryFactory
         $entityNamespace = $metadata->getName();
 
         if (is_subclass_of($entityNamespace, '\App\Util\Doctrine\Entity\EntityInterface', true)) {
-            return new AbstractRepository($entityManager, $metadata);
+            return new EnhancedRepository($entityManager, $metadata);
         }
 
         return $this->default->getRepository($entityManager, $entityName);

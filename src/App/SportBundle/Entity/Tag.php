@@ -41,7 +41,7 @@ class Tag extends AbstractEntity implements EntityInterface
     /**
      * {@inheritdoc}
      */
-    public function toArray(array $excludes = null)
+    public function asArray(array $excludes = array())
     {
         $tag = array(
             'id'     => $this->getId(),

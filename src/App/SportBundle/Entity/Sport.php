@@ -75,7 +75,7 @@ class Sport extends AbstractEntity implements EntityInterface
     /**
      * {@inheritdoc}
      */
-    public function toArray(array $excludes = null)
+    public function asArray(array $excludes = array())
     {
         $sport = array(
             'id'         => $this->getId(),
@@ -90,12 +90,12 @@ class Sport extends AbstractEntity implements EntityInterface
         );
 
         foreach ($this->getCategories() as $cat) {
-            $sport['categories'][] = $cat->toArray(['sports']);
+            $sport['categories'][] = $cat->asArray(['sports']);
         }
 
         //convert tags to array
         foreach ($this->getTags() as $tag) {
-            $sport['tags'][] = $tag->toArray(['sports']);
+            $sport['tags'][] = $tag->asArray(['sports']);
         }
 
         foreach ($excludes as $property) {

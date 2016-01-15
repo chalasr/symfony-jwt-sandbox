@@ -21,31 +21,32 @@ class ImportCommand extends ContainerAwareCommand
     {
         $this
             ->setName('sports:import')
-            ->setDescription('Import sports fixtures')
+            ->setDescription('Imports Sport fixtures')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $now = new \DateTime();
         $ignoreFirstl = $this->options['ignoreFirstl'];
-        $path = $this->getContainer()->get('kernel')->locateResource('@AppSportBundle/Resources/public/'.$this->options['filename']);
+        $path = $this->getContainer()
+            ->get('kernel')
+            ->locateResource('@AppSportBundle/Resources/public/'.$this->options['filename'])
+        ;
+
+        $now = new \DateTime();
         $output->writeln('<comment>Start : '.$now->format('d-m-Y G:i:s').' ---</comment>');
 
         $rows = array();
         if (($handle = fopen($path, 'r')) !== false) {
             $i = 0;
-            $pageSize = 100;
             while (($data = fgetcsv($handle, null, ',', '"')) !== false) {
                 ++$i;
                 if ($ignoreFirstl && $i == 1) {
                     continue;
                 }
                 $rows[] = $data;
-                if ($i % $pageSize == 0) {
-                    $this->import($input, $output, $rows);
-                    $rows = array();
-                }
+                $this->import($input, $output, $rows);
+                $rows = [];
             }
             fclose($handle);
         }
@@ -64,30 +65,35 @@ class ImportCommand extends ContainerAwareCommand
      * @param InputInterface  $input
      * @param OutputInterface $output
      * @param array           $data
-     *
-     * @return [type] [description]
      */
     protected function import(InputInterface $input, OutputInterface $output, $data)
     {
-        $em = $this->getContainer()->get('doctrine')->getManager();
-        $repo = $em->getRepository('AppSportBundle:Sport');
+        $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
+        $repo = $em->getRepository('AppSportBundle:Sport');
+        $categoryRepo = $em->getRepository('AppSportBundle:Category');
+        $tagRepo = $em->getRepository('AppSportBundle:Tag');
         $batchSize = 20;
         for ($i = 0; $i < count($data); ++$i) {
-            $sport = new Sport();
-            $categoryRepo = $em->getRepository('AppSportBundle:Category');
-            $category = $categoryRepo->findOneByOrCreate(['name' => $data[$i][0]]);
-            $sport->addCategory($category);
-            $sport->setName($data[$i][1]);
             $tags = explode(', ', $data[$i][2]);
-            $tagRepo = $em->getRepository('AppSportBundle:Tag');
+            $category = $categoryRepo->findOneBy(array(
+                'name' => $data[$i][0],
+            ));
+            if (null == $category) {
+                $category = $categoryRepo->create(['name' => $data[$i][0]]);
+            }
+
+            $sport = new Sport();
+            $sport->setName($data[$i][1]);
+            $sport->setIsActive(intval($data[$i][3]));
+            $sport->setIcon($data[$i][4]);
+            $sport->addCategory($category);
+
             foreach ($tags as $tagName) {
                 $tag = $tagRepo->findOneByOrCreate(['name' => $tagName]);
                 $sport->addTag($tag);
             }
 
-            $sport->setIsActive(intval($data[$i][3]));
-            $sport->setIcon($data[$i][4]);
             try {
                 $em->persist($sport);
                 $output->writeln(sprintf('%s created', $sport->getName()));
@@ -102,31 +108,5 @@ class ImportCommand extends ContainerAwareCommand
         }
 
         $em->flush();
-    }
-
-    /**
-     * Parse a csv file.
-     *
-     * @return array
-     */
-    private function parseCSV()
-    {
-        $ignoreFirstl = $this->options['ignoreFirstl'];
-        $path = __DIR__.'/../Data/'.$this->options['filename'];
-        $rows = array();
-
-        if (($handle = fopen($path, 'r')) !== false) {
-            $i = 0;
-            while (($data = fgetcsv($handle, null, ',', '"')) !== false) {
-                ++$i;
-                if ($ignoreFirstl && $i == 1) {
-                    continue;
-                }
-                $rows[] = $data;
-            }
-            fclose($handle);
-        }
-
-        return $rows;
     }
 }
