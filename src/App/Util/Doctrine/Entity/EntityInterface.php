@@ -17,5 +17,5 @@ interface EntityInterface
     /**
      * To array.
      */
-    public function toArray();
+    public function asArray();
 }

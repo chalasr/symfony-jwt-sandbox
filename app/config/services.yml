@@ -1,6 +1,6 @@
 parameters:
     api.kernel.listener.exception_listener.class: App\Util\EventListener\ExceptionResponseListener
-    app.doctrine.abstract_repository_factory.class: App\Util\Doctrine\Repository\AbstractRepositoryFactory
+    app.doctrine.abstract_repository_factory.class: App\Util\Doctrine\Repository\EnhancedRepositoryFactory
 
 services:
     app.doctrine.repository.factory:

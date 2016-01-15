@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Tags resource.
+ * Manages Tags API collection.
  *
  * @author Pham Xuan Thuy <phamxuanthuy@sutunam.com>
  * @author Robin Chalas   <rchalas@sutunam.com>
@@ -39,7 +39,7 @@ class TagsController extends Controller
         $entities = $em->getRepository('AppSportBundle:Tag')->findAll();
         $results = array();
         foreach ($entities as $entity) {
-            $results[] = $entity->toArray();
+            $results[] = $entity->asArray();
         }
 
         return $results;
@@ -74,7 +74,7 @@ class TagsController extends Controller
         $tag = ['name' => $name];
         $repo->findOneByAndFail($tag);
 
-        return $repo->create($tag)->toArray();
+        return $repo->create($tag)->asArray();
     }
 
     /**
@@ -99,11 +99,11 @@ class TagsController extends Controller
         $em = $this->getEntityManager();
         $entity = $em->getRepository('AppSportBundle:Tag')->findOrFail($id);
 
-        return $entity->toArray();
+        return $entity->asArray();
     }
 
     /**
-     * update Tag entity.
+     * Update Tag entity.
      *
      * @Rest\Patch("/tags/{id}")
      * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")
@@ -131,18 +131,18 @@ class TagsController extends Controller
         $name = $paramFetcher->get('name');
 
         if ($entity->getName() == $name) {
-            return $entity->toArray();
+            return $entity->asArray();
         }
 
         $changes = ['name' => $name];
         $repo->findOneByAndFail($changes);
         $entity = $repo->update($entity, $changes);
 
-        return $entity->toArray();
+        return $entity->asArray();
     }
 
     /**
-     * delete Tag entity.
+     * Delete a Tag entity.
      *
      * @Rest\Delete("/tags/{id}")
      * @ApiDoc(
@@ -156,7 +156,7 @@ class TagsController extends Controller
      *
      * @param int $id Tag entity
      *
-     * @return JsonResponse $response get Tag
+     * @return JsonResponse
      */
     public function deleteTagAction($id)
     {
