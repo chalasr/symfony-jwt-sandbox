@@ -107,7 +107,7 @@ class SportsController extends Controller
     {
         return $this->forward('AppAdminBundle:SportAdmin:showIcon', array(
             'sport'          => $sport,
-            '_sonata_admin' => 'sonata.admin.sports',
+            '_sonata_admin'  => 'sonata.admin.sports',
         ));
     }
 }
