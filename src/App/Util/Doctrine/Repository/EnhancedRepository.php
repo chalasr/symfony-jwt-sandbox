@@ -3,8 +3,8 @@
 namespace App\Util\Doctrine\Repository;
 
 use App\Util\Doctrine\Entity\AbstractEntity;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 

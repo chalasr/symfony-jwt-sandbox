@@ -34,6 +34,7 @@ file that was distributed with this source code.
             {% for stylesheet in sonata_admin.adminPool.getOption('stylesheets', []) %}
                     <link rel="stylesheet" href="{{ asset(stylesheet) }}">
             {% endfor %}
+              <link rel="stylesheet" href="{{ asset('bundles/appadmin/css/sonata_custom.css') }}">
         {% endblock %}
 
         {% block javascripts %}
@@ -143,7 +144,13 @@ file that was distributed with this source code.
                                                         {% if not loop.last  %}
                                                             <li>
                                                                 {% if menu.uri is not empty %}
-                                                                    <a href="{{ menu.uri }}">{{ menu.label|raw|trans({}, 'SonataAdminBundle') }}</a>
+                                                                    <a href="{{ menu.uri }}">
+                                                                        {% if 'List' in menu.label %}
+                                                                            {{ "navbar_list"|trans({'%class%': admin.getClassnameLabel()|trans({}, 'messages')}, "messages") }}
+                                                                        {% else %}
+                                                                            {{ menu.label|trans({}, 'SonataAdminBundle') }}
+                                                                        {% endif %}
+                                                                    </a>
                                                                 {% else %}
                                                                     {{ menu.label|trans({}, 'SonataAdminBundle') }}
                                                                 {% endif %}
@@ -152,7 +159,11 @@ file that was distributed with this source code.
                                                             <li class="active">
                                                                 <span>
                                                                     {% if action == 'create' %}
-                                                                        {{ "navbar_create"|trans({'%class%': admin.getClassnameLabel()|trans({}, 'messages')}, "messages") }}
+                                                                        {% if admin.getClassnameLabel()|trans({}, 'messages')|slice(-2) == 'ie' %}
+                                                                            Nouvelle {{ admin.getClassnameLabel()|trans({}, 'messages') }}
+                                                                        {% else %}
+                                                                          {{ "navbar_create"|trans({'%class%': admin.getClassnameLabel()|trans({}, 'messages')}, "messages") }}
+                                                                        {% endif %}
                                                                     {% elseif action == 'list' %}
                                                                         {{ "navbar_list"|trans({'%class%': admin.getClassnameLabel()|trans({}, 'messages')}, "messages") }}
                                                                     {% else %}
