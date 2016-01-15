@@ -14,16 +14,19 @@ class SportAdminController extends AbstractAdminController
     /**
      * Returns icon of a sport in response.
      *
-     * @param string $name
+     * @param string|int $sport
      *
      * @return Response
      */
-    public function showIconAction($name)
+    public function showIconAction($sport)
     {
-        if (!$name) {
-            return new Http\JsonResponse(['error' => 'No icon found for this sport']);
-        }
-        $path = $this->locate('@AppSportBundle/Resources/public/icons/'.$name);
+        $repo = $this->getDoctrine()->getRepository('AppSportBundle:Sport');
+        $sport = is_numeric($sport)
+        ? $repo->findOrFail($sport)
+        : $repo->findOneByOrFail(['name' => $sport]);
+
+        $iconName = $sport->getIcon();
+        $path = $this->locate('@AppSportBundle/Resources/public' . $iconName);
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path));
         $response->headers->set('Content-Disposition', 'inline; filename="'.$name.'";');

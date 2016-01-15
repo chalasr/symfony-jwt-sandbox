@@ -81,10 +81,6 @@ class Sport extends AbstractEntity implements EntityInterface
             'id'         => $this->getId(),
             'name'       => $this->getName(),
             'isActive'   => $this->getIsActive(),
-            'icon'       => array(
-                'name' => $this->getIcon() ?: null,
-                'url'  => $this->getIcon() ? sprintf('/v1/sports/%d/icon', $this->getId()) : null,
-            ),
             'categories' => array(),
             'tags'       => array(),
         );
