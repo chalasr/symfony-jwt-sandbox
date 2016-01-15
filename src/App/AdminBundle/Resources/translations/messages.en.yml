@@ -7,3 +7,4 @@ Créer un: Create a
 # Nouvelle Catégorie: New Category
 navbar_create: New %class%
 navbar_list: %class% List
+create_block_label: Creation

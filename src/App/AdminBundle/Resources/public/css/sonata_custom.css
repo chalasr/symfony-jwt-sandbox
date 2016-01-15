@@ -1,0 +1,10 @@
+.icon_prev {
+  background-color: #eee;
+  width: 100px;
+}
+
+.icon_prev img {
+  max-width: 100px;
+  border: 1px solid;
+  border-radius: 2px;
+}
