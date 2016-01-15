@@ -3,52 +3,30 @@
 namespace App\Util\Doctrine\Repository;
 
 use App\Util\Doctrine\Entity\AbstractEntity;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
  * Abstract Repository.
  *
  * @author Robin Chalas <rchalas@sutunam.com>
  */
-class AbstractRepository extends EntityRepository
+class EnhancedRepository extends EntityRepository
 {
-    /**
-     * @var EntityManager
-     */
-    protected static $_manager;
-
-    /**
-     * @var string
-     */
-    protected static $_className;
-
-    /**
-     * Constructor.
-     *
-     * @param EntityManager $entityManager
-     * @param ClassMetadata $class
-     */
-    public function __construct($entityManager, ClassMetadata $class)
-    {
-        parent::__construct($entityManager, $class);
-        self::$_manager = $this->_em;
-        self::$_className = $this->_entityName;
-    }
-
     /**
      * Handles fail in find method.
      *
      * @param int $id
      *
-     * @return object
+     * @throws NotFoundHttpException
+     *
+     * @return AbstractEntity Instance of AbstactEntity
      */
     public function findOrFail($id)
     {
         if (null == $entity = $this->find($id)) {
-            return self::notFound($id);
+            return $this->resourceNotFound($id);
         }
 
         return $entity;
@@ -62,14 +40,16 @@ class AbstractRepository extends EntityRepository
      * @param mixed $limit
      * @param mixed $offset
      *
-     * @return object
+     * @throws NotFoundHttpException
+     *
+     * @return AbstractEntity Instance of AbstactEntity
      */
     public function findByOrFail(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         $entities = $this->findBy($criteria, $orderBy);
 
         if (count($entities) == 0) {
-            return self::notFound();
+            return $this->resourceNotFound();
         }
 
         return $entities;
@@ -83,14 +63,16 @@ class AbstractRepository extends EntityRepository
      * @param mixed $limit
      * @param mixed $offset
      *
-     * @return object
+     * @throws NotFoundHttpException
+     *
+     * @return AbstractEntity Instance of AbstactEntity
      */
     public function findOneByOrFail(array $criteria, array $orderBy = null)
     {
         $entity = $this->findOneBy($criteria, $orderBy);
 
         if (null == $entity) {
-            return self::notFound();
+            return $this->resourceNotFound();
         }
 
         return $entity;
@@ -104,6 +86,8 @@ class AbstractRepository extends EntityRepository
      * @param mixed $limit
      * @param mixed $offset
      *
+     * @throws UnprocessableEntityHttpException
+     *
      * @return object
      */
     public function findOneByAndFail(array $criteria, array $orderBy = null)
@@ -111,7 +95,7 @@ class AbstractRepository extends EntityRepository
         $entity = $this->findOneBy($criteria, $orderBy);
 
         if (null !== $entity) {
-            return self::alreadyExists($entity->getId());
+            return $this->resourceAlreadyExists($entity->getId());
         }
 
         return $entity;
@@ -132,52 +116,10 @@ class AbstractRepository extends EntityRepository
         $entity = $this->findOneBy($criteria, $orderBy);
 
         if (null == $entity) {
-            return self::create($criteria);
+            return $this->create($criteria);
         }
 
         return $entity;
-    }
-
-    /**
-     * Check for existing resource by criteria.
-     *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
-     *
-     * @return object
-     */
-    public function findByAndFail(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-        $entities = $this->findBy($criteria, $orderBy);
-
-        if (count($entities) > 0) {
-            return self::alreadyExists();
-        }
-
-        return $entities;
-    }
-
-    /**
-     * Find resource by criteria or create a new.
-     *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
-     *
-     * @return object
-     */
-    public function findByOrCreate(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-        $entities = $this->findBy($criteria, $orderBy, $limit, $offset);
-
-        if (count($entities) == 0) {
-            return self::create($criteria);
-        }
-
-        return $entities;
     }
 
     /**
@@ -188,7 +130,7 @@ class AbstractRepository extends EntityRepository
      *
      * @throws NotFoundHttpException
      */
-    public static function notFound($id = null, $message = 'Unable to find resource')
+    public function resourceNotFound($id = null, $message = 'Unable to find resource')
     {
         if (null !== $id) {
             $endMessage = sprintf(' with id %d', $id);
@@ -206,14 +148,14 @@ class AbstractRepository extends EntityRepository
      *
      * @throws NotFoundHttpException
      */
-    public static function alreadyExists($id = null, $message = 'A resource already exists')
+    public function resourceAlreadyExists($id = null, $message = 'A resource already exists')
     {
         if (null !== $id) {
             $endMessage = sprintf(' with id %d', $id);
             $message .= $endMessage;
         }
 
-        throw new NotFoundHttpException($message);
+        throw new UnprocessableEntityHttpException($message);
     }
 
     /**
@@ -223,17 +165,17 @@ class AbstractRepository extends EntityRepository
      *
      * @return EntityInterface
      */
-    public static function create(array $properties)
+    public function create(array $properties)
     {
-        $entity = new self::$_className();
+        $entity = new $this->_entityName();
 
         foreach ($properties as $property => $value) {
             $setter = 'set'.ucfirst($property);
             $entity->$setter($value);
         }
 
-        self::$_manager->persist($entity);
-        self::$_manager->flush();
+        $this->_em->persist($entity);
+        $this->_em->flush();
 
         return $entity;
     }
@@ -246,14 +188,14 @@ class AbstractRepository extends EntityRepository
      *
      * @return EntityInterface
      */
-    public static function update(AbstractEntity $entity, array $properties)
+    public function update(AbstractEntity $entity, array $properties)
     {
         foreach ($properties as $property => $value) {
             $setter = 'set'.ucfirst($property);
             $entity->$setter($value);
         }
 
-        self::$_manager->flush();
+        $this->_em->flush();
 
         return $entity;
     }
@@ -263,9 +205,9 @@ class AbstractRepository extends EntityRepository
      *
      * @param EntityInterface $entity
      */
-    public static function delete(AbstractEntity $entity)
+    public function delete(AbstractEntity $entity)
     {
-        self::$_manager->remove($entity);
-        self::$_manager->flush();
+        $this->_em->remove($entity);
+        $this->_em->flush();
     }
 }

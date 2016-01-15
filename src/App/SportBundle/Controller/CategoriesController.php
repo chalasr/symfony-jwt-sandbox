@@ -7,11 +7,10 @@ use App\Util\Controller\AbstractRestController as Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Categories resource.
+ * Manages Categories API collection.
  *
  * @author Pham Xuan Thuy <phamxuanthuy@sutunam.com>
  * @author Robin Chalas   <rchalas@sutunam.com>
@@ -39,7 +38,7 @@ class CategoriesController extends Controller
         $entities = $em->getRepository('AppSportBundle:Category')->findAll();
         $results = array();
         foreach ($entities as $entity) {
-            $results[] = $entity->toArray();
+            $results[] = $entity->asArray();
         }
 
         return $results;
@@ -74,7 +73,7 @@ class CategoriesController extends Controller
         $category = ['name' => $name];
         $repo->findOneByAndFail($category);
 
-        return $repo->create($category)->toArray();
+        return $repo->create($category)->asArray();
     }
 
     /**
@@ -99,11 +98,11 @@ class CategoriesController extends Controller
         $em = $this->getEntityManager();
         $entity = $em->getRepository('AppSportBundle:Category')->findOrFail($id);
 
-        return $entity->toArray();
+        return $entity->asArray();
     }
 
     /**
-     * update Category entity.
+     * Update a Category entity.
      *
      * @Rest\Patch("/categories/{id}")
      * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")
@@ -131,18 +130,18 @@ class CategoriesController extends Controller
         $name = $paramFetcher->get('name');
 
         if ($entity->getName() == $name) {
-            return $entity->toArray();
+            return $entity->asArray();
         }
 
         $changes = ['name' => $name];
         $repo->findOneByAndFail($changes);
         $entity = $repo->update($entity, $changes);
 
-        return $entity->toArray();
+        return $entity->asArray();
     }
 
     /**
-     * delete Category entity.
+     * Delete a Category entity.
      *
      * @Rest\Delete("/categories/{id}")
      * @ApiDoc(
@@ -156,7 +155,7 @@ class CategoriesController extends Controller
      *
      * @param int $id Category entity
      *
-     * @return JsonResponse $response get Category
+     * @return array
      */
     public function deleteCategoryAction($id)
     {

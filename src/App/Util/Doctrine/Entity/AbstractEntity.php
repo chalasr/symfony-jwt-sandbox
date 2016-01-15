@@ -29,4 +29,22 @@ abstract class AbstractEntity
     {
         return $this->id;
     }
+
+    /**
+     * Returns self as array.
+     *
+     * @return array
+     */
+    public function asArray(array $excludes = null)
+    {
+        $arrayResult = array();
+        $self = new \ReflectionClass($this);
+
+        foreach ($self->getProperties() as $property) {
+            $getter = 'get'.ucfirst($property->name);
+            $arrayResult[$property] = $entity->$getter();
+        }
+
+        return $arrayResult;
+    }
 }
