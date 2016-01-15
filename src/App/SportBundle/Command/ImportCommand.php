@@ -76,12 +76,9 @@ class ImportCommand extends ContainerAwareCommand
         $batchSize = 20;
         for ($i = 0; $i < count($data); ++$i) {
             $tags = explode(', ', $data[$i][2]);
-            $category = $categoryRepo->findOneBy(array(
+            $category = $categoryRepo->findOneByOrCreate(array(
                 'name' => $data[$i][0],
             ));
-            if (null == $category) {
-                $category = $categoryRepo->create(['name' => $data[$i][0]]);
-            }
 
             $sport = new Sport();
             $sport->setName($data[$i][1]);
