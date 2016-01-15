@@ -86,7 +86,6 @@ class SportsController extends Controller
         // Use JsonResponse to specify status code.
         return new JsonResponse($sport->asArray(), 201);
     }
-
     /**
      * Get Icon image from Sport entity.
      *
@@ -100,23 +99,14 @@ class SportsController extends Controller
      * 	 },
      * )
      *
-     * @param int $id Sport entity
+     * @param string|int $sport Sport entity
      *
      * @return Response
      */
     public function getIconBySportAction($sport)
     {
-        $em = $this->getEntityManager();
-        $repo = $em->getRepository('AppSportBundle:Sport');
-
-        $sport = is_numeric($sport)
-        ? $repo->findOrFail($sport)
-        : $repo->findOneByOrFail(['name' => $sport]);
-
-        $iconName = $sport->getIcon();
-
         return $this->forward('AppAdminBundle:SportAdmin:showIcon', array(
-            'name'          => $iconName,
+            'sport'          => $sport,
             '_sonata_admin' => 'sonata.admin.sports',
         ));
     }

@@ -21,7 +21,7 @@ class SportAdmin extends AbstractAdmin
      */
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->add('show_icon', 'icon/{name}', [], [], ['expose' => true]);
+        $collection->add('show_icon', 'icon/{sport}', [], [], ['expose' => true]);
     }
 
     /**
@@ -38,7 +38,7 @@ class SportAdmin extends AbstractAdmin
         if ($this->getSubject()->getId()) {
             $subject = $this->getSubject();
             if ($subject->getIcon()) {
-                $path = $this->generateUrl('show_icon', ['name' => $subject->getIcon()]);
+                $path = $this->generateUrl('show_icon', ['sport' => $subject->getName()]);
                 $iconFieldOptions['help'] = sprintf('<img style="max-width: 100px;" src="%s"/>', $path);
             }
         }
