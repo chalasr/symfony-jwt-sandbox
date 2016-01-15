@@ -47,7 +47,6 @@ sonata_admin:
         layout:                    AppAdminBundle:Default:standard_layout.html.twig
         short_object_description:  SonataAdminBundle:Helper:short-object-description.html.twig
 
-
     admin_services:
         # Prototype
         id:

@@ -14,6 +14,8 @@ use Sonata\AdminBundle\Route\Routecollection;
  */
 class SportAdmin extends AbstractAdmin
 {
+    // Define the base uri for the admin class
+    // e.g. /admin/sports
     protected $baseRoutePattern = 'sports';
 
     /**
@@ -21,6 +23,9 @@ class SportAdmin extends AbstractAdmin
      */
     protected function configureRoutes(RouteCollection $collection)
     {
+        // Add a custom route from a method created in the corresponding AdminController
+        // Here, I set a route using 'show_icon'.
+        // It's an alias for retrieve the showIconAction method in the SportAdminController
         $collection->add('show_icon', 'icon/{sport}', [], [], ['expose' => true]);
     }
 
@@ -39,7 +44,7 @@ class SportAdmin extends AbstractAdmin
             $subject = $this->getSubject();
             if ($subject->getIcon()) {
                 $path = $this->generateUrl('show_icon', ['sport' => $subject->getName()]);
-                $iconFieldOptions['help'] = sprintf('<img style="max-width: 100px;" src="%s"/>', $path);
+                $iconFieldOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
             }
         }
 
