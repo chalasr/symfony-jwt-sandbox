@@ -26,7 +26,7 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
      * @param int|null $lockMode    One of the \Doctrine\DBAL\LockMode::* constants or NULL
      * @param int|null $lockVersion The lock version.
      *
-     * @throws NotFoundHttpException Resource not found
+     * @throws NotFoundHttpException
      *
      * @return object
      */
@@ -51,7 +51,7 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
      * @param int|null   $limit
      * @param int|null   $offset
      *
-     * @throws NotFoundHttpException Resource not found
+     * @throws NotFoundHttpException
      *
      * @return object
      */
@@ -74,7 +74,7 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
      * @param array      $criteria
      * @param array|null $orderBy
      *
-     * @throws NotFoundHttpException Resource not found
+     * @throws NotFoundHttpException
      *
      * @return object
      */
@@ -97,7 +97,7 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
      * @param array      $criteria
      * @param array|null $orderBy
      *
-     * @throws UnprocessableEntityHttpException Already existing resource
+     * @throws UnprocessableEntityHttpException
      *
      * @return object
      */
@@ -202,6 +202,6 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
         $keys = implode(', ', array_keys($criteria));
         $values = implode(', ', array_values($criteria));
 
-        return sprintf('\'%s\' = \'%s\'', $keys, $values);
+        return sprintf("%s' = '%s'", $keys, $values);
     }
 }
