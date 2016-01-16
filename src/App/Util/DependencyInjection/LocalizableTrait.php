@@ -9,18 +9,73 @@ namespace App\Util\DependencyInjection;
  */
 trait LocalizableTrait
 {
-    protected function locate($name, $dir = null, $first = true)
+
+    /**
+     * Get Bundle path.
+     *
+     * @param string $shortName
+     *
+     * @return string
+     *
+     * @throws \InvalidArgumentException If the bundle doesn't exists
+     */
+    protected function getBundlePath($name)
     {
-        if ('@' !== $name[0]) {
-            throw new \InvalidArgumentException(sprintf('A resource name must start with @ ("%s" given).', $name));
+        $registeredBundles = $this->get('kernel')->getBundles();
+        $bundleMap = array();
+
+        foreach ($registeredBundles as $bundle) {
+            $bundleMap[$bundle->getName()] = $bundle->getPath();
         }
 
-        if (false !== strpos($name, '..')) {
-            throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $name));
+        if (false === isset($bundleMap[$name])) {
+            throw new \InvalidArgumentException(
+                sprintf('Bundle "%s" does not exist or it is not enabled.', $name)
+            );
         }
 
-        $bundleName = substr($name, 1);
+        return $bundleMap[$name];
+    }
+
+    /**
+     * Get bundle full path from bundle name.
+     *
+     * @param  string $shortName Bundle shortcut name
+     *
+     * @throws \InvalidArgumentException if the file cannot be found or the name is not valid
+     * @throws \RuntimeException         if the name contains invalid/unsafe characters
+     *
+     * @return string
+     */
+    protected function getResourcePath($resource)
+    {
+        if ('@' !== $resource[0]) {
+            throw new \InvalidArgumentException(sprintf('A resource name must start with @ ("%s" given).', $resource));
+        }
+
+        if (false !== strpos($resource, '..')) {
+            throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $resource));
+        }
+
+        return substr($resource, 1);
+    }
+
+    /**
+     * Returns the file path for a given resource.
+     *
+     * @param string $name  A resource name to locate
+     * @param string $dir   A directory where to look for the resource first
+     * @param bool   $first Whether to return the first path or paths for all matching bundles
+     *
+     * @throws \InvalidArgumentException if the file cannot be found
+     *
+     * @return string|array The absolute path of the resource or an array if $first
+     */
+    protected function locateResource($name, $dir = null, $first = true)
+    {
         $path = '';
+        $bundleName = $this->getResourcePath($name);
+
         if (false !== strpos($bundleName, '/')) {
             list($bundleName, $path) = explode('/', $bundleName, 2);
         }
@@ -33,17 +88,10 @@ trait LocalizableTrait
 
         foreach ($bundles as $bundle) {
             if ($isResource && file_exists($file = $dir.'/'.$bundle->getName().$overridePath)) {
-                if (null !== $resourceBundle) {
-                    throw new \RuntimeException(sprintf('"%s" resource is hidden by a resource from the "%s" derived bundle. Create a "%s" file to override the bundle resource.',
-                        $file,
-                        $resourceBundle,
-                        $dir.'/'.$bundles[0]->getName().$overridePath
-                    ));
-                }
-
                 if ($first) {
                     return $file;
                 }
+
                 $files[] = $file;
             }
 
@@ -60,6 +108,6 @@ trait LocalizableTrait
             return $first && $isResource ? $files[0] : $files;
         }
 
-        throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $name));
+        return null;
     }
 }

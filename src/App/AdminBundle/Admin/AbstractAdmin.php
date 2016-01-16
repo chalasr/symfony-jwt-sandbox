@@ -2,7 +2,8 @@
 
 namespace App\AdminBundle\Admin;
 
-use App\Util\DependencyInjection\InjectableTrait;
+use App\Util\DependencyInjection\InjectableTrait as Injectable;
+use App\Util\DependencyInjection\LocalizableTrait as Localizable;
 use Sonata\AdminBundle\Admin\Admin;
 
 /**
@@ -12,19 +13,7 @@ use Sonata\AdminBundle\Admin\Admin;
  */
 abstract class AbstractAdmin extends Admin
 {
-    use InjectableTrait;
-
-    /**
-     * Shortcut method to locate a resource.
-     *
-     * @param string $resource
-     *
-     * @return string Resource path
-     */
-    protected function locate($resource)
-    {
-        return $this->get('kernel')->locateResource($resource);
-    }
+    use Injectable, Localizable;
 
     /**
      * Shortcut method for translate a string.

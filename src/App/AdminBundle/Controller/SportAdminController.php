@@ -26,7 +26,7 @@ class SportAdminController extends AbstractAdminController
         : $repo->findOneByOrFail(['name' => $sport]);
 
         $iconName = $sport->getIcon();
-        $path = $this->locate('@AppSportBundle/Resources/public/icons/'.$iconName);
+        $path = $this->locateResource('@AppSportBundle/Resources/public/icons/'.$iconName);
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path));
         $response->headers->set('Content-Disposition', 'inline; filename="'.$sport.'";');

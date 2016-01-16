@@ -121,7 +121,7 @@ class SportAdmin extends AbstractAdmin
      */
     public function prePersist($created)
     {
-        $uploadPath = $this->locate('@AppSportBundle/Resources/public/icons');
+        $uploadPath = $this->locateResource('@AppSportBundle/Resources/public/icons');
         if ($created->getFile()) {
             $created->uploadIcon($uploadPath);
         }
@@ -134,7 +134,7 @@ class SportAdmin extends AbstractAdmin
      */
     public function preUpdate($updated)
     {
-        $uploadPath = $this->locate('@AppSportBundle/Resources/public/icons');
+        $uploadPath = $this->locateResource('@AppSportBundle/Resources/public/icons');
 
         if ($updated->getFile()) {
             $updated->uploadIcon($uploadPath);
