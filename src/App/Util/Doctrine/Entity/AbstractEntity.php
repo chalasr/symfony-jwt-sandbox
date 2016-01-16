@@ -3,6 +3,7 @@
 namespace App\Util\Doctrine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Abstract Entity.
@@ -17,6 +18,8 @@ abstract class AbstractEntity
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
+     * @JMS\Expose
      */
     protected $id;
 
@@ -28,23 +31,5 @@ abstract class AbstractEntity
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Returns self as array.
-     *
-     * @return array
-     */
-    public function asArray(array $excludes = null)
-    {
-        $arrayResult = array();
-        $self = new \ReflectionClass($this);
-
-        foreach ($self->getProperties() as $property) {
-            $getter = 'get'.ucfirst($property->name);
-            $arrayResult[$property] = $entity->$getter();
-        }
-
-        return $arrayResult;
     }
 }

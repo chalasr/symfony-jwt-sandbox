@@ -9,6 +9,8 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Sports resource.
@@ -29,6 +31,7 @@ class SportsController extends Controller
      * 	   401="Unauthorized"
      * 	 },
      * )
+     * @Rest\View
      *
      * @return array
      */
@@ -36,15 +39,10 @@ class SportsController extends Controller
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Sport');
-        $entities = $repo->findBy(['isActive' => 1])
-            ->getArrayResult();
+        $entities = $repo->findBy(['isActive' => 1]);
         $results = array();
 
-        foreach ($entities as $entity) {
-            $results[] = $entity->asArray(['isActive']);
-        }
-
-        return $results;
+        return $entities;
     }
 
     /**
@@ -77,10 +75,7 @@ class SportsController extends Controller
         $repo->findOneByAndFail($sport);
         $sport['isActive'] = false === $paramFetcher->get('isActive') ? false : true;
 
-        $sport = $repo->create($sport);
-
-        // Use JsonResponse to specify status code.
-        return new JsonResponse($sport->asArray(), 201);
+        return $repo->create($sport);
     }
     /**
      * Get Icon image from Sport entity.

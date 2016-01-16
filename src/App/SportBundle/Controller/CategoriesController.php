@@ -21,6 +21,8 @@ class CategoriesController extends Controller
      * Get Categories.
      *
      * @Rest\Get("/categories")
+     * @Rest\View
+     *
      * @ApiDoc(
      *   section="Category",
      * 	 resource=true,
@@ -36,12 +38,8 @@ class CategoriesController extends Controller
     {
         $em = $this->getEntityManager();
         $entities = $em->getRepository('AppSportBundle:Category')->findAll();
-        $results = array();
-        foreach ($entities as $entity) {
-            $results[] = $entity->asArray();
-        }
 
-        return $results;
+        return $entities;
     }
 
     /**
@@ -49,7 +47,7 @@ class CategoriesController extends Controller
      *
      * @Rest\Post("/categories")
      * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")
-     * @Rest\View
+     *
      * @ApiDoc(
      *   section="Category",
      * 	 resource=true,
@@ -73,13 +71,14 @@ class CategoriesController extends Controller
         $category = ['name' => $name];
         $repo->findOneByAndFail($category);
 
-        return $repo->create($category)->asArray();
+        return $repo->create($category);
     }
 
     /**
      * Get Category Json from Category entity.
      *
      * @Rest\Get("/categories/{id}")
+     *
      * @ApiDoc(
      *   section="Category",
      * 	 resource=true,
@@ -98,7 +97,7 @@ class CategoriesController extends Controller
         $em = $this->getEntityManager();
         $entity = $em->getRepository('AppSportBundle:Category')->findOrFail($id);
 
-        return $entity->asArray();
+        return $entity;
     }
 
     /**
@@ -130,14 +129,14 @@ class CategoriesController extends Controller
         $name = $paramFetcher->get('name');
 
         if ($entity->getName() == $name) {
-            return $entity->asArray();
+            return $entity;
         }
 
         $changes = ['name' => $name];
         $repo->findOneByAndFail($changes);
         $entity = $repo->update($entity, $changes);
 
-        return $entity->asArray();
+        return $entity;
     }
 
     /**
