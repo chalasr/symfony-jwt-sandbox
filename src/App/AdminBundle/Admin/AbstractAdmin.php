@@ -2,8 +2,8 @@
 
 namespace App\AdminBundle\Admin;
 
-use App\Util\DependencyInjection\InjectableTrait as Injectable;
-use App\Util\DependencyInjection\LocalizableTrait as Localizable;
+use App\Util\Controller\InjectableTrait as Injectable;
+use App\Util\Controller\LocalizableTrait as Localizable;
 use Sonata\AdminBundle\Admin\Admin;
 
 /**

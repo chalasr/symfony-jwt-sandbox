@@ -6,11 +6,11 @@ use App\SportBundle\Entity\Sport;
 use App\Util\Controller\AbstractRestController as Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use JMS\Serializer\SerializerBuilder;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Sports resource.
@@ -40,7 +40,6 @@ class SportsController extends Controller
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Sport');
         $entities = $repo->findBy(['isActive' => 1]);
-        $results = array();
 
         return $entities;
     }
@@ -51,7 +50,6 @@ class SportsController extends Controller
      * @Rest\Post("/sports")
      * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")
      * @Rest\RequestParam(name="isActive", requirements="true|false", nullable=true, description="is Active")
-     * @Rest\View
      * @ApiDoc(
      *   section="Sport",
      * 	 resource=true,
@@ -75,7 +73,9 @@ class SportsController extends Controller
         $repo->findOneByAndFail($sport);
         $sport['isActive'] = false === $paramFetcher->get('isActive') ? false : true;
 
-        return $repo->create($sport);
+        $serializer = SerializerBuilder::create()->build();
+
+        return new Response($this->serialize($repo->create($sport)), 201);
     }
     /**
      * Get Icon image from Sport entity.

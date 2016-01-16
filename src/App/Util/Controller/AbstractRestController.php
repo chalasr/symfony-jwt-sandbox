@@ -2,12 +2,13 @@
 
 namespace App\Util\Controller;
 
-use App\Util\DependencyInjection\LocalizableTrait as Localizable;
+use App\Util\Controller\LocalizableTrait as Localizable;
+use App\Util\Controller\EntitySerializable;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 abstract class AbstractRestController extends Controller
 {
-    use Localizable;
+    use Localizable, EntitySerializable;
 
     /**
      * Returns Entity Manager.

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Util\DependencyInjection;
+namespace App\Util\Controller;
 
 /**
  * Add resource localisation helper methods.
