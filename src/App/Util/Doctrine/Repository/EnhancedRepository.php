@@ -204,6 +204,22 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function findBy(array $criteria, array $orderBy = array('id' => 'ASC'), $limit = null, $offset = null)
+    {
+        return parent::findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAll()
+    {
+        return $this->findBy([]);
+    }
+
+    /**
      * Get criteria as string.
      *
      * @param array $criteria The query criteria

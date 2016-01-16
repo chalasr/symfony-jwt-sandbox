@@ -13,9 +13,4 @@ interface EntityInterface
      * To string.
      */
     public function __toString();
-
-    /**
-     * To array.
-     */
-    public function asArray();
 }

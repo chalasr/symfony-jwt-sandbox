@@ -37,12 +37,8 @@ class TagsController extends Controller
     {
         $em = $this->getEntityManager();
         $entities = $em->getRepository('AppSportBundle:Tag')->findAll();
-        $results = array();
-        foreach ($entities as $entity) {
-            $results[] = $entity->asArray();
-        }
 
-        return $results;
+        return $entities;
     }
 
     /**
@@ -74,7 +70,7 @@ class TagsController extends Controller
         $tag = ['name' => $name];
         $repo->findOneByAndFail($tag);
 
-        return $repo->create($tag)->asArray();
+        return $repo->create($tag);
     }
 
     /**
@@ -99,7 +95,7 @@ class TagsController extends Controller
         $em = $this->getEntityManager();
         $entity = $em->getRepository('AppSportBundle:Tag')->findOrFail($id);
 
-        return $entity->asArray();
+        return $entity;
     }
 
     /**
@@ -131,14 +127,14 @@ class TagsController extends Controller
         $name = $paramFetcher->get('name');
 
         if ($entity->getName() == $name) {
-            return $entity->asArray();
+            return $entity;
         }
 
         $changes = ['name' => $name];
         $repo->findOneByAndFail($changes);
         $entity = $repo->update($entity, $changes);
 
-        return $entity->asArray();
+        return $entity;
     }
 
     /**

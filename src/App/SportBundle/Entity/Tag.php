@@ -5,19 +5,28 @@ namespace App\SportBundle\Entity;
 use App\Util\Doctrine\Entity\AbstractEntity;
 use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="tags_sport")
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class Tag extends AbstractEntity implements EntityInterface
 {
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
+     * @JMS\Expose
+     *
      */
     protected $name;
 
     /**
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Sport", mappedBy="tags")
      */
     protected $sports;
@@ -36,31 +45,6 @@ class Tag extends AbstractEntity implements EntityInterface
     public function __toString()
     {
         return $this->getName() ?: 'Nouveau Tag';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function asArray(array $excludes = array())
-    {
-        $tag = array(
-            'id'     => $this->getId(),
-            'name'   => $this->getName(),
-            'sports' => array(),
-        );
-
-        foreach ($this->getSports() as $sport) {
-            $tag['sports'][] = array(
-                'id'   => $sport->getId(),
-                'name' => $sport->getName(),
-            );
-        }
-
-        foreach ($excludes as $value) {
-            unset($tag[$value]);
-        }
-
-        return $tag;
     }
 
     /**
