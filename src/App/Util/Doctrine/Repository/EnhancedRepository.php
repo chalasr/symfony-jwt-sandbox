@@ -20,15 +20,85 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
     const ALREADY_EXISTS_MESSAGE = 'A resource already exists';
 
     /**
+     * Creates a new resource.
+     *
+     * @param array $properties
+     *
+     * @return object
+     */
+    public function create(array $properties)
+    {
+        $entity = new $this->_entityName();
+
+        foreach ($properties as $property => $value) {
+            $setter = 'set'.ucfirst($property);
+            $entity->$setter($value);
+        }
+
+        $this->_em->persist($entity);
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Updates an existing resource.
+     *
+     * @param AbstractEntity $entity
+     * @param array          $properties
+     *
+     * @return object
+     */
+    public function update(AbstractEntity $entity, array $properties)
+    {
+        foreach ($properties as $property => $value) {
+            $setter = 'set'.ucfirst($property);
+            $entity->$setter($value);
+        }
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Deletes a given resource.
+     *
+     * @param AbstractEntity $entity
+     *
+     * @return void
+     */
+    public function delete(AbstractEntity $entity)
+    {
+        $this->_em->remove($entity);
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
+    }
+
+
+    /**
      * Finds a resource by identifier.
      *
      * @param int      $id          The resource identifier
      * @param int|null $lockMode    One of the \Doctrine\DBAL\LockMode::* constants or NULL
      * @param int|null $lockVersion The lock version.
      *
-     * @throws NotFoundHttpException
-     *
      * @return object
+     *
+     * @throws NotFoundHttpException
      */
     public function findOrFail($id, $lockMode = null, $lockVersion = null)
     {
@@ -51,9 +121,9 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
      * @param int|null   $limit
      * @param int|null   $offset
      *
-     * @throws NotFoundHttpException
-     *
      * @return object
+     *
+     * @throws NotFoundHttpException
      */
     public function findByOrFail(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
@@ -74,9 +144,9 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
      * @param array      $criteria
      * @param array|null $orderBy
      *
-     * @throws NotFoundHttpException
-     *
      * @return object
+     *
+     * @throws NotFoundHttpException
      */
     public function findOneByOrFail(array $criteria, array $orderBy = null)
     {
@@ -97,9 +167,9 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
      * @param array      $criteria
      * @param array|null $orderBy
      *
-     * @throws UnprocessableEntityHttpException
-     *
      * @return object
+     *
+     * @throws UnprocessableEntityHttpException
      */
     public function findOneByAndFail(array $criteria, array $orderBy = null)
     {
@@ -131,59 +201,6 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
         }
 
         return $entity;
-    }
-
-    /**
-     * Creates a new resource.
-     *
-     * @param array $properties
-     *
-     * @return object
-     */
-    public function create(array $properties)
-    {
-        $entity = new $this->_entityName();
-
-        foreach ($properties as $property => $value) {
-            $setter = 'set'.ucfirst($property);
-            $entity->$setter($value);
-        }
-
-        $this->_em->persist($entity);
-        $this->_em->flush();
-
-        return $entity;
-    }
-
-    /**
-     * Updates an existing resource.
-     *
-     * @param AbstractEntity $entity
-     * @param array          $properties
-     *
-     * @return object
-     */
-    public function update(AbstractEntity $entity, array $properties)
-    {
-        foreach ($properties as $property => $value) {
-            $setter = 'set'.ucfirst($property);
-            $entity->$setter($value);
-        }
-
-        $this->_em->flush();
-
-        return $entity;
-    }
-
-    /**
-     * Deletes a given resource.
-     *
-     * @param AbstractEntity $entity
-     */
-    public function delete(AbstractEntity $entity)
-    {
-        $this->_em->remove($entity);
-        $this->_em->flush();
     }
 
     /**

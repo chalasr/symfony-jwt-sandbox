@@ -36,15 +36,11 @@ class SportsController extends Controller
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Sport');
-        $entities = $repo->findBy(['isActive' => 1]);
+        $entities = $repo->findBy(['isActive' => 1])
+            ->getArrayResult();
         $results = array();
 
         foreach ($entities as $entity) {
-            // ($entity);
-            // $entity['icon'] = array(
-            //     'name' => null == $entity['icon'] ? null : $entity['icon']['name'],
-            //     'url'  => null == $entity['icon'] ? sprintf('/v1/sports/%d/icon', $this->getId()) : null,
-            // );
             $results[] = $entity->asArray(['isActive']);
         }
 
