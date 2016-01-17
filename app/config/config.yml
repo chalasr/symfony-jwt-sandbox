@@ -107,8 +107,6 @@ fos_rest:
         serialize_null: true
     param_fetcher_listener: force
     body_listener: true
-    access_denied_listener:
-        json: true
 
 gesdinet_jwt_refresh_token:
     ttl: 1291000

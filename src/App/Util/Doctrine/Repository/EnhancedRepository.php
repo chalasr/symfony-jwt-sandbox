@@ -235,6 +235,6 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
         $keys = implode(', ', array_keys($criteria));
         $values = implode(', ', array_values($criteria));
 
-        return sprintf("%s' = '%s'", $keys, $values);
+        return sprintf("'%s' = '%s'", $keys, $values);
     }
 }

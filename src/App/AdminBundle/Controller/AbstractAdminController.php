@@ -2,7 +2,7 @@
 
 namespace App\AdminBundle\Controller;
 
-use App\Util\DependencyInjection\LocalizableTrait as Localizable;
+use App\Util\Controller\LocalizableTrait as Localizable;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
 
 /**
