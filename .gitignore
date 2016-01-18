@@ -5,7 +5,7 @@
 /composer.phar
 /vendor/
 /web/bundles/
-/web/.htaccess
+/web/app_dev.php
 /app/bootstrap.php.cache
 /app/cache/*
 !app/cache/.gitkeep
