@@ -10,36 +10,42 @@ use Sonata\AdminBundle\Route\Routecollection;
 /**
  * Sport admin class.
  *
+ * This class represents an entity (Sport here) in our Back Office.
+ * It must be declared in the Resources/config/services.yml of this bundle (@AppAdminBundle)
+ *
  * @author Robin Chalas <rchalas@sutunam.com>
  */
 class SportAdmin extends AbstractAdmin
 {
-    // Define the base uri for the admin class
-    // e.g. /admin/sports
+    /**
+     *  Define the base uri for the admin class
+     *  Here will be accessible on /admin/sports
+     */
     protected $baseRoutePattern = 'sports';
 
     /**
-     * {@inheritdoc}
+     * Add a custom route to expose methods from the corresponding AdminController.
      */
     protected function configureRoutes(RouteCollection $collection)
     {
-        // Add a custom route from a method created in the corresponding AdminController
-        // Here, I set a route using 'show_icon'.
-        // It's an alias for retrieve the showIconAction method in the SportAdminController
+        /**
+         *  Here, I set a route using 'show_icon'.
+         *  It's an alias for retrieve the showIconAction method in the SportAdminController.
+         */
         $collection->add('show_icon', 'icon/{sport}', [], [], ['expose' => true]);
     }
 
     /**
-     * {@inheritdoc}
+     * Configure your form fields.
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        /** Custom check displaying icon if is it */
         $iconFieldOptions =  array(
             'required'   => false,
             'data_class' => null,
             'label'      => 'Icône',
         );
-
         if ($this->getSubject()->getId()) {
             $subject = $this->getSubject();
             if ($subject->getIcon()) {
@@ -47,7 +53,20 @@ class SportAdmin extends AbstractAdmin
                 $iconFieldOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
             }
         }
+        /** End custom check */
 
+        /**
+         * For each field you want add to the form
+         * Do a $formMapper->add()
+         *
+         * @prototype ->add($name, $type, array $option, array $fieldDescriptionOptions)
+         *
+         * By default, sonata use the most adapted type corresponding to the property type in database schema.
+         * Sometimes you have to use a custom field like autocomplete or model_list
+         *
+         * @see https://sonata-project.org/bundles/doctrine-orm-admin/master/doc/reference/form_field_definition.html
+         * @see https://sonata-project.org/bundles/admin/master/doc/reference/form_types.html
+         */
         $formMapper
             ->add('name', null, array(
                 'label' => 'Nom',
@@ -67,10 +86,18 @@ class SportAdmin extends AbstractAdmin
     }
 
     /**
-     * {@inheritdoc}
+     * In the LIST view, you have some filters called datagridFilters.
+     * Use the $datagridMapper to configure your list filters.
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        /**
+         * Use the Same approach than use formMapper
+         *
+         * @prototype ->add($name, $type, array $filterOptions, $fieldType, $fieldOptions, array $fieldDescriptionOptions)
+         *
+         * @see https://sonata-project.org/bundles/doctrine-orm-admin/master/doc/reference/filter_field_definition.html
+         */
         $datagridMapper
             ->add('id', null, array(
                 'label' => 'id',
@@ -87,10 +114,19 @@ class SportAdmin extends AbstractAdmin
     }
 
     /**
-     * {@inheritdoc}
+     * Configure the fields for the LIST view.
+     * Use the $listMapper same as $formMapper and $datagridMapper.
      */
     protected function configureListFields(ListMapper $listMapper)
     {
+
+        /**
+         * Same approach than use formMapper and datagridMapper
+         *
+         * @prototype ->add($name, $type, array $fieldDescriptionOptions)
+         *
+         * @see https://sonata-project.org/bundles/doctrine-orm-admin/master/doc/reference/list_field_definition.html
+         */
         $listMapper
             ->add('id', null, [
                 'label' => '#',
@@ -117,7 +153,9 @@ class SportAdmin extends AbstractAdmin
     }
 
     /**
-     * {@inheritdoc}
+     * Custom method called after submit the CREATE form; before data binding.
+     *
+     * @param object $created The newly created entity
      */
     public function prePersist($created)
     {
@@ -130,7 +168,10 @@ class SportAdmin extends AbstractAdmin
     }
 
     /**
-     * {@inheritdoc}
+     * Custom method called after submit the EDIT form; before data binding.
+     * Handles icon upload.
+     *
+     * @param object $updated The updated entity
      */
     public function preUpdate($updated)
     {

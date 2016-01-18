@@ -14,7 +14,7 @@ use GuzzleHttp\Client;
 class SportsControllerTest extends \PHPUnit_Framework_TestCase
 {
     /* @var string Base URI */
-    protected $baseUri = 'http://localhost:8000/v1/';
+    protected $baseUri = 'http://api.sportroops.dev/v1/';
 
     /* @var string JWT */
     protected $token;
@@ -37,7 +37,9 @@ class SportsControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
 
         $response = $response->json();
-        $this->token = $response['token'];
+        $token = $response['token'];
+
+        return $token;
     }
 
     /**
@@ -51,16 +53,15 @@ class SportsControllerTest extends \PHPUnit_Framework_TestCase
             'base_url' => $this->baseUri,
         ]);
 
+        $token = $this->createUser($client, [
+            'email'    => 'admin',
+            'password' => 'admin',
+        ]);
+
         $data = array(
             'name'     => 'UnitTestSports_Create_fifre12344',
             'isActive' => false,
         );
-
-        $token = $this->createUser($client, [
-            'email'    => 'robin',
-            'password' => 'robin',
-        ]);
-
         $request = $client->createRequest('POST', 'sports', [
             'body' => $data,
             'headers' => [
