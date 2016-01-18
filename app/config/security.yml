@@ -9,6 +9,12 @@ security:
             FOS\UserBundle\Model\UserInterface: sha512
     acl:
         connection: default
+
+    role_hierarchy:
+        ROLE_GUEST: [ROLE_GUEST]
+        ROLE_ADMIN:       [ROLE_USER, ROLE_SONATA_ADMIN]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -64,6 +70,7 @@ security:
             pattern:   ^/v1/
             stateless: true
             lexik_jwt: ~
+
     access_control:
         # Admin login page needs to be access without credential
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -76,5 +83,4 @@ security:
         - { path: ^/v1/guest/login, role: [IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY] }
         - { path: ^/v1/refresh_token, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v1/oauth/login , role: [IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY] }
-        - { path: ^/v1/, role: [ROLE_ADMIN, ROLE_USER, IS_AUTHENTICATED_FULLY] }
-        - { path: ^/ , role: [IS_AUTHENTICATED_FULLY, IS_AUTHENTICATED_ANONYMOUSLY] }
+        - { path: ^/v1/, role: [ROLE_ADMIN, ROLE_USER, ROLE_SUPER_ADMIN] }
