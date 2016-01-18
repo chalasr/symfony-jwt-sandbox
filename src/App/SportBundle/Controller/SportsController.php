@@ -152,7 +152,7 @@ class SportsController extends Controller
             if ($name == $entity->getName()) {
                 return $entity;
             }
-            
+
             $changes['name'] = $name;
         }
 
@@ -166,7 +166,7 @@ class SportsController extends Controller
      *
      * @Rest\Delete("/sports/{id}")
      * @ApiDoc(
-     *   section="Category",
+     *   section="Sport",
      * 	 resource=true,
      * 	 statusCodes={
      * 	   200="OK",
@@ -178,7 +178,7 @@ class SportsController extends Controller
      *
      * @return array
      */
-    public function deleteCategoryAction($id)
+    public function deleteSportAction($id)
     {
         $repo = $this
             ->getEntityManager()
