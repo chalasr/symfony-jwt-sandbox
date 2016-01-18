@@ -148,11 +148,11 @@ file that was distributed with this source code.
                                                                         {% if 'List' in menu.label %}
                                                                             {{ "navbar_list"|trans({'%class%': admin.getClassnameLabel()|trans({}, 'messages')}, "messages") }}
                                                                         {% else %}
-                                                                            {{ menu.label|trans({}, 'SonataAdminBundle') }}
+                                                                            {{ menu.label|raw }}
                                                                         {% endif %}
                                                                     </a>
                                                                 {% else %}
-                                                                    {{ menu.label|trans({}, 'SonataAdminBundle') }}
+                                                                    {{ menu.label }}
                                                                 {% endif %}
                                                             </li>
                                                         {% else %}

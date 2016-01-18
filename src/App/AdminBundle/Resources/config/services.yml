@@ -1,14 +1,10 @@
 parameters:
     admin.patched_model_type.class: App\AdminBundle\Form\Type\PatchedModelType
-    admin.sports.class: App\AdminBundle\Admin\SportAdmin
-    admin.categories.class: App\AdminBundle\Admin\CategoryAdmin
-    admin.tags.class: App\AdminBundle\Admin\TagAdmin
+    admin.sports.class: App\AdminBundle\Admin\Sport\SportAdmin
+    admin.categories.class: App\AdminBundle\Admin\Sport\CategoryAdmin
+    admin.tags.class: App\AdminBundle\Admin\Sport\TagAdmin
 
 services:
-    sonata.admin.form.type.model_choice:
-        class: "%admin.patched_model_type.class%"
-        tags:
-            - { name: form.type, alias: sonata_type_model }
 
     sonata.admin.sports:
         class: "%admin.sports.class%"

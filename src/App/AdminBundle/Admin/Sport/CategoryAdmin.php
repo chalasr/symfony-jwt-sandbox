@@ -1,14 +1,15 @@
 <?php
 
-namespace App\AdminBundle\Admin;
+namespace App\AdminBundle\Admin\Sport;
 
+use App\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
-class TagAdmin extends AbstractAdmin
+class CategoryAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'tags';
+    protected $baseRoutePattern = 'categories';
 
     /**
      * {@inheritdoc}
@@ -35,7 +36,7 @@ class TagAdmin extends AbstractAdmin
                 'label' => 'Nom',
             ))
             ->add('sports', null, array(
-                'label' => 'Sports',
+                'label' => 'Nom',
             ))
         ;
     }

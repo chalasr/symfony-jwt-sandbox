@@ -1,7 +1,8 @@
 <?php
 
-namespace App\AdminBundle\Admin;
+namespace App\AdminBundle\Admin\Sport;
 
+use App\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
