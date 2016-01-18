@@ -1,7 +1,7 @@
 # Use the front controller as index file. It serves as a fallback solution when
 # every other rewrite/redirect fails (e.g. in an aliased environment without
 # mod_rewrite). Additionally, this reduces the matching process for the
-# start page (path "/") because otherwise Apache will app_devly the rewriting rules
+# start page (path "/") because otherwise Apache will apply the rewriting rules
 # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
 DirectoryIndex app_dev.php
 
@@ -11,8 +11,8 @@ DirectoryIndex app_dev.php
 # when compiling LESS/Sass/CoffeScript assets.
 # Options FollowSymlinks
 
-# Disabling MultiViews prevents unwanted negotiation, e.g. "/app_dev" should not resolve
-# to the front controller "/app_dev.php" but be rewritten to "/app_dev.php/app_dev".
+# Disabling MultiViews prevents unwanted negotiation, e.g. "/app" should not resolve
+# to the front controller "/app_dev.php" but be rewritten to "/app_dev.php/app".
 <IfModule mod_negotiation.c>
     Options -MultiViews
 </IfModule>
