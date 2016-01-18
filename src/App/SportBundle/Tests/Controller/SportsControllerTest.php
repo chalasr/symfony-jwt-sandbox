@@ -13,33 +13,45 @@ use GuzzleHttp\Client;
  */
 class SportsControllerTest extends \PHPUnit_Framework_TestCase
 {
-    /* @var string Base URI */
-    protected $baseUri = 'http://api.sportroops.dev/v1/';
+    /* @var Client */
+    protected $client;
 
-    /* @var string JWT */
+    /* @var string JsonWebToken */
     protected $token;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->client = new Client([
+            'base_url' => 'http://api.sportroops.dev/v1/',
+        ]);
+
+        $this->token = $this->createUser([
+            'email'    => 'admin',
+            'password' => 'admin',
+        ]);
+    }
 
     /**
      * Creates an authenticated user.
      *
-     * @param  Client $client
      * @param  array  $credentials
      *
      * @method POST
      *
      * @return string The Json Web Token
      */
-    protected function createUser(Client $client, array $credentials)
+    protected function createUser(array $credentials)
     {
-        $request = $client->createRequest('POST', 'login_check', ['body' => $credentials]);
-        $response = $client->send($request);
+        $request = $this->client->createRequest('POST', 'login_check', ['body' => $credentials]);
+        $response = $this->client->send($request);
 
         $this->assertEquals(200, $response->getStatusCode());
 
         $response = $response->json();
-        $token = $response['token'];
 
-        return $token;
+        return $response['token'];
     }
 
     /**
@@ -49,27 +61,19 @@ class SportsControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $client = new Client([
-            'base_url' => $this->baseUri,
-        ]);
-
-        $token = $this->createUser($client, [
-            'email'    => 'admin',
-            'password' => 'admin',
-        ]);
-
         $data = array(
-            'name'     => 'UnitTestSports_Create_fifre12344',
+            'name'     => 'Unit_Sport_create'. time(),
             'isActive' => false,
         );
-        $request = $client->createRequest('POST', 'sports', [
+
+        $request = $this->client->createRequest('POST', 'sports', [
             'body' => $data,
             'headers' => [
-                'Authorization' => sprintf('Bearer %s', $token),
+                'Authorization' => sprintf('Bearer %s', $this->token),
             ],
         ]);
 
-        $response = $client->send($request);
+        $response = $this->client->send($request);
 
         $this->assertEquals(201, $response->getStatusCode());
         $this->assertArrayHasKey('id', $response->json());
