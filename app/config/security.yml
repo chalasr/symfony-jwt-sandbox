@@ -54,6 +54,11 @@ security:
             pattern:  ^/v1/refresh_token
             stateless: true
             anonymous: true
+        # Refresh token
+        guest:
+            pattern:  ^/v1/guest/login
+            stateless: true
+            anonymous: true
         # REST API
         api:
             pattern:   ^/v1/
@@ -68,6 +73,7 @@ security:
         - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SUPER_ADMIN, ROLE_SONATA_ADMIN] }
         # REST API
         - { path: ^/v1/signup, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/v1/guest/login, role: [IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY] }
         - { path: ^/v1/refresh_token, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v1/oauth/login , role: [IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY] }
         - { path: ^/v1/, role: [ROLE_ADMIN, ROLE_USER, IS_AUTHENTICATED_FULLY] }

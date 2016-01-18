@@ -8,10 +8,5 @@ api_security:
     requirements:
         _format: json
 
-api_refresh_token:
-    path:     /refresh_token
-    methods: POST
-    defaults: { _controller: gesdinet.jwtrefreshtoken:refresh }
-    
 sports:
     resource: "@AppSportBundle/Resources/config/routing.yml"

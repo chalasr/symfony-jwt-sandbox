@@ -1,19 +1,29 @@
-sign_up:
+security_register:
     path: /signup
     defaults: { _controller: AppUserBundle:Security:registerUserAccount }
     methods: POST
 
-sign_in:
+security_login:
     path: /login_check
     defaults: { _controller: AppUserBundle:Security:authenticateUser }
     methods: POST
 
-oauth_login:
+security_guest_login:
+    path: /guest/login
+    defaults: { _controller: AppUserBundle:Security:authenticateGuest }
+    methods: GET
+
+security_oauth_login:
     path: /oauth/login
     defaults: { _controller: AppUserBundle:Security:authenticateByOAuth }
     methods: POST
 
-users_list:
+security_users_list:
     path:     /users
     defaults: { _controller: AppUserBundle:Security:getAllUsers }
     methods: GET
+
+security_api_refresh_token:
+    path:     /refresh_token
+    methods: POST
+    defaults: { _controller: AppUserBundle:Security:refreshToken }
