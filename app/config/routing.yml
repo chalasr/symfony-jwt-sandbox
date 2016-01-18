@@ -3,7 +3,7 @@ app_api:
   prefix: /v1/
   resource: "routing_api.yml"
   requirements:
-      _format: json
+      _format: json|xml
 
 # Routing Admin loaded if referer's host is "admin."
 app_admin:

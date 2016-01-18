@@ -23,6 +23,8 @@ class SportsController extends Controller
      * Get sports.
      *
      * @Rest\Get("/sports")
+     * @Rest\View
+     *
      * @ApiDoc(
      *   section="Sport",
      * 	 resource=true,
@@ -31,7 +33,6 @@ class SportsController extends Controller
      * 	   401="Unauthorized"
      * 	 },
      * )
-     * @Rest\View
      *
      * @return array
      */
