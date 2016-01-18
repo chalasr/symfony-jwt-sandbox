@@ -5,6 +5,7 @@ namespace App\SportBundle\Entity;
 use App\Util\Doctrine\Entity\AbstractEntity;
 use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -13,6 +14,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity
  * @ORM\Table(name="categories_sport")
  * @UniqueEntity("name")
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class Category extends AbstractEntity implements EntityInterface
 {
@@ -20,6 +23,8 @@ class Category extends AbstractEntity implements EntityInterface
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
+     *
+     * @JMS\Expose
      */
     protected $name;
 
@@ -44,31 +49,6 @@ class Category extends AbstractEntity implements EntityInterface
     public function __toString()
     {
         return $this->getName() ?: 'Nouvelle Catégorie';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function asArray(array $excludes = array())
-    {
-        $category = array(
-            'id'     => $this->getId(),
-            'name'   => $this->getName(),
-            'sports' => array(),
-        );
-
-        foreach ($this->getSports() as $sport) {
-            $category['sports'][] = array(
-                'id'   => $sport->getId(),
-                'name' => $sport->getName(),
-            );
-        }
-
-        foreach ($excludes as $value) {
-            unset($category[$value]);
-        }
-
-        return $category;
     }
 
     /**

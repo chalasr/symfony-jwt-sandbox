@@ -5,6 +5,7 @@ namespace App\SportBundle\Entity;
 use App\Util\Doctrine\Entity\AbstractEntity;
 use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Entity
  * @ORM\Table(name="sports")
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class Sport extends AbstractEntity implements EntityInterface
 {
@@ -19,6 +22,8 @@ class Sport extends AbstractEntity implements EntityInterface
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     *
+     * @JMS\Expose
      */
     protected $name;
 
@@ -39,6 +44,8 @@ class Sport extends AbstractEntity implements EntityInterface
     /**
      * @ORM\ManyToMany(targetEntity="Category", inversedBy="sports", cascade={"persist"})
      * @ORM\JoinTable(name="sports_categories")
+     *
+     * @JMS\Expose
      */
     protected $categories;
 
@@ -70,35 +77,6 @@ class Sport extends AbstractEntity implements EntityInterface
     public function __toString()
     {
         return $this->getName() ?: 'New Sport';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function asArray(array $excludes = array())
-    {
-        $sport = array(
-            'id'         => $this->getId(),
-            'name'       => $this->getName(),
-            'isActive'   => $this->getIsActive(),
-            'categories' => array(),
-            'tags'       => array(),
-        );
-
-        foreach ($this->getCategories() as $cat) {
-            $sport['categories'][] = $cat->asArray(['sports']);
-        }
-
-        //convert tags to array
-        foreach ($this->getTags() as $tag) {
-            $sport['tags'][] = $tag->asArray(['sports']);
-        }
-
-        foreach ($excludes as $property) {
-            unset($sport[$property]);
-        }
-
-        return $sport;
     }
 
     /**

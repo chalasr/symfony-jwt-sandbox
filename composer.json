@@ -20,7 +20,7 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
         "knplabs/knp-menu-bundle": "@dev",
-        "sonata-project/admin-bundle": "^2.4@dev",
+        "sonata-project/admin-bundle": "dev-master",
         "sonata-project/user-bundle": "@dev",
         "sonata-project/doctrine-orm-admin-bundle": "^2.4@dev",
         "sonata-project/easy-extends-bundle": "^2.1",

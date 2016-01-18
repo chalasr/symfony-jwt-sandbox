@@ -65,7 +65,7 @@ security:
         - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         # Secured part of the Admin
-        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
+        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SUPER_ADMIN, ROLE_SONATA_ADMIN] }
         # REST API
         - { path: ^/v1/signup, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v1/refresh_token, role: IS_AUTHENTICATED_ANONYMOUSLY }

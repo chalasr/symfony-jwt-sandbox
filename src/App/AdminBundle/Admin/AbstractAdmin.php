@@ -2,7 +2,8 @@
 
 namespace App\AdminBundle\Admin;
 
-use App\Util\DependencyInjection\InjectableTrait;
+use App\Util\Controller\InjectableTrait as Injectable;
+use App\Util\Controller\LocalizableTrait as Localizable;
 use Sonata\AdminBundle\Admin\Admin;
 
 /**
@@ -12,18 +13,21 @@ use Sonata\AdminBundle\Admin\Admin;
  */
 abstract class AbstractAdmin extends Admin
 {
-    use InjectableTrait;
+    use Injectable, Localizable;
 
     /**
-     * Shortcut method to locate a resource.
+     * Shortcut method for translate a string.
      *
-     * @param string $resource
+     * @param string      $id
+     * @param array       $parameters
+     * @param string|null $domain
+     * @param string|null $locale
      *
-     * @return string Resource path
+     * @return string
      */
-    protected function locate($resource)
+    protected function translate($id, array $parameters = array(), $domain = null, $locale = null)
     {
-        return $this->get('kernel')->locateResource($resource);
+        return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
     /**
@@ -33,6 +37,12 @@ abstract class AbstractAdmin extends Admin
      */
     public function getCreateLabel()
     {
-        return sprintf('%s Création', $this->translator->trans($this->getClassnameLabel(), [], 'AppAdminBundle'));
+        $createLabel = $this->translate('create_block_label');
+        $entityName = $this->translate($this->getClassnameLabel(), [], 'messages');
+        if ($this->translator->getLocale() == 'fr') {
+            return sprintf('%s %s', $createLabel, $entityName);
+        }
+
+        return sprintf('%s %s', $entityName, $createLabel);
     }
 }

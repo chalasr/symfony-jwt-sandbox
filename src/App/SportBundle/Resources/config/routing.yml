@@ -6,6 +6,7 @@ sports_collection:
     resource: App\SportBundle\Controller\SportsController
 
 categories_collection:
+    type: rest
     resource: App\SportBundle\Controller\CategoriesController
 
 tags_collection:

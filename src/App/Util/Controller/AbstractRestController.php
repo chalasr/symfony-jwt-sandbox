@@ -2,10 +2,14 @@
 
 namespace App\Util\Controller;
 
+use App\Util\Controller\LocalizableTrait as Localizable;
+use App\Util\Controller\EntitySerializable;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 abstract class AbstractRestController extends Controller
 {
+    use Localizable, EntitySerializable;
+
     /**
      * Returns Entity Manager.
      *
@@ -13,6 +17,6 @@ abstract class AbstractRestController extends Controller
      */
     protected function getEntityManager()
     {
-        return $this->getDoctrine()->getEntityManager();
+        return $this->getDoctrine()->getManager();
     }
 }

@@ -3,167 +3,28 @@
 namespace App\Util\Doctrine\Repository;
 
 use App\Util\Doctrine\Entity\AbstractEntity;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- * Abstract Repository.
+ * Enhanced EntityRepository that pre-handle exceptions.
  *
  * @author Robin Chalas <rchalas@sutunam.com>
  */
-class EnhancedRepository extends EntityRepository
+class EnhancedRepository extends EntityRepository implements ObjectRepository
 {
-    /**
-     * Handles fail in find method.
-     *
-     * @param int $id
-     *
-     * @throws NotFoundHttpException
-     *
-     * @return AbstractEntity Instance of AbstactEntity
-     */
-    public function findOrFail($id)
-    {
-        if (null == $entity = $this->find($id)) {
-            return $this->resourceNotFound($id);
-        }
+    const NOT_FOUND_MESSAGE = 'The resource cannot be found';
 
-        return $entity;
-    }
-
-    /**
-     * Find resource by criteria or fail.
-     *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
-     *
-     * @throws NotFoundHttpException
-     *
-     * @return AbstractEntity Instance of AbstactEntity
-     */
-    public function findByOrFail(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-        $entities = $this->findBy($criteria, $orderBy);
-
-        if (count($entities) == 0) {
-            return $this->resourceNotFound();
-        }
-
-        return $entities;
-    }
-
-    /**
-     * Find resource by criteria or create a new.
-     *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
-     *
-     * @throws NotFoundHttpException
-     *
-     * @return AbstractEntity Instance of AbstactEntity
-     */
-    public function findOneByOrFail(array $criteria, array $orderBy = null)
-    {
-        $entity = $this->findOneBy($criteria, $orderBy);
-
-        if (null == $entity) {
-            return $this->resourceNotFound();
-        }
-
-        return $entity;
-    }
-
-    /**
-     * Check for existing resource by criteria and fail.
-     *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
-     *
-     * @throws UnprocessableEntityHttpException
-     *
-     * @return object
-     */
-    public function findOneByAndFail(array $criteria, array $orderBy = null)
-    {
-        $entity = $this->findOneBy($criteria, $orderBy);
-
-        if (null !== $entity) {
-            return $this->resourceAlreadyExists($entity->getId());
-        }
-
-        return $entity;
-    }
-
-    /**
-     * Find resource by criteria or create a new.
-     *
-     * @param array $criteria
-     * @param mixed $orderBy
-     * @param mixed $limit
-     * @param mixed $offset
-     *
-     * @return object
-     */
-    public function findOneByOrCreate(array $criteria, array $orderBy = null)
-    {
-        $entity = $this->findOneBy($criteria, $orderBy);
-
-        if (null == $entity) {
-            return $this->create($criteria);
-        }
-
-        return $entity;
-    }
-
-    /**
-     * Fails on resource not found.
-     *
-     * @param mixed  $id
-     * @param string $message
-     *
-     * @throws NotFoundHttpException
-     */
-    public function resourceNotFound($id = null, $message = 'Unable to find resource')
-    {
-        if (null !== $id) {
-            $endMessage = sprintf(' with id %d', $id);
-            $message .= $endMessage;
-        }
-
-        throw new NotFoundHttpException($message);
-    }
-
-    /**
-     * Fails on resource already exists.
-     *
-     * @param mixed  $id
-     * @param string $message
-     *
-     * @throws NotFoundHttpException
-     */
-    public function resourceAlreadyExists($id = null, $message = 'A resource already exists')
-    {
-        if (null !== $id) {
-            $endMessage = sprintf(' with id %d', $id);
-            $message .= $endMessage;
-        }
-
-        throw new UnprocessableEntityHttpException($message);
-    }
+    const ALREADY_EXISTS_MESSAGE = 'A resource already exists';
 
     /**
      * Creates a new resource.
      *
      * @param array $properties
      *
-     * @return EntityInterface
+     * @return object
      */
     public function create(array $properties)
     {
@@ -175,7 +36,12 @@ class EnhancedRepository extends EntityRepository
         }
 
         $this->_em->persist($entity);
-        $this->_em->flush();
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
 
         return $entity;
     }
@@ -183,10 +49,10 @@ class EnhancedRepository extends EntityRepository
     /**
      * Updates an existing resource.
      *
-     * @param EntityInterface $entity
-     * @param array           $properties
+     * @param AbstractEntity $entity
+     * @param array          $properties
      *
-     * @return EntityInterface
+     * @return object
      */
     public function update(AbstractEntity $entity, array $properties)
     {
@@ -195,19 +61,180 @@ class EnhancedRepository extends EntityRepository
             $entity->$setter($value);
         }
 
-        $this->_em->flush();
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
 
         return $entity;
     }
 
     /**
-     * Deletes a resource.
+     * Deletes a given resource.
      *
-     * @param EntityInterface $entity
+     * @param AbstractEntity $entity
+     *
+     * @return void
      */
     public function delete(AbstractEntity $entity)
     {
         $this->_em->remove($entity);
-        $this->_em->flush();
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            throw new UnprocessableEntityHttpException($e->getMessage());
+        }
+    }
+
+
+    /**
+     * Finds a resource by identifier.
+     *
+     * @param int      $id          The resource identifier
+     * @param int|null $lockMode    One of the \Doctrine\DBAL\LockMode::* constants or NULL
+     * @param int|null $lockVersion The lock version.
+     *
+     * @return object
+     *
+     * @throws NotFoundHttpException
+     */
+    public function findOrFail($id, $lockMode = null, $lockVersion = null)
+    {
+        $entity = $this->find($id);
+
+        if (null === $entity) {
+            throw new NotFoundHttpException(
+                sprintf('%s (\'id\' = %d)', self::NOT_FOUND_MESSAGE, $id)
+            );
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Find resource by criteria or fail.
+     *
+     * @param array      $criteria
+     * @param array|null $orderBy
+     * @param int|null   $limit
+     * @param int|null   $offset
+     *
+     * @return object
+     *
+     * @throws NotFoundHttpException
+     */
+    public function findByOrFail(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        $entities = $this->findBy($criteria, $orderBy);
+
+        if (count($entities) == 0) {
+            throw new NotFoundHttpException(
+                sprintf('%s (%s)', self::NOT_FOUND_MESSAGE, $this->implodeCriteria($criteria))
+            );
+        }
+
+        return $entities;
+    }
+
+    /**
+     * Find resource by criteria or create a new.
+     *
+     * @param array      $criteria
+     * @param array|null $orderBy
+     *
+     * @return object
+     *
+     * @throws NotFoundHttpException
+     */
+    public function findOneByOrFail(array $criteria, array $orderBy = null)
+    {
+        $entity = $this->findOneBy($criteria, $orderBy);
+
+        if (null === $entity) {
+            throw new NotFoundHttpException(
+                sprintf('%s (%s)', self::NOT_FOUND_MESSAGE, $this->implodeCriteria($criteria))
+            );
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Check for existing resource by criteria and fail.
+     *
+     * @param array      $criteria
+     * @param array|null $orderBy
+     *
+     * @return object
+     *
+     * @throws UnprocessableEntityHttpException
+     */
+    public function findOneByAndFail(array $criteria, array $orderBy = null)
+    {
+        $entity = $this->findOneBy($criteria, $orderBy);
+
+        if (null !== $entity) {
+            throw new UnprocessableEntityHttpException(
+                sprintf('%s (%s)', self::ALREADY_EXISTS_MESSAGE, $this->implodeCriteria($criteria))
+            );
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Find resource by criteria or create a new.
+     *
+     * @param array      $criteria
+     * @param array|null $orderBy
+     *
+     * @return object
+     */
+    public function findOneByOrCreate(array $criteria, array $orderBy = null)
+    {
+        $entity = $this->findOneBy($criteria, $orderBy);
+
+        if (null === $entity) {
+            return $this->create($criteria);
+        }
+
+        return $entity;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBy(array $criteria, array $orderBy = array('id' => 'ASC'), $limit = null, $offset = null)
+    {
+        return parent::findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAll()
+    {
+        return $this->findBy([]);
+    }
+
+    /**
+     * Get criteria as string.
+     *
+     * @param array $criteria The query criteria
+     *
+     * @return string
+     */
+    private function implodeCriteria(array $criteria)
+    {
+        if (true === empty($criteria)) {
+            return 'no fields';
+        }
+
+        $keys = implode(', ', array_keys($criteria));
+        $values = implode(', ', array_values($criteria));
+
+        return sprintf("'%s' = '%s'", $keys, $values);
     }
 }
