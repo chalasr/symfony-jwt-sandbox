@@ -101,6 +101,10 @@ fos_rest:
         formats:
             json: true
             xml:  true
+        mime_types:
+            json: ['application/json', 'application/x-json']
+            png: 'image/png'
+            jpg: 'image/jpeg'
     routing_loader:
         default_format: json
         include_format: true
