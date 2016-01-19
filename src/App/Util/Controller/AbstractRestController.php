@@ -19,4 +19,9 @@ abstract class AbstractRestController extends Controller
     {
         return $this->getDoctrine()->getManager();
     }
+
+    protected function getRolesManager()
+    {
+        return $this->container->get('security.authorization_checker');
+    }
 }

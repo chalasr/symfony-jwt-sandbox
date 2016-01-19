@@ -3,6 +3,7 @@
 namespace App\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation as Http;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Controller of Sport admin class.
@@ -21,15 +22,24 @@ class SportAdminController extends AbstractAdminController
     public function showIconAction($sport)
     {
         $repo = $this->getDoctrine()->getRepository('AppSportBundle:Sport');
-        $sport = is_numeric($sport)
+        $entity = is_numeric($sport)
         ? $repo->findOrFail($sport)
         : $repo->findOneByOrFail(['name' => $sport]);
+        $iconName = $entity->getIcon();
 
-        $iconName = $sport->getIcon();
+        if (!$iconName) {
+            throw new NotFoundHttpException(sprintf('The resource %s has not associated icon', $entity));
+        }
+
         $path = $this->locateResource('@AppSportBundle/Resources/public/icons/'.$iconName);
+        $iconInfo = pathinfo($path);
+
+        if (false === isset($iconInfo['extension'])) {
+            throw new NotFoundHttpException(sprintf('Unable to find icon with name \'%s\'', $iconName));
+        }
+
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path));
-        $response->headers->set('Content-Disposition', 'inline; filename="'.$sport.'";');
         $response->headers->set('Content-length', filesize($path));
         $response->sendHeaders();
         $response->setContent(readfile($path));

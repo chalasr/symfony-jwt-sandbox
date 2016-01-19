@@ -6,11 +6,13 @@ use App\SportBundle\Entity\Sport;
 use App\Util\Controller\AbstractRestController as Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\View\View;
 use JMS\Serializer\SerializerBuilder;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 
 /**
  * Sports resource.
@@ -68,6 +70,12 @@ class SportsController extends Controller
      */
     public function createAction(ParamFetcher $paramFetcher)
     {
+        $rolesManager = $this->getRolesManager();
+
+        if (false === $this->getRolesManager()->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You are not allowed to access this part of the application', 403);
+        }
+
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Sport');
         $sport = ['name' => $paramFetcher->get('name')];
@@ -84,7 +92,11 @@ class SportsController extends Controller
             $sport->setIcon($icon);
         }
 
-        return new Response($this->serialize($repo->create($sport)), 201);
+        $view = View::create()
+           ->setStatusCode(201)
+           ->setData($repo->create($sport));
+
+         return $this->get('fos_rest.view_handler')->handle($view);
     }
 
     /**
