@@ -14,20 +14,16 @@
 
     function MainCtrl($scope, $rootScope, $http, $timeout, authService, AuthenticationService) {
       $scope.credentials = {
-        email: 'guest',
-        password: 'guest'
+          email: 'guest',
+          password: 'guest'
       };
-
+      $scope.access = {};
 
       $scope.submit = function(resource) {
-        if (!$scope.accessToken) {
-          $scope.login();
-          $timeout(function() {
-            $scope.fetch(resource);
-          }, 500);
-        } else {
-            $scope.fetch(resource);
-        }
+        $scope.login();
+        $timeout(function() {
+          $scope.fetch(resource);
+        }, 500);
       };
 
       $scope.fetch = function(resource) {
@@ -41,13 +37,16 @@
       }
 
       $scope.login = function() {
+        var credentials = $scope.credentials;
+
         AuthenticationService.login($scope.credentials)
           .success(function (data, status, headers, config) {
             $http.defaults.headers.common.Authorization = 'Bearer ' + data.token;
-            $scope.accessToken = data.token;
-            console.log(data);
+            $scope.access.token = data.token;
           })
           .error(function (data, status, headers, config) {
+            delete $http.defaults.headers.common.Authorization;
+            $scope.access = {};
             $scope.errorMessage = 'Bad credentials';
           });
       }
