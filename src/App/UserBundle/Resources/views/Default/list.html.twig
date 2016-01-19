@@ -27,18 +27,21 @@
                   <input type="password" class="form-control" ng-model="credentials.password" placeholder="Password" required>
                 </div>
               </div>
-              <button ng-click="submit(credentials)" class="btn btn btn-success" href="#" role="button">Try our API</button>
+              <button ng-click="submit('users')" class="btn btn btn-success" href="#" role="button">Fetch Users</button>
+              <button ng-click="submit('sports')" class="btn btn btn-success" href="#" role="button">Fetch Sports</button>
+              <button ng-click="submit('categories')" class="btn btn btn-success" href="#" role="button">Fetch Categories</button>
+              <button ng-click="submit('tags')" class="btn btn btn-success" href="#" role="button">Fetch Tags</button>
             </form>
             <br>
             <div class="alert alert-danger" ng-if="errorMessage">
               [% errorMessage %]
             </div>
             <div class="row text-left" ng-if="$root.results.data && !errorMessage">
-              <h3>Fetched results</h3>
+              <h3>Results</h3>
               <div class="code-block">
                 <samp>[% $root.results.config.method %] [% $root.results.config.url %]</samp>
                 <br><br>
-                <samp ng-repeat="res in $root.results.data">[% res %]<br></samp>
+                <samp ng-repeat="res in $root.results.data track by res.id">[% res %]<br></samp>
               </div>
             </div>
         </div>

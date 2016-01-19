@@ -12,34 +12,45 @@
       };
     };
 
-    function MainCtrl($scope, $rootScope, $http, authService, AuthenticationService) {
+    function MainCtrl($scope, $rootScope, $http, $timeout, authService, AuthenticationService) {
       $scope.credentials = {
-        email: 'admin',
-        password: ''
+        email: 'guest',
+        password: 'guest'
       };
 
-      $scope.getUsers = function() {
-        $http.get('/v1/users')
-        .then(function (response) {
+
+      $scope.submit = function(resource) {
+        if (!$scope.accessToken) {
+          $scope.login();
+          $timeout(function() {
+            $scope.fetch(resource);
+          }, 500);
+        } else {
+            $scope.fetch(resource);
+        }
+      };
+
+      $scope.fetch = function(resource) {
+        var _format = resource == 'users' ? '' : '.json';
+        $http.get('/v1/' + resource + _format)
+          .then(function (response) {
             $rootScope.results = response;
+            $scope.resource = resource;
             $scope.errorMessage = null;
-        });
-      };
+          });
+      }
 
-      $scope.submit = function (credentials) {
-        AuthenticationService.login(credentials)
+      $scope.login = function() {
+        AuthenticationService.login($scope.credentials)
           .success(function (data, status, headers, config) {
             $http.defaults.headers.common.Authorization = 'Bearer ' + data.token;
-            $scope.getUsers();
-            authService.loginConfirmed(data, function (config) {
-              config.headers.Authorization = 'Bearer ' + data.token;
-              return config;
-            });
+            $scope.accessToken = data.token;
+            console.log(data);
           })
           .error(function (data, status, headers, config) {
             $scope.errorMessage = 'Bad credentials';
           });
-      };
+      }
 
     };
 
