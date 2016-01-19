@@ -3,6 +3,7 @@ parameters:
     admin.sports.class: App\AdminBundle\Admin\Sport\SportAdmin
     admin.categories.class: App\AdminBundle\Admin\Sport\CategoryAdmin
     admin.tags.class: App\AdminBundle\Admin\Sport\TagAdmin
+    admin.coachs.class: App\AdminBundle\Admin\User\CoachAdmin
 
 services:
 
@@ -32,3 +33,18 @@ services:
             - ~
             - App\SportBundle\Entity\Tag
             - AppAdminBundle:TagAdmin
+
+    # @Thuy First admin class for you as example, I know it's a lot of search to know where files are located and how do it.
+    # Also, take a look at this declaration, it is how you create a new "Admin section" in our back-office.
+    # For it's example, it is the CoachAdmin class.
+    # ! You have to create the CoachInformation entity like I say in the ticket, I havn't done it. !
+    # If you have any doubt / need of resource or example, do not hesitate to ask me.
+    # Thank's for your job
+    sonata.admin.users_coachs:
+        class: "%admin.coachs.class%" # Previously declared at top (parameters)
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Coachs", label: "Coachs" } # Some parameters of sonata
+        arguments:
+            - ~
+            - App\UserBundle\Entity\User # The entity used, main entity but custom fields from the relation with CoachInformation.
+            - AppAdminBundle:CoachAdmin #  The admin class alias, mandatory too.
