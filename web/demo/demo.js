@@ -50,7 +50,7 @@
             $scope.errorMessage = 'Bad credentials';
           });
       }
-
+      
     };
 
     demo

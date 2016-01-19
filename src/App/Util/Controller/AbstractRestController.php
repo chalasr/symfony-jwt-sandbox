@@ -24,4 +24,16 @@ abstract class AbstractRestController extends Controller
     {
         return $this->container->get('security.authorization_checker');
     }
+
+    protected function isAdmin()
+    {
+        return $this->getRolesManager()->isGranted('ROLE_ADMIN');
+    }
+
+    protected function isGuest()
+    {
+        $rolesManager = $this->getRolesManager();
+
+        return ($rolesManager->isGranted('ROLE_GUEST') && !$rolesManager->isGranted('ROLE_ADMIN'));
+    }
 }

@@ -12,8 +12,8 @@ services:
             - { name: sonata.admin, manager_type: orm, group: "Sports", label: "Sports" }
         arguments:
             - ~
-            - App\SportBundle\Entity\Sport
-            - AppAdminBundle:SportAdmin
+            - App\SportBundle\Entity\Sport # The corresponding entity 
+            - AppAdminBundle:SportAdmin # The Admin Class
 
     sonata.admin.categories:
         class: "%admin.categories.class%"

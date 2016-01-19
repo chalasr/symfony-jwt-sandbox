@@ -12,7 +12,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Sports resource.
@@ -73,7 +73,7 @@ class SportsController extends Controller
         $rolesManager = $this->getRolesManager();
 
         if (false === $this->getRolesManager()->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('You are not allowed to access this part of the application', 403);
+            throw new AccessDeniedHttpException('You are not allowed to access this resource');
         }
 
         $em = $this->getEntityManager();
@@ -162,10 +162,6 @@ class SportsController extends Controller
         }
 
         if ($name) {
-            if ($name == $entity->getName()) {
-                return $entity;
-            }
-
             $changes['name'] = $name;
         }
 
