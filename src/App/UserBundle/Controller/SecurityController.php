@@ -2,6 +2,9 @@
 
 namespace App\UserBundle\Controller;
 
+use FOS\RestBundle\View\View;
+use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\Controller\Annotations;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Goutte\Client as HttpClient;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -9,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+
 
 /**
  * Mangages users from mobile app in API.
@@ -149,13 +154,13 @@ class SecurityController extends Controller
         }
 
         $userManager = $this->getUserManager();
-        $passwordGenerator = $this->get('fos_user.util.token_generator');
-
         $existingByFacebookId = $userManager->findUserBy(['facebookId' => $data['id']]);
         $existingByEmail = $userManager->findUserBy(['email' => $data['email']]);
+
         if (null !== $existingByFacebookId) {
             return $this->generateToken($existingByFacebookId, 200);
         }
+
         if (null !== $existingByEmail) {
             $existingByEmail->setFacebookId($data['id']);
             $userManager->updateUser($existingByEmail);
@@ -163,7 +168,7 @@ class SecurityController extends Controller
             return $this->generateToken($existingByEmail, 200);
         }
 
-        $data['password'] = substr($passwordGenerator->generateToken(), 0, 8);
+        $data['password'] = $this->getRandomPassword();
 
         return $this->generateToken($this->createUser($data, true), 201);
     }
@@ -187,6 +192,63 @@ class SecurityController extends Controller
     }
 
     /**
+     * Resets lost password for a given user.
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @return View
+     */
+    public function resetPasswordAction($id)
+    {
+        $userManager = $this->getUserManager();
+
+        if (null === $user = $userManager->findUserBy(['id' => $id])) {
+            throw new UnprocessableEntityHttpException(sprintf('Unable to find user with id \'%d\'', $id));
+        }
+
+        $password = $this->getRandomPassword();
+        $user->setPlainPassword($password);
+        $userManager->updateUser($user);
+
+        /** Get User informations for e-mail content **/
+        $query = $this->getEntityManager()
+            ->createQueryBuilder('u')
+            ->select('u.firstname', 'u.lastname', 'u.email')
+            ->from('App\UserBundle\Entity\User', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $id)
+            ->getQuery();
+
+        $result = $query->getResult();
+        $mailing = array(
+            'lastname'  => $result[0]['lastname'],
+            'firstname' => $result[0]['firstname'],
+            'email'     => $result[0]['email'],
+            'password'  => $password,
+        );
+
+        /** Prepare an email with data **/
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Sportroops reset password')
+            ->setFrom('support@sportroops.com')
+            ->setTo($mailing['email'])
+            ->setBody(
+                $this->renderView('Emails/reset_password.html.twig', $mailing),
+                'text/html'
+            );
+
+        /** Send email **/
+        $this->get('mailer')->send($message);
+
+        /** Serialize data before return response **/
+        $view = View::create()
+           ->setStatusCode(200)
+           ->setData($user);
+
+        return $this->renderView('Emails/reset_password.html.twig', $mailing);
+    }
+
+    /**
      * Lists all users.
      *
      * @ApiDoc(
@@ -205,8 +267,8 @@ class SecurityController extends Controller
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
         $query = $repo->createQueryBuilder('u')
-        ->select('u.id', 'u.username', 'u.email')
-        ->getQuery();
+            ->select('u.id', 'u.username', 'u.email')
+            ->getQuery();
 
         return $query->getResult();
     }
@@ -394,5 +456,17 @@ class SecurityController extends Controller
     protected function getUserManager()
     {
         return $this->get('fos_user.user_manager');
+    }
+
+    /**
+     * Generates a random password of 8 characters.
+     *
+     * @return string
+     */
+    protected function getRandomPassword()
+    {
+        $tokenGenerator = $this->get('fos_user.util.token_generator');
+
+        return substr($tokenGenerator->generateToken(), 0, 8);
     }
 }
