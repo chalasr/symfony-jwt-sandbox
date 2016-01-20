@@ -10,14 +10,14 @@
           $rootScope.$broadcast('event:auth-logout-complete');
         }
       };
-    };
+    }
 
     function MainCtrl($scope, $rootScope, $http, $timeout, authService, AuthenticationService) {
+      $scope.access = {};
       $scope.credentials = {
           email: 'guest',
           password: 'guest'
       };
-      $scope.access = {};
 
       $scope.submit = function(resource) {
         $scope.login();
@@ -34,7 +34,7 @@
             $scope.resource = resource;
             $scope.errorMessage = null;
           });
-      }
+      };
 
       $scope.login = function() {
         var credentials = $scope.credentials;
@@ -49,14 +49,25 @@
             $scope.access = {};
             $scope.errorMessage = 'Bad credentials';
           });
-      }
-      
-    };
+      };
+
+    }
+
+    function ucFirst() {
+      return function(input) {
+        if (!angular.isString(input)) return input;
+        return input.split(' ').map(function (ch) {
+            return ch.charAt(0).toUpperCase() + ch.substring(1);
+        }).join(' ');
+      };
+    }
 
     demo
       .factory('AuthenticationService', Authentication)
       .controller('MainCtrl', MainCtrl)
+      .filter('ucfirst', ucFirst)
     ;
+
 
 })(angular.module('demoApp', ['http-auth-interceptor', 'ui.bootstrap'], function($interpolateProvider) {
     $interpolateProvider.startSymbol('[%');

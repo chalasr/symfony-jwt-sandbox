@@ -20,7 +20,6 @@ class Tag extends AbstractEntity implements EntityInterface
      *
      * @ORM\Column(type="string", length=255)
      * @JMS\Expose
-     *
      */
     protected $name;
 

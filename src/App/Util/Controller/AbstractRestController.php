@@ -2,8 +2,8 @@
 
 namespace App\Util\Controller;
 
+use App\Util\Controller\EntitySerializableTrait as EntitySerializable;
 use App\Util\Controller\LocalizableTrait as Localizable;
-use App\Util\Controller\EntitySerializable;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 abstract class AbstractRestController extends Controller
@@ -34,6 +34,6 @@ abstract class AbstractRestController extends Controller
     {
         $rolesManager = $this->getRolesManager();
 
-        return ($rolesManager->isGranted('ROLE_GUEST') && !$rolesManager->isGranted('ROLE_ADMIN'));
+        return $rolesManager->isGranted('ROLE_GUEST') && !$rolesManager->isGranted('ROLE_ADMIN');
     }
 }

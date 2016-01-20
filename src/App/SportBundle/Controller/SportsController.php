@@ -7,7 +7,6 @@ use App\Util\Controller\AbstractRestController as Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
-use JMS\Serializer\SerializerBuilder;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,7 +95,7 @@ class SportsController extends Controller
            ->setStatusCode(201)
            ->setData($repo->create($sport));
 
-         return $this->get('fos_rest.view_handler')->handle($view);
+        return $this->get('fos_rest.view_handler')->handle($view);
     }
 
     /**
@@ -167,7 +166,7 @@ class SportsController extends Controller
 
         $repo->findOneByAndFail($changes);
 
-        return $repo->update($entity, $changes);;
+        return $repo->update($entity, $changes);
     }
 
     /**

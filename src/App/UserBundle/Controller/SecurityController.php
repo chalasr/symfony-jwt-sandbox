@@ -11,43 +11,43 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
-* Mangages users from mobile app in API.
-*
-* @author Robin Chalas <rchalas@sutunam.com>
-*/
+ * Mangages users from mobile app in API.
+ *
+ * @author Robin Chalas <rchalas@sutunam.com>
+ */
 class SecurityController extends Controller
 {
     protected $rules;
 
     /**
-    * Constructor.
-    */
+     * Constructor.
+     */
     public function __construct()
     {
         $this->rules = [
-            'register' => ['password', 'email'],
+            'register'     => ['password', 'email'],
             'basic'        => ['password', 'email'],
             'oauth'        => ['id', 'email', 'access_token'],
         ];
     }
 
     /**
-    * Register new user and process authentication.
-    *
-    * @ApiDoc(
-    * 	 section="Security",
-    *     parameters={
-    * 	     {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
-    *         {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
-    *         {"name"="first_name", "dataType"="string", "required"=false, "description"="First name"},
-    *         {"name"="last_name", "dataType"="string", "required"=false, "description"="Last name"},
-    *     },
-    * 	 statusCodes={
-    * 	     201="Created (new user created, token generated, returns them with refresh_token)",
-    * 	     422="Unprocessable Entity (missing parameters)"
-    * 	 },
-    * )
-    */
+     * Register new user and process authentication.
+     *
+     * @ApiDoc(
+     * 	 section="Security",
+     *     parameters={
+     * 	     {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
+     *         {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
+     *         {"name"="first_name", "dataType"="string", "required"=false, "description"="First name"},
+     *         {"name"="last_name", "dataType"="string", "required"=false, "description"="Last name"},
+     *     },
+     * 	 statusCodes={
+     * 	     201="Created (new user created, token generated, returns them with refresh_token)",
+     * 	     422="Unprocessable Entity (missing parameters)"
+     * 	 },
+     * )
+     */
     public function registerUserAccountAction(Request $request)
     {
         $data = $request->request->all();
@@ -75,27 +75,27 @@ class SecurityController extends Controller
     }
 
     /**
-    * Processes user authentication from email/password.
-    *
-    * @ApiDoc(
-    *     section="Security",
-    *     parameters={
-    * 	     {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
-    *        {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
-    *     },
-    * 	  statusCodes={
-    * 	     200="OK (user authenticated, returns token, refresh_token and available user infos)",
-    * 	     422="Unprocessable Entity (missing parameters)"
-    * 	  },
-    * )
-    */
+     * Processes user authentication from email/password.
+     *
+     * @ApiDoc(
+     *     section="Security",
+     *     parameters={
+     * 	     {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
+     *        {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
+     *     },
+     * 	  statusCodes={
+     * 	     200="OK (user authenticated, returns token, refresh_token and available user infos)",
+     * 	     422="Unprocessable Entity (missing parameters)"
+     * 	  },
+     * )
+     */
     public function authenticateUserAction()
     {
         // Handled by Security Component.
     }
 
     /**
-     * Authenticates user as guest to access READ resources
+     * Authenticates user as guest to access READ resources.
      *
      * @ApiDoc(
      *    section="Security",
@@ -116,24 +116,24 @@ class SecurityController extends Controller
     }
 
     /**
-    * Register/Authenticate user from OAuth Response.
-    *
-    * @ApiDoc(
-    * 	 section="Security",
-    *     parameters={
-    *         {"name"="id", "dataType"="integer", "required"=true, "description"="Facebook ID"},
-    *         {"name"="access_token", "dataType"="string", "required"=true, "description"="Facebook access_token"},
-    *         {"name"="email", "dataType"="string", "required"=true, "description"="Email credential"},
-    *         {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname"},
-    *         {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname"},
-    *     },
-    * 	 statusCodes={
-    * 	     200="OK (token generated for existing user, returns it with available user infos ans refresh_token)",
-    * 	     201="Created (new user created, access token generated, returns them with refresh_token)",
-    * 	     422="Unprocessable Entity (missing parameters)"
-    * 	 },
-    * )
-    */
+     * Register/Authenticate user from OAuth Response.
+     *
+     * @ApiDoc(
+     * 	 section="Security",
+     *     parameters={
+     *         {"name"="id", "dataType"="integer", "required"=true, "description"="Facebook ID"},
+     *         {"name"="access_token", "dataType"="string", "required"=true, "description"="Facebook access_token"},
+     *         {"name"="email", "dataType"="string", "required"=true, "description"="Email credential"},
+     *         {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname"},
+     *         {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname"},
+     *     },
+     * 	 statusCodes={
+     * 	     200="OK (token generated for existing user, returns it with available user infos ans refresh_token)",
+     * 	     201="Created (new user created, access token generated, returns them with refresh_token)",
+     * 	     422="Unprocessable Entity (missing parameters)"
+     * 	 },
+     * )
+     */
     public function authenticateByOAuthAction(Request $request)
     {
         $data = $request->request->all();
@@ -169,16 +169,16 @@ class SecurityController extends Controller
     }
 
     /**
-    * Reset expired Token.
-    *
-    * @ApiDoc(
-    * 	section="Security",
-    * 	parameters={
-    *     {"name"="token", "dataType"="string", "required"=true, "description"="Expired token"},
-    *     {"name"="refresh_token", "dataType"="string", "required"=true, "description"="Refresh token"},
-    *   }
-    * )
-    */
+     * Reset expired Token.
+     *
+     * @ApiDoc(
+     * 	section="Security",
+     * 	parameters={
+     *     {"name"="token", "dataType"="string", "required"=true, "description"="Expired token"},
+     *     {"name"="refresh_token", "dataType"="string", "required"=true, "description"="Refresh token"},
+     *   }
+     * )
+     */
     public function refreshTokenAction(Request $request)
     {
         return $this->forward('gesdinet.jwtrefreshtoken:refresh', array(
@@ -187,19 +187,19 @@ class SecurityController extends Controller
     }
 
     /**
-    * Lists all users.
-    *
-    * @ApiDoc(
-    * 	 section="User",
-    * 	 resource=true,
-    * 	 statusCodes={
-    * 	     200="OK (list all users)",
-    * 	     401="Unauthorized (this resource require an access token)"
-    * 	 },
-    * )
-    *
-    * @return Doctrine\ORM\QueryBuilder $results
-    */
+     * Lists all users.
+     *
+     * @ApiDoc(
+     * 	 section="User",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	     200="OK (list all users)",
+     * 	     401="Unauthorized (this resource require an access token)"
+     * 	 },
+     * )
+     *
+     * @return Doctrine\ORM\QueryBuilder $results
+     */
     public function getAllUsersAction()
     {
         $em = $this->getEntityManager();
@@ -212,15 +212,15 @@ class SecurityController extends Controller
     }
 
     /**
-    * Creates new User.
-    *
-    * @param array    $data
-    * @param string $username
-    * @param string $password
-    * @param bool     $isOAuth
-    *
-    * @return User $user
-    */
+     * Creates new User.
+     *
+     * @param array  $data
+     * @param string $username
+     * @param string $password
+     * @param bool   $isOAuth
+     *
+     * @return User $user
+     */
     protected function createUser($data, $isOAuth = false)
     {
         $userManager = $this->getUserManager();
@@ -247,12 +247,12 @@ class SecurityController extends Controller
     }
 
     /**
-    * Generates token from user.
-    *
-    * @param User $user
-    *
-    * @return JsonResponse $token
-    */
+     * Generates token from user.
+     *
+     * @param User $user
+     *
+     * @return JsonResponse $token
+     */
     protected function generateToken($user, $statusCode = 200)
     {
         $response = array(
@@ -277,13 +277,13 @@ class SecurityController extends Controller
     }
 
     /**
-    * Validates data based on $rules.
-    *
-    * @param array    $data
-    * @param string $type Origin of signup
-    *
-    * @return bool $validator
-    */
+     * Validates data based on $rules.
+     *
+     * @param array  $data
+     * @param string $type Origin of signup
+     *
+     * @return bool $validator
+     */
     protected function validator($data, $type = 'basic')
     {
         $validator = true;
@@ -299,12 +299,12 @@ class SecurityController extends Controller
     }
 
     /**
-    * Provides a refresh token.
-    *
-    * @param UserManager $user
-    *
-    * @return string refresh_token
-    */
+     * Provides a refresh token.
+     *
+     * @param UserManager $user
+     *
+     * @return string refresh_token
+     */
     protected function attachRefreshToken($user)
     {
         $refreshTokenManager = $this->get('gesdinet.jwtrefreshtoken.refresh_token_manager');
@@ -326,13 +326,13 @@ class SecurityController extends Controller
     }
 
     /**
-    * Verifiy facebook account from id/access_token.
-    *
-    * @param int        $facebookId                    Facebook account id
-    * @param string $facebookAccessToken Facebook access_token
-    *
-    * @return bool Facebook account status
-    */
+     * Verifiy facebook account from id/access_token.
+     *
+     * @param int    $facebookId          Facebook account id
+     * @param string $facebookAccessToken Facebook access_token
+     *
+     * @return bool Facebook account status
+     */
     protected function isValidFacebookAccount($facebookId, $facebookAccessToken)
     {
         $client = new HttpClient();
@@ -345,13 +345,13 @@ class SecurityController extends Controller
     }
 
     /**
-    * Returns an error caused by valid format but not good data.
-    *
-    * @param string $action
-    * @param string $user
-    *
-    * @return JsonResponse Unprocessable entity 422
-    */
+     * Returns an error caused by valid format but not good data.
+     *
+     * @param string $action
+     * @param string $user
+     *
+     * @return JsonResponse Unprocessable entity 422
+     */
     protected function missingParametersError($action, $origin = null)
     {
         $required = implode('\', \'', array_values($this->rules[null == $origin ? $action : $origin]));
@@ -362,13 +362,13 @@ class SecurityController extends Controller
     }
 
     /**
-    * Returns an error caused by already existing entity on try to create a new.
-    *
-    * @param string $prop The property used
-    * @param string $val    Value of property
-    *
-    * @return JsonResponse Unprocessable entity 422
-    */
+     * Returns an error caused by already existing entity on try to create a new.
+     *
+     * @param string $prop The property used
+     * @param string $val  Value of property
+     *
+     * @return JsonResponse Unprocessable entity 422
+     */
     protected function resourceAlreadyExistsError($prop, $val)
     {
         return new JsonResponse(array(
@@ -377,20 +377,20 @@ class SecurityController extends Controller
     }
 
     /**
-    * Returns Entity Manager.
-    *
-    * @return EntityManager $entityManager
-    */
+     * Returns Entity Manager.
+     *
+     * @return EntityManager $entityManager
+     */
     protected function getEntityManager()
     {
         return $this->getDoctrine()->getEntityManager();
     }
 
     /**
-    * Returns authentication provider.
-    *
-    * @return UserManager $userManager
-    */
+     * Returns authentication provider.
+     *
+     * @return UserManager $userManager
+     */
     protected function getUserManager()
     {
         return $this->get('fos_user.user_manager');

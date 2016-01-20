@@ -9,7 +9,6 @@ namespace App\Util\Controller;
  */
 trait LocalizableTrait
 {
-
     /**
      * Get Bundle path.
      *
@@ -40,7 +39,7 @@ trait LocalizableTrait
     /**
      * Get bundle full path from bundle name.
      *
-     * @param  string $shortName Bundle shortcut name
+     * @param string $shortName Bundle shortcut name
      *
      * @throws \InvalidArgumentException if the file cannot be found or the name is not valid
      * @throws \RuntimeException         if the name contains invalid/unsafe characters
@@ -108,6 +107,6 @@ trait LocalizableTrait
             return $first && $isResource ? $files[0] : $files;
         }
 
-        return null;
+        return;
     }
 }

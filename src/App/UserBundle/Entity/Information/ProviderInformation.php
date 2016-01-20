@@ -6,8 +6,6 @@ use App\Util\Doctrine\Entity\AbstractEntity;
 use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints\Null;
 
 /**
  * Province.
@@ -28,7 +26,6 @@ class ProviderInformation extends AbstractEntity implements EntityInterface
      */
     protected $name;
 
-
     /**
      * To string.
      *
@@ -36,7 +33,7 @@ class ProviderInformation extends AbstractEntity implements EntityInterface
      */
     public function __toString()
     {
-        return $this->getName() ?: "";
+        return $this->getName() ?: '';
     }
 
     /**
@@ -62,5 +59,4 @@ class ProviderInformation extends AbstractEntity implements EntityInterface
     {
         return $this->name;
     }
-
 }

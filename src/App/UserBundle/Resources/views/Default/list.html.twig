@@ -27,16 +27,14 @@
                   <input type="password" class="form-control" ng-model="credentials.password" placeholder="Password" required>
                 </div>
               </div>
-              <!-- <button ng-click="submit('users')" class="btn btn btn-success" href="#" role="button">Fetch Users</button> -->
-              <button
-                ng-submit="submit(res)"
-                ng-repeat="res in ['users', 'sports', 'categories', 'tags']"
-                class="btn btn btn-success">
-                  [% res %]
-              </button>
-              <!-- <button ng-click="submit('sports')" class="btn btn btn-success" href="#" role="button">Fetch Sports</button> -->
-              <!-- <button ng-click="submit('categories')" class="btn btn btn-success" href="#" role="button">Fetch Categories</button> -->
-              <!-- <button ng-click="submit('tags')" class="btn btn btn-success" href="#" role="button">Fetch Tags</button> -->
+              <div class="demo-submits">          
+                  <a
+                    ng-click="submit(res)"
+                    ng-repeat="res in ['users', 'sports', 'categories', 'tags']"
+                    class="btn btn-success">
+                      Fetch [% res| ucfirst %]
+                  </a>
+              </div>
             </form>
             <br>
             <div class="alert alert-danger" ng-if="errorMessage">

@@ -50,7 +50,7 @@ class User extends BaseUser
      */
     protected $providerInformation;
 
-   /**
+    /**
      * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\Information\CoachInformation")
      * @ORM\JoinColumn(name="coach_id", referencedColumnName="id")
      */

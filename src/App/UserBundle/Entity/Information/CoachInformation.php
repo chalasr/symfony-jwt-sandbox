@@ -6,8 +6,6 @@ use App\Util\Doctrine\Entity\AbstractEntity;
 use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints\Null;
 
 /**
  * Province.
@@ -23,16 +21,13 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      * @var string
      *
      * @ORM\Column(name="pro_card_expiration_date", type="date")
-     *
      */
     protected $proCardExpirationDate;
-
 
     /**
      * @var string
      *
      * @ORM\Column(name="insurance_company_name", type="string",length=255)
-     *
      */
     protected $insuranceCompanyName;
 
@@ -40,7 +35,6 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      * @var string
      *
      * @ORM\Column(name="insurance_policy_number", type="string", length=255)
-     *
      */
     protected $insurancePolicyNumber;
 
@@ -48,7 +42,6 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      * @var string
      *
      * @ORM\Column(name="insurance_policy_expiration_date", type="date")
-     *
      */
     protected $insurancePolicyExpirationDate;
 
@@ -59,12 +52,11 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      */
     public function __toString()
     {
-        return "";
+        return '';
     }
 
-
     /**
-     * Set proCardExpirationDate
+     * Set proCardExpirationDate.
      *
      * @param \DateTime $proCardExpirationDate
      *
@@ -78,7 +70,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get proCardExpirationDate
+     * Get proCardExpirationDate.
      *
      * @return \DateTime
      */
@@ -88,7 +80,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set insuranceCompanyName
+     * Set insuranceCompanyName.
      *
      * @param string $insuranceCompanyName
      *
@@ -102,7 +94,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get insuranceCompanyName
+     * Get insuranceCompanyName.
      *
      * @return string
      */
@@ -112,7 +104,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set insurancePolicyNumber
+     * Set insurancePolicyNumber.
      *
      * @param string $insurancePolicyNumber
      *
@@ -126,7 +118,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get insurancePolicyNumber
+     * Get insurancePolicyNumber.
      *
      * @return string
      */
@@ -136,7 +128,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set insurancePolicyExpirationDate
+     * Set insurancePolicyExpirationDate.
      *
      * @param \DateTime $insurancePolicyExpirationDate
      *
@@ -150,7 +142,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get insurancePolicyExpirationDate
+     * Get insurancePolicyExpirationDate.
      *
      * @return \DateTime
      */
