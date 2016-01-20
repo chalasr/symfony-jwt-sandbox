@@ -36,7 +36,7 @@ class CategoryAdmin extends AbstractAdmin
                 'label' => 'Nom',
             ))
             ->add('sports', null, array(
-                'label' => 'Nom',
+                'label' => 'sports',
             ))
         ;
     }

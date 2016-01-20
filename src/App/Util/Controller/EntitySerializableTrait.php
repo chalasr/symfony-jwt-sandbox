@@ -9,13 +9,13 @@ use JMS\Serializer\SerializerBuilder;
  *
  * @author Robin Chalas <rchalas@sutunam.com>
  */
-trait EntitySerializable
+trait EntitySerializableTrait
 {
     /**
-     * Serialize an entity or other object in given format
+     * Serialize an entity or other object in given format.
      *
-     * @param  object $object The object to serialize
-     * @param  string $format FOSRestBundle default format
+     * @param object $object The object to serialize
+     * @param string $format FOSRestBundle default format
      *
      * @return string The serialized object
      */

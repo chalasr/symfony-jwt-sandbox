@@ -6,3 +6,7 @@
   text-align: left;
   word-break: break-all;
 }
+
+.demo-submits a {
+  margin-right: 10px;
+}

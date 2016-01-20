@@ -20,7 +20,7 @@ class SportAdmin extends AbstractAdmin
 {
     /**
      *  Define the base uri for the admin class
-     *  Here will be accessible on /admin/sports
+     *  Here will be accessible on /admin/sports.
      */
     protected $baseRoutePattern = 'sports';
 
@@ -29,7 +29,7 @@ class SportAdmin extends AbstractAdmin
      */
     protected function configureRoutes(RouteCollection $collection)
     {
-        /**
+        /*
          *  Here, I set a route using 'show_icon'.
          *  It's an alias for retrieve the showIconAction method in the SportAdminController.
          */
@@ -41,7 +41,7 @@ class SportAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        /** Custom check displaying icon if is it */
+        /* Custom check displaying icon if is it */
         $iconFieldOptions =  array(
             'required'   => false,
             'data_class' => null,
@@ -54,9 +54,9 @@ class SportAdmin extends AbstractAdmin
                 $iconFieldOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
             }
         }
-        /** End custom check */
+        /* End custom check */
 
-        /**
+        /*
          * For each field you want add to the form
          * Do a $formMapper->add()
          *
@@ -73,7 +73,7 @@ class SportAdmin extends AbstractAdmin
                 'label' => 'Nom',
             ))
             ->add('categories', null, array(
-                'label' => 'Categories',
+                'label' => 'Catégories',
             ))
             ->add('tags', null, array(
                 'label' => 'Tags',
@@ -92,7 +92,7 @@ class SportAdmin extends AbstractAdmin
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        /**
+        /*
          * Use the Same approach than use formMapper
          *
          * @prototype ->add($name, $type, array $filterOptions, $fieldType, $fieldOptions, array $fieldDescriptionOptions)
@@ -107,7 +107,10 @@ class SportAdmin extends AbstractAdmin
                 'label' => 'Nom',
             ))
             ->add('categories', null, array(
-                'label' => 'Categories',
+                'label' => 'Catégories',
+            ))
+            ->add('tags', null, array(
+                'label' => 'Tags',
             ))
             ->add('isActive', null, array(
                 'label' => 'Actif',
@@ -121,7 +124,7 @@ class SportAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
 
-        /**
+        /*
          * Same approach than use formMapper and datagridMapper
          *
          * @prototype ->add($name, $type, array $fieldDescriptionOptions)
@@ -136,10 +139,10 @@ class SportAdmin extends AbstractAdmin
                 'label' => 'Nom',
             ])
             ->add('categories', null, [
-                'label' => 'Categories',
+                'label' => 'Catégories',
             ])
             ->add('tags', null, [
-                'label' => 'Categories',
+                'label' => 'Tags',
             ])
             ->add('isActive', null, [
                 'label' => 'Actif',

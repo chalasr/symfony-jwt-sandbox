@@ -2,8 +2,6 @@
 
 namespace App\SportBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use GuzzleHttp\Client;
 
 /**
@@ -36,7 +34,7 @@ class SportsControllerTest extends \PHPUnit_Framework_TestCase
     /**
      * Creates an authenticated user.
      *
-     * @param  array  $credentials
+     * @param array $credentials
      *
      * @method POST
      *
@@ -55,19 +53,19 @@ class SportsControllerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Creation
+     * Tests Creation.
      *
      * @method POST
      */
     public function testCreate()
     {
         $data = array(
-            'name'     => 'Unit_Sport_create'. time(),
+            'name'     => 'Unit_Sport_create'.time(),
             'isActive' => false,
         );
 
         $request = $this->client->createRequest('POST', 'sports', [
-            'body' => $data,
+            'body'    => $data,
             'headers' => [
                 'Authorization' => sprintf('Bearer %s', $this->token),
             ],

@@ -3,14 +3,14 @@
 namespace App\AdminBundle\Admin\User;
 
 use App\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 
 class GroupAdmin extends AbstractAdmin
 {
     protected $formOptions = array(
-        'validation_groups' => 'Registration'
+        'validation_groups' => 'Registration',
     );
 
     /**
@@ -49,7 +49,6 @@ class GroupAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-
         $container = $this->getConfigurationPool()->getContainer();
         $roles = $container->getParameter('security.role_hierarchy.roles');
         $rolesChoices = self::flattenRoles($roles);
@@ -57,7 +56,7 @@ class GroupAdmin extends AbstractAdmin
             ->add('name')
             ->add('roles', 'choice', array(
                'choices'  => $rolesChoices,
-               'multiple' => true
+               'multiple' => true,
             ))
             // ->add('roles', 'security.role_hierarchy.roles', array(
             //     'expanded' => true,
@@ -73,14 +72,13 @@ class GroupAdmin extends AbstractAdmin
     protected static function flattenRoles($rolesHierarchy)
     {
         $flatRoles = array();
-        foreach($rolesHierarchy as $roles) {
-
-            if(empty($roles)) {
+        foreach ($rolesHierarchy as $roles) {
+            if (empty($roles)) {
                 continue;
             }
 
-            foreach($roles as $role) {
-                if(!isset($flatRoles[$role])) {
+            foreach ($roles as $role) {
+                if (!isset($flatRoles[$role])) {
                     $flatRoles[$role] = $role;
                 }
             }

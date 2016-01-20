@@ -3,13 +3,11 @@
 namespace App\AdminBundle\Admin\User;
 
 use App\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
+use FOS\UserBundle\Model\UserManagerInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\UserBundle\Model\UserInterface;
-
-use FOS\UserBundle\Model\UserManagerInterface;
 
 class UserAdmin extends AbstractAdmin
 {
@@ -23,7 +21,7 @@ class UserAdmin extends AbstractAdmin
         $options = $this->formOptions;
         $options['validation_groups'] = (!$this->getSubject() || is_null($this->getSubject()->getId())) ? 'Registration' : 'Profile';
 
-        $formBuilder = $this->getFormContractor()->getFormBuilder( $this->getUniqid(), $options);
+        $formBuilder = $this->getFormContractor()->getFormBuilder($this->getUniqid(), $options);
 
         $this->defineFormBuilder($formBuilder);
 
@@ -36,7 +34,7 @@ class UserAdmin extends AbstractAdmin
     public function getExportFields()
     {
         // avoid security field to be exported
-        return array_filter(parent::getExportFields(), function($v) {
+        return array_filter(parent::getExportFields(), function ($v) {
             return !in_array($v, array('password', 'salt'));
         });
     }
@@ -129,14 +127,14 @@ class UserAdmin extends AbstractAdmin
                 ->add('username')
                 ->add('email')
                 ->add('plainPassword', 'text', array(
-                    'required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))
+                    'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
                 ))
             ->end()
             ->with('Groups')
                 ->add('groups', 'sonata_type_model', array(
                     'required' => false,
                     'expanded' => true,
-                    'multiple' => true
+                    'multiple' => true,
                 ))
             ->end()
             ->with('Profile')
@@ -146,8 +144,8 @@ class UserAdmin extends AbstractAdmin
                 ->add('website', 'url', array('required' => false))
                 ->add('biography', 'text', array('required' => false))
                 ->add('gender', 'sonata_user_gender', array(
-                    'required' => true,
-                    'translation_domain' => $this->getTranslationDomain()
+                    'required'           => true,
+                    'translation_domain' => $this->getTranslationDomain(),
                 ))
                 ->add('locale', 'locale', array('required' => false))
                 ->add('timezone', 'timezone', array('required' => false))
@@ -217,14 +215,13 @@ class UserAdmin extends AbstractAdmin
     protected static function flattenRoles($rolesHierarchy)
     {
         $flatRoles = array();
-        foreach($rolesHierarchy as $roles) {
-
-            if(empty($roles)) {
+        foreach ($rolesHierarchy as $roles) {
+            if (empty($roles)) {
                 continue;
             }
 
-            foreach($roles as $role) {
-                if(!isset($flatRoles[$role])) {
+            foreach ($roles as $role) {
+                if (!isset($flatRoles[$role])) {
                     $flatRoles[$role] = $role;
                 }
             }

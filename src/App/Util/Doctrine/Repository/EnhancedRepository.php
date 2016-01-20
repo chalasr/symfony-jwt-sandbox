@@ -74,8 +74,6 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
      * Deletes a given resource.
      *
      * @param AbstractEntity $entity
-     *
-     * @return void
      */
     public function delete(AbstractEntity $entity)
     {
@@ -87,7 +85,6 @@ class EnhancedRepository extends EntityRepository implements ObjectRepository
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
     }
-
 
     /**
      * Finds a resource by identifier.
