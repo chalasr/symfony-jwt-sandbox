@@ -3,6 +3,7 @@
 namespace App\SportBundle\Tests\Controller;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Collection;
 
 /**
  * Tests the SportsController.

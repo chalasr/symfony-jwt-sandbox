@@ -8,3 +8,9 @@
   border: 1px solid;
   border-radius: 2px;
 }
+
+.logo img {
+  max-height: 110%!important;
+  max-width: 98px!important;
+
+}

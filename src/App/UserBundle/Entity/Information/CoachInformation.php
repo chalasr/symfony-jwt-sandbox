@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation as JMS;
  * Province.
  *
  * @ORM\Entity
- * @ORM\Table(name="Coach_user")
+ * @ORM\Table(name="coach_user")
  *
  * @JMS\ExclusionPolicy("all")
  */
