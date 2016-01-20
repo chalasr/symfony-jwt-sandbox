@@ -3,8 +3,8 @@
 namespace App\UserBundle\Controller;
 
 use FOS\RestBundle\View\View;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use FOS\RestBundle\Controller\Annotations;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Goutte\Client as HttpClient;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-
+use Symfony\Component\Validator\Constraints\Email;
 
 /**
  * Mangages users from mobile app in API.
@@ -192,18 +192,25 @@ class SecurityController extends Controller
     }
 
     /**
+     *
      * Resets lost password for a given user.
+     *
+     * @Rest\RequestParam(name="email", requirements=@Email, allowBlank=false, description="Email")
      *
      * @param ParamFetcher $paramFetcher
      *
      * @return View
      */
-    public function resetPasswordAction($id)
+    public function resetPasswordAction(Request $request)
     {
         $userManager = $this->getUserManager();
+        $data = $request->request->all();
 
-        if (null === $user = $userManager->findUserBy(['id' => $id])) {
-            throw new UnprocessableEntityHttpException(sprintf('Unable to find user with id \'%d\'', $id));
+
+        if (null === $user = $userManager->findUserBy(['email' => $data['email']])) {
+            throw new UnprocessableEntityHttpException(
+                sprintf('Unable to find user with email \'%s\'', $data['email'])
+            );
         }
 
         $password = $this->getRandomPassword();
@@ -215,8 +222,8 @@ class SecurityController extends Controller
             ->createQueryBuilder('u')
             ->select('u.firstname', 'u.lastname', 'u.email')
             ->from('App\UserBundle\Entity\User', 'u')
-            ->where('u.id = :userId')
-            ->setParameter('userId', $id)
+            ->where('u.email = :email')
+            ->setParameter('email', $data['email'])
             ->getQuery();
 
         $result = $query->getResult();
