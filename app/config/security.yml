@@ -12,7 +12,6 @@ security:
 
     role_hierarchy:
         ROLE_GUEST: [ROLE_GUEST]
-        ROLE_USER: [ROLE_USER]
         ROLE_ADMIN:       [ROLE_USER, ROLE_SONATA_ADMIN]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
