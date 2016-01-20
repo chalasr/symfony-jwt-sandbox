@@ -113,6 +113,16 @@ fos_rest:
         serialize_null: true
     param_fetcher_listener: force
     body_listener: true
+    exception:
+        enabled: true
+        codes:
+            'Symfony\Component\HttpKernel\Exception\BadRequestHttpException': 400
+            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException': 404
+            'Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException': 422
+        messages:
+            'Symfony\Component\HttpKernel\Exception\BadRequestHttpException': true
+            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException': true
+            'Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException': true
 
 gesdinet_jwt_refresh_token:
     ttl: 2592000

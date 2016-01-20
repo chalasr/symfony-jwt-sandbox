@@ -1,8 +1,14 @@
 parameters:
-    api.kernel.listener.exception_listener.class: App\Util\EventListener\ExceptionResponseListener
+  # api.kernel.listener.exception_listener.class: App\Util\EventListener\ExceptionResponseListener
     app.doctrine.abstract_repository_factory.class: App\Util\Doctrine\Repository\EnhancedRepositoryFactory
 
 services:
+
+  # api.kernel.listener.exception_listener:
+  #     class: %api.kernel.listener.exception_listener.class%
+  #     tags:
+  #         - { name: kernel.event_listener, event: kernel.exception, method: onKernelResponse }
+
     app.doctrine.repository.factory:
         class: %app.doctrine.abstract_repository_factory.class%
         arguments:
@@ -12,8 +18,3 @@ services:
 
     app.doctrine.repository.factory.default:
         class: Doctrine\ORM\Repository\DefaultRepositoryFactory
-
-    api.kernel.listener.exception_listener:
-        class: %api.kernel.listener.exception_listener.class%
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelResponse }

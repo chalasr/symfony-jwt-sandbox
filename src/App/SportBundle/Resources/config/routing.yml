@@ -1,8 +1,8 @@
 # One Controller per collection
 # Here the SportsController containing all Resources related to Sport (/v1/sports collection)
+# Inside this controller, routes are registered manually using the @Rest annotation (@Rest\Get|Post|Put|..)
+# @see http://symfony.com/doc/current/bundles/FOSRestBundle/7-manual-route-definition.html
 sports_collection:
-    # Inside this controller, routes are registered manually using the @Rest annotation (@Rest\Get|Post|Put|..)
-    # @see http://symfony.com/doc/current/bundles/FOSRestBundle/7-manual-route-definition.html
     type: rest
     resource: App\SportBundle\Controller\SportsController
 
