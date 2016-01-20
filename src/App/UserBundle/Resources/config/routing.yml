@@ -23,6 +23,11 @@ security_users_list:
     defaults: { _controller: AppUserBundle:Security:getAllUsers }
     methods: GET
 
+security_refresh_token:
+    path:     /users/{id}/reset_password
+    methods: GET
+    defaults: { _controller: AppUserBundle:Security:resetPassword }
+
 security_api_refresh_token:
     path:     /refresh_token
     methods: POST

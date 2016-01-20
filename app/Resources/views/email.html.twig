@@ -8,15 +8,17 @@
     <table style="border: none;text-align:left;width:350px;">
       <tr>
         <td>
-          <img src="logo_mail.jpg" alt="Sportroops" style="border:none;margin:0;display:block;width:350px;height:200px">
+          <img src="{{url('app_admin_homepage')}}bundles/appadmin/images/logo_mail.jpg" alt="Sportroops" style="border:none;margin:0;display:block;width:350px;height:200px">
         </td>
       </tr>
       <tr>
         <td style="padding:10px">
           <div style="padding:10px; background:#ffffff">
-            <p style="color: #208aa0;font: bold 18px/25px Trebuchet MS,sans-serif;margin: 0;">Cher [firstname] [name],</p>
+            <p style="color: #208aa0;font: bold 18px/25px Trebuchet MS,sans-serif;margin: 0;">
+              Cher {{ firstname }} {{ lastname }},
+            </p>
             <p style="color: #525252;font: normal 15px/20px Trebuchet MS,sans-serif;margin:5px 0;">Nous vous remercions de l'intérêt que vous portez à Sportroops.</p>
-            <p style="color: #525252;font: normal 12px/20px Trebuchet MS,sans-serif;margin: 10px 0;">[contentOfMail]</p>
+              {% block body %}{% endblock %}
             <p style="color: #7f7f7f;font: italic 13px/20px Trebuchet MS,sans-serif;margin:10px 0;">Nous nous tenons à votre disposition pour tout renseignement complémentaire.</p>
             <p style="color: #7f7f7f;font: italic 13px/20px Trebuchet MS,sans-serif;margin:10px 0;">Sportivement,</p>
             <div style="border-left:1px solid #d9d9d9; padding:0 10px ; margin:10px 0; color:#525252; font: 12px/15px  Trebuchet MS,sans-serif">

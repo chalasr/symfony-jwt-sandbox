@@ -4,12 +4,14 @@ namespace App\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\UserBundle\Entity\BaseUser;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * User.
  *
  * @ORM\Table(name="fos_user_user")
  * @ORM\Entity
+ * @JMS\ExclusionPolicy("all")
  */
 class User extends BaseUser
 {
@@ -19,6 +21,8 @@ class User extends BaseUser
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
+     * @JMS\Expose
      */
     protected $id;
 
