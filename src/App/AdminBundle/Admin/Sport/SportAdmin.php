@@ -73,7 +73,7 @@ class SportAdmin extends AbstractAdmin
                 'label' => 'Nom',
             ))
             ->add('categories', null, array(
-                'label' => 'Categories',
+                'label' => 'Catégories',
             ))
             ->add('tags', null, array(
                 'label' => 'Tags',
@@ -107,7 +107,10 @@ class SportAdmin extends AbstractAdmin
                 'label' => 'Nom',
             ))
             ->add('categories', null, array(
-                'label' => 'Categories',
+                'label' => 'Catégories',
+            ))
+            ->add('tags', null, array(
+                'label' => 'Tags',
             ))
             ->add('isActive', null, array(
                 'label' => 'Actif',
@@ -136,10 +139,10 @@ class SportAdmin extends AbstractAdmin
                 'label' => 'Nom',
             ])
             ->add('categories', null, [
-                'label' => 'Categories',
+                'label' => 'Catégories',
             ])
             ->add('tags', null, [
-                'label' => 'Categories',
+                'label' => 'Tags',
             ])
             ->add('isActive', null, [
                 'label' => 'Actif',
