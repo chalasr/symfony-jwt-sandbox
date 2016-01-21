@@ -1,14 +1,11 @@
 <?php
 
-
 namespace App\AdminBundle\Admin\User\Type;
 
 use App\AdminBundle\Admin\User\BaseUserAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\UserBundle\Model\UserInterface;
+use Sonata\AdminBundle\Form\FormMapper;
 
 class ProviderAdmin extends BaseUserAdmin
 {
@@ -23,13 +20,12 @@ class ProviderAdmin extends BaseUserAdmin
         $formMapper
             ->add('providerInformation', 'sonata_type_admin', array(
                 'by_reference' => false,
-                'required' => false,
-            ),array(
-                'edit' => 'inline',
-                'admin_code' => 'sonata.admin.provider_information'
+                'required'     => false,
+            ), array(
+                'edit'       => 'inline',
+                'admin_code' => 'sonata.admin.provider_information',
             ))
         ;
-
     }
 
     public function configureDatagridFilters(DatagridMapper $filterMapper)
@@ -56,5 +52,4 @@ class ProviderAdmin extends BaseUserAdmin
 
         parent::configureListFields($listMapper);
     }
-
 }

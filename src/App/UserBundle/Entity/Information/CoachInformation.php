@@ -17,13 +17,11 @@ use JMS\Serializer\Annotation as JMS;
  */
 class CoachInformation extends AbstractEntity implements EntityInterface
 {
-
     /**
      * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\User", inversedBy="coachInformation")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     protected $user;
-
 
     /**
      * @var string
@@ -160,7 +158,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \App\UserBundle\Entity\User $user
      *
@@ -174,7 +172,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \App\UserBundle\Entity\User
      */

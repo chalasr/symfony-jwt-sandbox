@@ -3,8 +3,8 @@
 namespace App\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\UserBundle\Entity\BaseUser;
 use JMS\Serializer\Annotation as JMS;
+use Sonata\UserBundle\Entity\BaseUser;
 
 /**
  * User.
@@ -99,7 +99,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set providerInformation
+     * Set providerInformation.
      *
      * @param \App\UserBundle\Entity\Information\ProviderInformation $providerInformation
      *
@@ -113,7 +113,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get providerInformation
+     * Get providerInformation.
      *
      * @return \App\UserBundle\Entity\Information\ProviderInformation
      */
@@ -123,7 +123,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set coachInformation
+     * Set coachInformation.
      *
      * @param \App\UserBundle\Entity\Information\CoachInformation $coachInformation
      *
@@ -137,7 +137,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get coachInformation
+     * Get coachInformation.
      *
      * @return \App\UserBundle\Entity\Information\CoachInformation
      */
@@ -147,7 +147,7 @@ class User extends BaseUser
     }
 
     /**
-     * Add follower
+     * Add follower.
      *
      * @param \App\UserBundle\Entity\User $follower
      *
@@ -161,7 +161,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove follower
+     * Remove follower.
      *
      * @param \App\UserBundle\Entity\User $follower
      */
@@ -171,7 +171,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get followers
+     * Get followers.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -181,7 +181,7 @@ class User extends BaseUser
     }
 
     /**
-     * Add follow
+     * Add follow.
      *
      * @param \App\UserBundle\Entity\User $follow
      *
@@ -195,7 +195,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove follow
+     * Remove follow.
      *
      * @param \App\UserBundle\Entity\User $follow
      */
@@ -205,7 +205,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get follows
+     * Get follows.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
