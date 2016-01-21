@@ -16,12 +16,18 @@ class ProviderAdmin extends UserAdmin
     protected $baseRoutePattern = 'users/provider';
 
     public function configureFormFields(FormMapper $formMapper){
-        parent::configureDatagridFilters($formMapper);
+        parent::configureFormFields($formMapper);
+
         $formMapper
-            ->with('ProviderInformation')
-            ->add('name', null, array(
-                'label' => 'Name',
+            // ->add('coachInformation', null, array());
+            ->add('coachInformation', 'sonata_type_admin', array(
+                'by_reference' => false,
+                'required' => false,
+            ),array(
+                'edit' => 'inline',
+                'admin_code' => 'sonata.admin.provider_information'
             ));
+
     }
     public function configureDatagridFilters(DatagridMapper $filterMapper){
         parent::configureDatagridFilters($filterMapper);

@@ -67,3 +67,12 @@ services:
             - ~
             - App\UserBundle\Entity\Information\CoachInformation
             - AppAdminBundle:CoachInformationAdmin
+
+    sonata.admin.provider_information:
+        class: App\AdminBundle\Admin\User\Information\ProviderInformationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Provider informations" , show_in_dashboard: false }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\Information\ProviderInformation
+            - AppAdminBundle:ProviderInformationAdmin
