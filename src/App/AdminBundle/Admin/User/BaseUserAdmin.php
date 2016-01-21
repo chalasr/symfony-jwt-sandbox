@@ -8,11 +8,12 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\UserBundle\Model\UserInterface;
-
 use FOS\UserBundle\Model\UserManagerInterface;
 
-class UserAdmin extends AbstractAdmin
+class BaseUserAdmin extends AbstractAdmin
 {
+    protected $userManager;
+
     /**
      * {@inheritdoc}
      */
@@ -86,9 +87,6 @@ class UserAdmin extends AbstractAdmin
                 ->add('username')
                 ->add('email')
             ->end()
-            ->with('Groups')
-                ->add('groups')
-            ->end()
             ->with('Profile')
                 ->add('dateOfBirth')
                 ->add('firstname')
@@ -100,18 +98,18 @@ class UserAdmin extends AbstractAdmin
                 ->add('timezone')
                 ->add('phone')
             ->end()
-            ->with('Social')
-                ->add('facebookUid')
-                ->add('facebookName')
-                ->add('twitterUid')
-                ->add('twitterName')
-                ->add('gplusUid')
-                ->add('gplusName')
-            ->end()
-            ->with('Security')
-                ->add('token')
-                ->add('twoStepVerificationCode')
-            ->end()
+            // ->with('Social')
+            //     ->add('facebookUid')
+            //     ->add('facebookName')
+            //     ->add('twitterUid')
+            //     ->add('twitterName')
+            //     ->add('gplusUid')
+            //     ->add('gplusName')
+            // ->end()
+            // ->with('Security')
+            //     ->add('token')
+            //     ->add('twoStepVerificationCode')
+            // ->end()
         ;
     }
 
@@ -153,14 +151,14 @@ class UserAdmin extends AbstractAdmin
                 ->add('timezone', 'timezone', array('required' => false))
                 ->add('phone', null, array('required' => false))
             ->end()
-            ->with('Social')
-                ->add('facebookUid', null, array('required' => false))
-                ->add('facebookName', null, array('required' => false))
-                ->add('twitterUid', null, array('required' => false))
-                ->add('twitterName', null, array('required' => false))
-                ->add('gplusUid', null, array('required' => false))
-                ->add('gplusName', null, array('required' => false))
-            ->end()
+            // ->with('Social')
+            //     ->add('facebookUid', null, array('required' => false))
+            //     ->add('facebookName', null, array('required' => false))
+            //     ->add('twitterUid', null, array('required' => false))
+            //     ->add('twitterName', null, array('required' => false))
+            //     ->add('gplusUid', null, array('required' => false))
+            //     ->add('gplusName', null, array('required' => false))
+            // ->end()
         ;
 
         if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
@@ -233,4 +231,35 @@ class UserAdmin extends AbstractAdmin
 
         return $flatRoles;
     }
+
+    protected function getUserGroup()
+    {
+        $group = $this->get('doctrine')
+            ->getRepository('AppUserBundle:Group')
+            ->findOneBy(array(
+                'name' => $this->getLabel(),
+            ))
+        ;
+
+        return $group;
+    }
+
+    public function getNewInstance()
+    {
+        $coach = parent::getNewInstance();
+        $group = $this->getUserGroup();
+
+        $coach->addGroup($group);
+
+        return $coach;
+    }
+
+    public function getFilterParameters()
+    {
+        $filterByGroup = ['groups' => ['value' => $this->getUserGroup()->getId()]];
+        $this->datagridValues = array_merge($filterByGroup, $this->datagridValues);
+
+        return parent::getFilterParameters();
+    }
+
 }

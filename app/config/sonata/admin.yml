@@ -38,6 +38,16 @@ sonata_admin:
         title_mode:           'both'                      # 'both', 'single_text' or 'single_image'
     dashboard:
         groups:
+            user:
+                label: "Utilisateurs"
+                items:
+                    # - sonata.user.admin.user
+                    - sonata.user.admin.group
+                    - sonata.admin.users_coachs
+                    - sonata.admin.users_providers
+                    - sonata.admin.users_individuals
+            sport:
+                label: "Sport"
 
         blocks:
             -

@@ -49,14 +49,29 @@ class User extends BaseUser
     protected $groups;
 
     /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="follows")
+     */
+    protected $followers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="followers")
+     * @ORM\JoinTable(
+     * 			name="follows",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="follower_id", referencedColumnName="id")}
+     * )
+     */
+    protected $follows;
+
+    /**
      * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\Information\ProviderInformation", cascade={"persist"})
-     * @ORM\JoinColumn(name="provider_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="provider_id", referencedColumnName="id", nullable=true)
      */
     protected $providerInformation;
 
     /**
      * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\Information\CoachInformation", cascade={"persist"})
-     * @ORM\JoinColumn(name="coach_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="coach_id", referencedColumnName="id", nullable=true)
      */
     protected $coachInformation;
 
@@ -67,6 +82,8 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getFacebookId()
@@ -127,5 +144,73 @@ class User extends BaseUser
     public function getCoachInformation()
     {
         return $this->coachInformation;
+    }
+
+    /**
+     * Add follower
+     *
+     * @param \App\UserBundle\Entity\User $follower
+     *
+     * @return User
+     */
+    public function addFollower(\App\UserBundle\Entity\User $follower)
+    {
+        $this->followers[] = $follower;
+
+        return $this;
+    }
+
+    /**
+     * Remove follower
+     *
+     * @param \App\UserBundle\Entity\User $follower
+     */
+    public function removeFollower(\App\UserBundle\Entity\User $follower)
+    {
+        $this->followers->removeElement($follower);
+    }
+
+    /**
+     * Get followers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFollowers()
+    {
+        return $this->followers;
+    }
+
+    /**
+     * Add follow
+     *
+     * @param \App\UserBundle\Entity\User $follow
+     *
+     * @return User
+     */
+    public function addFollow(\App\UserBundle\Entity\User $follow)
+    {
+        $this->follows[] = $follow;
+
+        return $this;
+    }
+
+    /**
+     * Remove follow
+     *
+     * @param \App\UserBundle\Entity\User $follow
+     */
+    public function removeFollow(\App\UserBundle\Entity\User $follow)
+    {
+        $this->follows->removeElement($follow);
+    }
+
+    /**
+     * Get follows
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFollows()
+    {
+        return $this->follows;
     }
 }
