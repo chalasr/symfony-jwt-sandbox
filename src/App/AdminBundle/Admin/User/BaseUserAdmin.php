@@ -125,12 +125,12 @@ class BaseUserAdmin extends AbstractAdmin
             ->with('General')
                 ->add('username')
                 ->add('email')
-                ->add('plainPassword', 'text', array(
+                ->add('plainPassword', 'password', array(
                     'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
                 ))
             ->end()
             ->with('Groups')
-                ->add('groups', 'sonata_type_model', array(
+                ->add('groups', null, array(
                     'required' => false,
                     'expanded' => true,
                     'multiple' => true,
@@ -164,24 +164,18 @@ class BaseUserAdmin extends AbstractAdmin
             $formMapper
                 ->with('Management')
                     ->add('realRoles', 'choice', array(
-                        'label'    => 'form.label_roles',
+                        'label'    => 'Rôles',
                         'choices'  => $rolesChoices,
                         'multiple' => true,
+                        'required' => true,
                     ))
                     ->add('locked', null, array('required' => false))
-                    ->add('expired', null, array('required' => false))
+                    // ->add('expired', null, array('required' => false))
                     ->add('enabled', null, array('required' => false))
-                    ->add('credentialsExpired', null, array('required' => false))
+                    // ->add('credentialsExpired', null, array('required' => false))
                 ->end()
             ;
         }
-
-        $formMapper
-            ->with('Security')
-                ->add('token', null, array('required' => false))
-                ->add('twoStepVerificationCode', null, array('required' => false))
-            ->end()
-        ;
     }
 
     /**
@@ -242,6 +236,11 @@ class BaseUserAdmin extends AbstractAdmin
         return $group;
     }
 
+    /**
+     * In user _create, pre-set Group depending on type of
+     * the created user. e.g. Coachs, Providers or Individuals.
+     * @return [type] [description]
+     */
     public function getNewInstance()
     {
         $coach = parent::getNewInstance();
@@ -252,6 +251,10 @@ class BaseUserAdmin extends AbstractAdmin
         return $coach;
     }
 
+    /**
+     * Pre-filter lists depending on Group.
+     * e.g. In Provider List get only users with group = Providers
+     */
     public function getFilterParameters()
     {
         $filterByGroup = ['groups' => ['value' => $this->getUserGroup()->getId()]];
