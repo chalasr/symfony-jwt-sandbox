@@ -11,12 +11,12 @@ sonata_user:
 
     admin:                  # Admin Classes
         user:
-            class:          App\AdminBundle\Admin\User\UserAdmin
+            class:          Sonata\UserBundle\Admin\Entity\UserAdmin
             controller:     SonataAdminBundle:CRUD
             translation:    SonataUserBundle
 
         group:
-            class:          App\AdminBundle\Admin\User\GroupAdmin
+            class:          Sonata\UserBundle\Admin\Entity\GroupAdmin
             controller:     SonataAdminBundle:CRUD
             translation:    SonataUserBundle
 

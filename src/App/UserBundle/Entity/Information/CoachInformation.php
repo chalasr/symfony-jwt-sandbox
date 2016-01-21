@@ -20,7 +20,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
 
     /**
      * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\User", inversedBy="coachInformation")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     protected $user;
 
@@ -35,21 +35,21 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="insurance_company_name", type="string",length=255)
+     * @ORM\Column(name="insurance_company_name", type="string", length=255, nullable=true)
      */
     protected $insuranceCompanyName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="insurance_policy_number", type="string", length=255)
+     * @ORM\Column(name="insurance_policy_number", type="string", length=255, nullable=true)
      */
     protected $insurancePolicyNumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="insurance_policy_expiration_date", type="date")
+     * @ORM\Column(name="insurance_policy_expiration_date", type="date", nullable=true)
      */
     protected $insurancePolicyExpirationDate;
 
