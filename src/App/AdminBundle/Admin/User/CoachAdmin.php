@@ -1,9 +1,14 @@
 <?php
 
+
 namespace App\AdminBundle\Admin\User;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
+
+use App\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\UserBundle\Model\UserInterface;
 
 class CoachAdmin extends UserAdmin
 {
@@ -31,10 +36,10 @@ class CoachAdmin extends UserAdmin
         parent::configureDatagridFilters($filterMapper);
 
         $filterMapper
-            ->add('proCardExpirationDate')
-            ->add('insuranceCompanyName')
-            ->add('insurancePolicyNumber')
-            ->add('insurancePolicyExpirationDate')
+            ->add('coachInformation.proCardExpirationDate')
+            ->add('coachInformation.insuranceCompanyName')
+            ->add('coachInformation.insurancePolicyNumber')
+            ->add('coachInformation.insurancePolicyExpirationDate')
         ;
     }
 
@@ -46,9 +51,6 @@ class CoachAdmin extends UserAdmin
     {
         parent::configureListFields($listMapper);
         $listMapper
-            ->add('id', null, [
-                'label' => '#',
-            ])
             ->add('proCardExpirationDate', null, [
                 'label' => 'proCardExpirationDate',
             ])
@@ -60,12 +62,6 @@ class CoachAdmin extends UserAdmin
             ])
             ->add('insurancePolicyExpirationDate', null, [
                 'label' => 'insurancePolicyExpirationDate',
-            ])
-            ->add('_action', 'actions', [
-                'actions' => array(
-                    'edit'   => [],
-                    'delete' => [],
-                ),
             ])
         ;
     }
