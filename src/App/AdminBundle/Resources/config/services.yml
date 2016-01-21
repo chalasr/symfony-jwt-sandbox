@@ -3,23 +3,25 @@ parameters:
     admin.sports.class: App\AdminBundle\Admin\Sport\SportAdmin
     admin.categories.class: App\AdminBundle\Admin\Sport\CategoryAdmin
     admin.tags.class: App\AdminBundle\Admin\Sport\TagAdmin
-    admin.coachs.class: App\AdminBundle\Admin\User\CoachAdmin
+    admin.coach.class: App\AdminBundle\Admin\User\Type\CoachAdmin
+    admin.provider.class: App\AdminBundle\Admin\User\Type\ProviderAdmin
+    admin.individual.class: App\AdminBundle\Admin\User\Type\IndividualAdmin
 
 services:
 
     sonata.admin.sports:
         class: "%admin.sports.class%"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Sports", label: "Sports" }
+            - { name: sonata.admin, manager_type: orm, group: sport, label: "Sports" }
         arguments:
             - ~
-            - App\SportBundle\Entity\Sport # The corresponding entity 
+            - App\SportBundle\Entity\Sport # The corresponding entity
             - AppAdminBundle:SportAdmin # The Admin Class
 
     sonata.admin.categories:
         class: "%admin.categories.class%"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Sports", label: "Catégories" }
+            - { name: sonata.admin, manager_type: orm, group: sport, label: "Catégories" }
         arguments:
             - ~
             - App\SportBundle\Entity\Category
@@ -28,23 +30,60 @@ services:
     sonata.admin.tags:
         class: "%admin.tags.class%"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Sports", label: "Tags" }
+            - { name: sonata.admin, manager_type: orm, group: sport, label: "Tags" }
         arguments:
             - ~
             - App\SportBundle\Entity\Tag
             - AppAdminBundle:TagAdmin
 
-    # @Thuy First admin class for you as example, I know it's a lot of search to know where files are located and how do it.
-    # Also, take a look at this declaration, it is how you create a new "Admin section" in our back-office.
-    # For it's example, it is the CoachAdmin class.
-    # ! You have to create the CoachInformation entity like I say in the ticket, I havn't done it. !
-    # If you have any doubt / need of resource or example, do not hesitate to ask me.
-    # Thank's for your job
     sonata.admin.users_coachs:
-        class: "%admin.coachs.class%" # Previously declared at top (parameters)
+        class: "%admin.coach.class%"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Coachs", label: "Coachs" } # Some parameters of sonata
+            - { name: sonata.admin, manager_type: orm, group: user, label: "Coachs" }
         arguments:
             - ~
-            - App\UserBundle\Entity\User # The entity used, main entity but custom fields from the relation with CoachInformation.
-            - AppAdminBundle:CoachAdmin #  The admin class alias, mandatory too.
+            - App\UserBundle\Entity\User
+            - AppAdminBundle:CoachAdmin
+        calls:
+            - [setUserManager, ["@fos_user.user_manager"]]
+
+    sonata.admin.users_providers:
+        class: "%admin.provider.class%"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: user, label: "Providers" }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\User
+            - AppAdminBundle:ProviderAdmin
+        calls:
+            - [setUserManager, ['@fos_user.user_manager']]
+
+    sonata.admin.users_individuals:
+        class: "%admin.individual.class%"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: user, label: "Individuals" }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\User
+            - AppAdminBundle:IndividualAdmin
+        calls:
+            - [setUserManager, ['@fos_user.user_manager']]
+
+    sonata.admin.coach_information:
+        class: App\AdminBundle\Admin\User\Information\CoachInformationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Coach informations" , show_in_dashboard: false }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\Information\CoachInformation
+            - AppAdminBundle:CoachInformationAdmin
+            -
+
+    sonata.admin.provider_information:
+        class: App\AdminBundle\Admin\User\Information\ProviderInformationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Provider informations" , show_in_dashboard: false }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\Information\ProviderInformation
+            - AppAdminBundle:ProviderInformationAdmin

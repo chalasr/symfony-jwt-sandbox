@@ -67,7 +67,7 @@ class GroupAdmin extends AbstractAdmin
     }
 
     /**
-     * Turns the role's array keys into string <ROLES_NAME> keys.
+     * Turns the role's array keys into strings.
      */
     protected static function flattenRoles($rolesHierarchy)
     {

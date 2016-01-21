@@ -18,9 +18,15 @@ use JMS\Serializer\Annotation as JMS;
 class ProviderInformation extends AbstractEntity implements EntityInterface
 {
     /**
+     * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\User", inversedBy="coachInformation")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
+     */
+    protected $user;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      *
      * @JMS\Expose
      */
@@ -58,5 +64,29 @@ class ProviderInformation extends AbstractEntity implements EntityInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \App\UserBundle\Entity\User $user
+     *
+     * @return ProviderInformation
+     */
+    public function setUser(\App\UserBundle\Entity\User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \App\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
