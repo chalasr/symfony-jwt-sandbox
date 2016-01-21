@@ -66,12 +66,14 @@ class SecurityController extends Controller
             return $this->resourceAlreadyExistsError('email', $data['email']);
         }
 
-        if ($data['last_name'] !== null || $data['first_name'] !== null) {
-            $data['name'] = sprintf('%s %s', $data['first_name'], $data['last_name']);
+        $firstname = isset($data['first_name']) ? $data['fist_name'] : null;
+        $lastname = isset($data['last_name']) ? $data['last_name'] : null;
+
+        if (null !== $firstname && null !== $lastname) {
+            $data['name'] = sprintf('%s %s', $firstname, $lastname);
         } else {
             $data['name'] = $data['email'];
         }
-
         if ($userManager->findUserByUsername($data['name']) !== null) {
             return $this->resourceAlreadyExistsError('name', $data['name']);
         }
@@ -273,9 +275,12 @@ class SecurityController extends Controller
     {
         $userManager = $this->getUserManager();
 
+        $em = $this->getEntityManager();
+        $group = $em->getRepository('AppUserBundle:Group')->findOneByName(['name' => 'Individuals']);
         $user = $userManager->createUser();
         $user->setUsername($data['name']);
         $user->setEmail($data['email']);
+        $user->addGroup($group);
         $user->setEnabled(true);
         $user->setPlainPassword($data['password']);
 
@@ -431,7 +436,7 @@ class SecurityController extends Controller
      */
     protected function getEntityManager()
     {
-        return $this->getDoctrine()->getEntityManager();
+        return $this->getDoctrine()->getManager();
     }
 
     /**
