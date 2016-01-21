@@ -236,6 +236,11 @@ class BaseUserAdmin extends AbstractAdmin
         return $group;
     }
 
+    /**
+     * In user _create, pre-set Group depending on type of
+     * the created user. e.g. Coachs, Providers or Individuals.
+     * @return [type] [description]
+     */
     public function getNewInstance()
     {
         $coach = parent::getNewInstance();
@@ -246,6 +251,10 @@ class BaseUserAdmin extends AbstractAdmin
         return $coach;
     }
 
+    /**
+     * Pre-filter lists depending on Group.
+     * e.g. In Provider List get only users with group = Providers
+     */
     public function getFilterParameters()
     {
         $filterByGroup = ['groups' => ['value' => $this->getUserGroup()->getId()]];
