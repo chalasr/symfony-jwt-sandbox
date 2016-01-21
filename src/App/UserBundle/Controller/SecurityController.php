@@ -30,9 +30,9 @@ class SecurityController extends Controller
     public function __construct()
     {
         $this->rules = [
-            'register'     => ['password', 'email'],
-            'basic'        => ['password', 'email'],
-            'oauth'        => ['id', 'email', 'access_token'],
+            'register' => ['password', 'email'],
+            'basic'    => ['password', 'email'],
+            'oauth'    => ['id', 'email', 'access_token'],
         ];
     }
 
@@ -194,8 +194,13 @@ class SecurityController extends Controller
     /**
      *
      * Resets lost password for a given user.
-     *
-     * @Rest\RequestParam(name="email", requirements=@Email, allowBlank=false, description="Email")
+     * @Rest\RequestParam(name="email", requirements=@Email, allowBlank=false, description="User email")
+     * @ApiDoc(
+     * 	section="Security",
+     * 	parameters={
+     *     {"name"="email", "dataType"="string", "required"=true, "description"="User email"}
+     *   }
+     * )
      *
      * @param ParamFetcher $paramFetcher
      *
@@ -252,7 +257,7 @@ class SecurityController extends Controller
            ->setStatusCode(200)
            ->setData($user);
 
-        return $this->renderView('Emails/reset_password.html.twig', $mailing);
+        return $this->get('fos_rest.view_handler')->handle($view);
     }
 
     /**
