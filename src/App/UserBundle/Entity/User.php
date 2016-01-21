@@ -80,4 +80,52 @@ class User extends BaseUser
 
         return $this->facebookId;
     }
+
+    /**
+     * Set providerInformation
+     *
+     * @param \App\UserBundle\Entity\Information\ProviderInformation $providerInformation
+     *
+     * @return User
+     */
+    public function setProviderInformation(\App\UserBundle\Entity\Information\ProviderInformation $providerInformation = null)
+    {
+        $this->providerInformation = $providerInformation;
+
+        return $this;
+    }
+
+    /**
+     * Get providerInformation
+     *
+     * @return \App\UserBundle\Entity\Information\ProviderInformation
+     */
+    public function getProviderInformation()
+    {
+        return $this->providerInformation;
+    }
+
+    /**
+     * Set coachInformation
+     *
+     * @param \App\UserBundle\Entity\Information\CoachInformation $coachInformation
+     *
+     * @return User
+     */
+    public function setCoachInformation(\App\UserBundle\Entity\Information\CoachInformation $coachInformation = null)
+    {
+        $this->coachInformation = $coachInformation;
+
+        return $this;
+    }
+
+    /**
+     * Get coachInformation
+     *
+     * @return \App\UserBundle\Entity\Information\CoachInformation
+     */
+    public function getCoachInformation()
+    {
+        return $this->coachInformation;
+    }
 }
