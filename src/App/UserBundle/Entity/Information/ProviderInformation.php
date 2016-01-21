@@ -67,7 +67,7 @@ class ProviderInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \App\UserBundle\Entity\User $user
      *
@@ -81,7 +81,7 @@ class ProviderInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \App\UserBundle\Entity\User
      */

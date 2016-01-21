@@ -71,7 +71,7 @@ class SportsController extends Controller
     {
         $rolesManager = $this->getRolesManager();
 
-        if (false === $this->getRolesManager()->isGranted('ROLE_ADMIN')) {
+        if (false === $this->isAdmin()) {
             throw new AccessDeniedHttpException('You are not allowed to access this resource');
         }
 
@@ -95,13 +95,13 @@ class SportsController extends Controller
            ->setStatusCode(201)
            ->setData($repo->create($sport));
 
-        return $this->get('fos_rest.view_handler')->handle($view);
+        return $this->getViewHandler()->handle($view);
     }
 
     /**
      * Get Sport entity.
      *
-     * @Rest\Get("/sports/{id}")
+     * @Rest\Get("/sports/{id}", requirements={"id" = "\d+"})
      *
      * @ApiDoc(
      *   section="Sport",
@@ -127,7 +127,7 @@ class SportsController extends Controller
     /**
      * Update an existing entity.
      *
-     * @Rest\Patch("/sports/{id}")
+     * @Rest\Patch("/sports/{id}", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="name", requirements="[^/]+", nullable=true, description="Name")
      * @Rest\RequestParam(name="isActive", requirements="[^/]+", nullable=true, description="Name")
      * @Rest\RequestParam(name="icon", requirements="[^/]+", nullable=true, description="Name")
@@ -172,7 +172,8 @@ class SportsController extends Controller
     /**
      * Delete a Sport entity.
      *
-     * @Rest\Delete("/sports/{id}")
+     * @Rest\Delete("/sports/{id}", requirements={"id" = "\d+"})
+     
      * @ApiDoc(
      *   section="Sport",
      * 	 resource=true,

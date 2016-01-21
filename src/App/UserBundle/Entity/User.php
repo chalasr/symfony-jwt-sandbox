@@ -3,8 +3,8 @@
 namespace App\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\UserBundle\Entity\BaseUser;
 use JMS\Serializer\Annotation as JMS;
+use Sonata\UserBundle\Entity\BaseUser;
 
 /**
  * User.
@@ -49,17 +49,17 @@ class User extends BaseUser
     protected $groups;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="follows")
-     */
-    protected $followers;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="followers")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="follows")
      * @ORM\JoinTable(
      * 			name="follows",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="follower_id", referencedColumnName="id")}
      * )
+     */
+    protected $followers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="followers")
      */
     protected $follows;
 
@@ -86,20 +86,32 @@ class User extends BaseUser
         $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * Get facebookId.
+     *
+     * @return int
+     */
     public function getFacebookId()
     {
         return $this->facebookId;
     }
 
+    /**
+     * Set facebookId .
+     *
+     * @param int $facebookId
+     *
+     * @return User
+     */
     public function setFacebookId($facebookId)
     {
         $this->facebookId = $facebookId;
 
-        return $this->facebookId;
+        return $this;
     }
 
     /**
-     * Set providerInformation
+     * Set providerInformation.
      *
      * @param \App\UserBundle\Entity\Information\ProviderInformation $providerInformation
      *
@@ -113,7 +125,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get providerInformation
+     * Get providerInformation.
      *
      * @return \App\UserBundle\Entity\Information\ProviderInformation
      */
@@ -123,7 +135,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set coachInformation
+     * Set coachInformation.
      *
      * @param \App\UserBundle\Entity\Information\CoachInformation $coachInformation
      *
@@ -137,7 +149,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get coachInformation
+     * Get coachInformation.
      *
      * @return \App\UserBundle\Entity\Information\CoachInformation
      */
@@ -147,7 +159,7 @@ class User extends BaseUser
     }
 
     /**
-     * Add follower
+     * Add follower.
      *
      * @param \App\UserBundle\Entity\User $follower
      *
@@ -157,21 +169,29 @@ class User extends BaseUser
     {
         $this->followers[] = $follower;
 
+        if (!$follower->getFollows()->contains($this)) {
+            $follower->addFollow($this);
+        }
+
         return $this;
     }
 
     /**
-     * Remove follower
+     * Remove follower.
      *
      * @param \App\UserBundle\Entity\User $follower
      */
     public function removeFollower(\App\UserBundle\Entity\User $follower)
     {
         $this->followers->removeElement($follower);
+
+        if ($follower->getFollows()->contains($this)) {
+            $follower->removeFollow($this);
+        }
     }
 
     /**
-     * Get followers
+     * Get followers.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -181,7 +201,7 @@ class User extends BaseUser
     }
 
     /**
-     * Add follow
+     * Add follow.
      *
      * @param \App\UserBundle\Entity\User $follow
      *
@@ -191,21 +211,29 @@ class User extends BaseUser
     {
         $this->follows[] = $follow;
 
+        if (!$follow->getFollowers()->contains($this)) {
+            $follow->addFollower($this);
+        }
+
         return $this;
     }
 
     /**
-     * Remove follow
+     * Remove follow.
      *
      * @param \App\UserBundle\Entity\User $follow
      */
     public function removeFollow(\App\UserBundle\Entity\User $follow)
     {
         $this->follows->removeElement($follow);
+
+        if ($follow->getFollowers()->contains($this)) {
+            $follow->removeFollower($this);
+        }
     }
 
     /**
-     * Get follows
+     * Get follows.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

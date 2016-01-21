@@ -2,9 +2,9 @@
 
 namespace App\UserBundle\Controller;
 
-use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\View\View;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Goutte\Client as HttpClient;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -192,8 +192,8 @@ class SecurityController extends Controller
     }
 
     /**
-     *
      * Resets lost password for a given user.
+     *
      * @Rest\RequestParam(name="email", requirements=@Email, allowBlank=false, description="User email")
      * @ApiDoc(
      * 	section="Security",
@@ -211,7 +211,6 @@ class SecurityController extends Controller
         $userManager = $this->getUserManager();
         $data = $request->request->all();
 
-
         if (null === $user = $userManager->findUserBy(['email' => $data['email']])) {
             throw new UnprocessableEntityHttpException(
                 sprintf('Unable to find user with email \'%s\'', $data['email'])
@@ -222,7 +221,7 @@ class SecurityController extends Controller
         $user->setPlainPassword($password);
         $userManager->updateUser($user);
 
-        /** Get User informations for e-mail content **/
+        /* Get User informations for e-mail content **/
         $query = $this->getEntityManager()
             ->createQueryBuilder('u')
             ->select('u.firstname', 'u.lastname', 'u.email')
@@ -239,7 +238,7 @@ class SecurityController extends Controller
             'password'  => $password,
         );
 
-        /** Prepare an email with data **/
+        /* Prepare an email with data **/
         $message = \Swift_Message::newInstance()
             ->setSubject('Sportroops reset password')
             ->setFrom('support@sportroops.com')
@@ -249,40 +248,15 @@ class SecurityController extends Controller
                 'text/html'
             );
 
-        /** Send email **/
+        /* Send email **/
         $this->get('mailer')->send($message);
 
-        /** Serialize data before return response **/
+        /* Serialize data before return response **/
         $view = View::create()
            ->setStatusCode(200)
            ->setData($user);
 
         return $this->get('fos_rest.view_handler')->handle($view);
-    }
-
-    /**
-     * Lists all users.
-     *
-     * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK (list all users)",
-     * 	     401="Unauthorized (this resource require an access token)"
-     * 	 },
-     * )
-     *
-     * @return Doctrine\ORM\QueryBuilder $results
-     */
-    public function getAllUsersAction()
-    {
-        $em = $this->getEntityManager();
-        $repo = $em->getRepository('AppUserBundle:User');
-        $query = $repo->createQueryBuilder('u')
-            ->select('u.id', 'u.username', 'u.email')
-            ->getQuery();
-
-        return $query->getResult();
     }
 
     /**
