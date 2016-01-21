@@ -11,8 +11,10 @@ class CoachInformationAdmin extends Admin
 {
     public function configureFormFields(FormMapper $formMapper){
         $formMapper
-            ->add('proCardExpirationDate', null, array(
+            ->add('proCardExpirationDate', 'sonata_type_date_picker', array(
                 'label' => 'Card expiration date',
+                'format' => 'dd/MM/yyyy',
+                'dp_language' => 'en'
             ))
             ->add('insuranceCompanyName', null, array(
                 'label' => 'Insurance company name',
@@ -20,8 +22,10 @@ class CoachInformationAdmin extends Admin
             ->add('insurancePolicyNumber', null, array(
                 'label' => 'Insurance policy number',
             ))
-            ->add('insurancePolicyExpirationDate', null, array(
+            ->add('insurancePolicyExpirationDate', 'sonata_type_date_picker', array(
                 'label' => 'Insurance policy expiration date',
+                'format' => 'dd/MM/yyyy',
+                'dp_language' => 'en'
             ));
     }
 
