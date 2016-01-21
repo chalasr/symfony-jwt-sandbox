@@ -13,7 +13,7 @@ services:
             - { name: sonata.admin, manager_type: orm, group: "Sports", label: "Sports" }
         arguments:
             - ~
-            - App\SportBundle\Entity\Sport # The corresponding entity 
+            - App\SportBundle\Entity\Sport # The corresponding entity
             - AppAdminBundle:SportAdmin # The Admin Class
 
     sonata.admin.categories:
@@ -48,3 +48,12 @@ services:
             - ~
             - App\UserBundle\Entity\User # The entity used, main entity but custom fields from the relation with CoachInformation.
             - AppAdminBundle:CoachAdmin #  The admin class alias, mandatory too.
+
+    sonata.admin.coach_information:
+        class: App\AdminBundle\Admin\User\Information\CoachInformationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Coach informations" , show_in_dashboard: false }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\Information\CoachInformation
+            - AppAdminBundle:CoachInformationAdmin

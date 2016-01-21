@@ -17,10 +17,18 @@ use JMS\Serializer\Annotation as JMS;
  */
 class CoachInformation extends AbstractEntity implements EntityInterface
 {
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\User", inversedBy="coachInformation")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $user;
+
+
     /**
      * @var string
      *
-     * @ORM\Column(name="pro_card_expiration_date", type="date")
+     * @ORM\Column(name="pro_card_expiration_date", type="date", nullable=true)
      */
     protected $proCardExpirationDate;
 
@@ -52,7 +60,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      */
     public function __toString()
     {
-        return '';
+        return 'coachInformation';
     }
 
     /**
@@ -149,5 +157,29 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     public function getInsurancePolicyExpirationDate()
     {
         return $this->insurancePolicyExpirationDate;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \App\UserBundle\Entity\User $user
+     *
+     * @return CoachInformation
+     */
+    public function setUser(\App\UserBundle\Entity\User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \App\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
