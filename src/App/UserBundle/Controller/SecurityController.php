@@ -260,31 +260,6 @@ class SecurityController extends Controller
     }
 
     /**
-     * Lists all users.
-     *
-     * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK (list all users)",
-     * 	     401="Unauthorized (this resource require an access token)"
-     * 	 },
-     * )
-     *
-     * @return Doctrine\ORM\QueryBuilder $results
-     */
-    public function getAllUsersAction()
-    {
-        $em = $this->getEntityManager();
-        $repo = $em->getRepository('AppUserBundle:User');
-        $query = $repo->createQueryBuilder('u')
-            ->select('u.id', 'u.username', 'u.email')
-            ->getQuery();
-
-        return $query->getResult();
-    }
-
-    /**
      * Creates new User.
      *
      * @param array  $data

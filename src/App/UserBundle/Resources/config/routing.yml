@@ -1,3 +1,9 @@
+# Users
+users:
+  type: rest
+  resource: App\UserBundle\Controller\UsersController
+
+# Security
 security_register:
     path: /signup
     defaults: { _controller: AppUserBundle:Security:registerUserAccount }
@@ -17,11 +23,6 @@ security_oauth_login:
     path: /oauth/login
     defaults: { _controller: AppUserBundle:Security:authenticateByOAuth }
     methods: POST
-
-security_users_list:
-    path:     /users
-    defaults: { _controller: AppUserBundle:Security:getAllUsers }
-    methods: GET
 
 security_reset_password:
     path:     /users/reset_password

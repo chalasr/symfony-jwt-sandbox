@@ -49,17 +49,17 @@ class User extends BaseUser
     protected $groups;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="follows")
-     */
-    protected $followers;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="followers")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="follows")
      * @ORM\JoinTable(
      * 			name="follows",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="follower_id", referencedColumnName="id")}
      * )
+     */
+    protected $followers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="followers")
      */
     protected $follows;
 
@@ -86,16 +86,28 @@ class User extends BaseUser
         $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * Get facebookId.
+     *
+     * @return int
+     */
     public function getFacebookId()
     {
         return $this->facebookId;
     }
 
+    /**
+     * Set facebookId .
+     *
+     * @param int $facebookId
+     *
+     * @return User
+     */
     public function setFacebookId($facebookId)
     {
         $this->facebookId = $facebookId;
 
-        return $this->facebookId;
+        return $this;
     }
 
     /**
@@ -157,6 +169,10 @@ class User extends BaseUser
     {
         $this->followers[] = $follower;
 
+        if (!$follower->getFollows()->contains($this)) {
+            $follower->addFollow($this);
+        }
+
         return $this;
     }
 
@@ -168,6 +184,10 @@ class User extends BaseUser
     public function removeFollower(\App\UserBundle\Entity\User $follower)
     {
         $this->followers->removeElement($follower);
+
+        if ($follower->getFollows()->contains($this)) {
+            $follower->removeFollow($this);
+        }
     }
 
     /**
@@ -191,6 +211,10 @@ class User extends BaseUser
     {
         $this->follows[] = $follow;
 
+        if (!$follow->getFollowers()->contains($this)) {
+            $follow->addFollower($this);
+        }
+
         return $this;
     }
 
@@ -202,6 +226,10 @@ class User extends BaseUser
     public function removeFollow(\App\UserBundle\Entity\User $follow)
     {
         $this->follows->removeElement($follow);
+
+        if ($follow->getFollowers()->contains($this)) {
+            $follow->removeFollower($this);
+        }
     }
 
     /**
