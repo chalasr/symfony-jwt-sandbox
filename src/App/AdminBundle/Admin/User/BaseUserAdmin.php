@@ -97,18 +97,6 @@ class BaseUserAdmin extends AbstractAdmin
                 ->add('timezone')
                 ->add('phone')
             ->end()
-            // ->with('Social')
-            //     ->add('facebookUid')
-            //     ->add('facebookName')
-            //     ->add('twitterUid')
-            //     ->add('twitterName')
-            //     ->add('gplusUid')
-            //     ->add('gplusName')
-            // ->end()
-            // ->with('Security')
-            //     ->add('token')
-            //     ->add('twoStepVerificationCode')
-            // ->end()
         ;
     }
 
@@ -150,14 +138,6 @@ class BaseUserAdmin extends AbstractAdmin
                 ->add('timezone', 'timezone', array('required' => false))
                 ->add('phone', null, array('required' => false))
             ->end()
-            // ->with('Social')
-            //     ->add('facebookUid', null, array('required' => false))
-            //     ->add('facebookName', null, array('required' => false))
-            //     ->add('twitterUid', null, array('required' => false))
-            //     ->add('twitterName', null, array('required' => false))
-            //     ->add('gplusUid', null, array('required' => false))
-            //     ->add('gplusName', null, array('required' => false))
-            // ->end()
         ;
 
         if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
@@ -167,12 +147,10 @@ class BaseUserAdmin extends AbstractAdmin
                         'label'    => 'Rôles',
                         'choices'  => $rolesChoices,
                         'multiple' => true,
-                        'required' => true,
+                        'required' => false,
                     ))
                     ->add('locked', null, array('required' => false))
-                    // ->add('expired', null, array('required' => false))
                     ->add('enabled', null, array('required' => false))
-                    // ->add('credentialsExpired', null, array('required' => false))
                 ->end()
             ;
         }
@@ -247,6 +225,7 @@ class BaseUserAdmin extends AbstractAdmin
         $group = $this->getUserGroup();
 
         $coach->addGroup($group);
+        $coach->setEnabled(true);
 
         return $coach;
     }
@@ -257,7 +236,7 @@ class BaseUserAdmin extends AbstractAdmin
      */
     public function getFilterParameters()
     {
-        $filterByGroup = ['groups' => ['value' => $this->getUserGroup()->getId()]];
+        $filterByGroup = ['groups' => ['value' => $this->getUserGroup() ? $this->getUserGroup()->getId() : '']];
         $this->datagridValues = array_merge($filterByGroup, $this->datagridValues);
 
         return parent::getFilterParameters();

@@ -6,6 +6,7 @@ parameters:
     admin.coach.class: App\AdminBundle\Admin\User\Type\CoachAdmin
     admin.provider.class: App\AdminBundle\Admin\User\Type\ProviderAdmin
     admin.individual.class: App\AdminBundle\Admin\User\Type\IndividualAdmin
+    admin.admin.class: App\AdminBundle\Admin\User\Type\AdminsAdmin
 
 services:
 
@@ -66,6 +67,17 @@ services:
             - ~
             - App\UserBundle\Entity\User
             - AppAdminBundle:IndividualAdmin
+        calls:
+            - [setUserManager, ['@fos_user.user_manager']]
+
+    sonata.admin.users_admins:
+        class: "%admin.admin.class%"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: user, label: "Admins" }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\User
+            - AppAdminBundle:AdminsAdmin
         calls:
             - [setUserManager, ['@fos_user.user_manager']]
 
