@@ -4,6 +4,7 @@ parameters:
     admin.categories.class: App\AdminBundle\Admin\Sport\CategoryAdmin
     admin.tags.class: App\AdminBundle\Admin\Sport\TagAdmin
     admin.coachs.class: App\AdminBundle\Admin\User\CoachAdmin
+    admin.provider.class: App\AdminBundle\Admin\User\ProviderAdmin
 
 services:
 
@@ -43,8 +44,16 @@ services:
     sonata.admin.users_coachs:
         class: "%admin.coachs.class%" # Previously declared at top (parameters)
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Coachs", label: "Coachs" } # Some parameters of sonata
+            - { name: sonata.admin, manager_type: orm, group: "coach", label: "Coachs" } # Some parameters of sonata
         arguments:
             - ~
             - App\UserBundle\Entity\User # The entity used, main entity but custom fields from the relation with CoachInformation.
             - AppAdminBundle:CoachAdmin #  The admin class alias, mandatory too.
+    sonata.admin.users_providers:
+        class: "%admin.provider.class%"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "provider", label: "Providers" }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\User
+            - AppAdminBundle:ProviderAdmin
