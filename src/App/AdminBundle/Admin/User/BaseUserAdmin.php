@@ -47,19 +47,18 @@ class BaseUserAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id')
+            ->addIdentifier('id', null, array('label' => 'id'))
             ->add('email')
             ->add('group')
             ->add('enabled', null, array('editable' => true))
             ->add('locked', null, array('editable' => true))
-            ->add('createdAt')
+            ->add('_action', 'actions', [
+                'actions' => array(
+                    'edit'   => [],
+                    'delete' => [],
+                ),
+            ])
         ;
-
-        if ($this->isGranted('ROLE_ALLOWED_TO_SWITCH')) {
-            $listMapper
-                ->add('impersonating', 'string', array('template' => 'SonataUserBundle:Admin:Field/impersonating.html.twig'))
-            ;
-        }
     }
 
     /**
@@ -115,7 +114,6 @@ class BaseUserAdmin extends AbstractAdmin
                     'label'    => 'Groupe',
                     'required' => false,
                 ))
-                // ->add('dateOfBirth', 'birthday', array('required' => false))
                 ->add('dateOfBirth', 'sonata_type_date_picker', array(
                     'label'       => 'Date de naissance',
                     'format'      => 'dd/MM/yyyy',
@@ -132,6 +130,9 @@ class BaseUserAdmin extends AbstractAdmin
                     'translation_domain' => $this->getTranslationDomain(),
                 ))
                 ->add('phone', null, array('required' => false))
+                ->add('address', 'text', array('label' => 'Adresse', 'required' => false))
+                ->add('city', null, array('label' => 'Ville', 'required' => false))
+                ->add('zipcode', null, array('label' => 'Code postal', 'required' => false))
             ->end()
         ;
 
