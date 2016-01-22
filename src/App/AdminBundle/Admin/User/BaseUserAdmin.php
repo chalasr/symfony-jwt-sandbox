@@ -93,10 +93,23 @@ class BaseUserAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $container = $this->getConfigurationPool()->getContainer();
+        $container = $this->getContainer();
         $roles = $container->getParameter('security.role_hierarchy.roles');
         $rolesChoices = self::flattenRoles($roles);
-
+        /* Custom check displaying icon if is it */
+        $pictureOptions =  array(
+            'required'   => false,
+            'data_class' => null,
+            'label'      => 'Icône',
+        );
+        if ($this->getSubject()->getId()) {
+            $subject = $this->getSubject();
+            if ($subject->getPicture()) {
+                $path = sprintf('http://%s/bundles/appuser/pictures/%s', $container->getParameter('domain'), $subject->getPicture());
+                $pictureOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
+            }
+        }
+        /* End custom check */
         $formMapper
             ->with('Général')
                 ->add('email')
@@ -115,6 +128,7 @@ class BaseUserAdmin extends AbstractAdmin
                     'format'      => 'dd/MM/yyyy',
                     'dp_language' => 'fr',
                 ))
+                ->add('file', 'file', $pictureOptions)
                 ->add('firstname', null, array('required' => false))
                 ->add('lastname', null, array('required' => false))
                 ->add('description', 'textarea', array(
@@ -166,12 +180,24 @@ class BaseUserAdmin extends AbstractAdmin
         $user->setUsername($user->getEmail());
         $this->getUserManager()->updateCanonicalFields($user);
         $this->getUserManager()->updatePassword($user);
+
+        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
+
+        if ($user->getFile()) {
+            $user->uploadPicture($uploadPath);
+        }
     }
 
     public function prePersist($user)
     {
         $user->setCreatedAt(new \DateTime);
         $user->setUsername($user->getEmail());
+
+        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
+        if ($user->getFile()) {
+            $user->uploadPicture($uploadPath);
+        }
+
         return $user;
     }
 
