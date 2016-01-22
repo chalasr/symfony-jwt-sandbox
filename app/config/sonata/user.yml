@@ -11,7 +11,7 @@ sonata_user:
 
     admin:                  # Admin Classes
         user:
-            class:          Sonata\UserBundle\Admin\Entity\UserAdmin
+            class:          App\AdminBundle\Admin\User\BaseUserAdmin
             controller:     SonataAdminBundle:CRUD
             translation:    SonataUserBundle
 

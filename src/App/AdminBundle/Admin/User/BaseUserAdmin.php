@@ -47,19 +47,13 @@ class BaseUserAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('username')
+            ->addIdentifier('id', null, array('label' => 'Id'))
             ->add('email')
-            ->add('groups')
-            ->add('enabled', null, array('editable' => true))
-            ->add('locked', null, array('editable' => true))
-            ->add('createdAt')
+            ->add('firstname')
+            ->add('lastname')
+            ->add('phone')
+            ->add('createdAt', 'date', array('label' => 'Créé le', 'format' => 'd/m/Y'))
         ;
-
-        if ($this->isGranted('ROLE_ALLOWED_TO_SWITCH')) {
-            $listMapper
-                ->add('impersonating', 'string', array('template' => 'SonataUserBundle:Admin:Field/impersonating.html.twig'))
-            ;
-        }
     }
 
     /**
@@ -69,10 +63,9 @@ class BaseUserAdmin extends AbstractAdmin
     {
         $filterMapper
             ->add('id')
-            ->add('username')
-            ->add('locked')
             ->add('email')
-            ->add('groups')
+            ->add('lastname')
+            ->add('group')
         ;
     }
 
@@ -83,18 +76,13 @@ class BaseUserAdmin extends AbstractAdmin
     {
         $showMapper
             ->with('General')
-                ->add('username')
                 ->add('email')
             ->end()
             ->with('Profile')
                 ->add('dateOfBirth')
                 ->add('firstname')
                 ->add('lastname')
-                ->add('website')
-                ->add('biography')
                 ->add('gender')
-                ->add('locale')
-                ->add('timezone')
                 ->add('phone')
             ->end()
         ;
@@ -105,38 +93,65 @@ class BaseUserAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $container = $this->getConfigurationPool()->getContainer();
+        $container = $this->getContainer();
         $roles = $container->getParameter('security.role_hierarchy.roles');
         $rolesChoices = self::flattenRoles($roles);
-
+        /* Custom check displaying icon if is it */
+        $pictureOptions =  array(
+            'required'   => false,
+            'data_class' => null,
+            'label'      => 'Icône',
+        );
+        if ($this->getSubject()->getId()) {
+            $subject = $this->getSubject();
+            if ($subject->getPicture()) {
+                $path = sprintf('http://%s/bundles/appuser/pictures/%s', $container->getParameter('domain'), $subject->getPicture());
+                $pictureOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
+            }
+        }
+        /* End custom check */
         $formMapper
-            ->with('General')
-                ->add('username')
+            ->with('Général')
                 ->add('email')
                 ->add('plainPassword', 'password', array(
+                    'label' => 'Mot de passe',
                     'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
                 ))
             ->end()
-            ->with('Groups')
-                ->add('groups', null, array(
-                    'required' => false,
-                    'expanded' => true,
-                    'multiple' => true,
-                ))
-            ->end()
             ->with('Profile')
-                ->add('dateOfBirth', 'birthday', array('required' => false))
+                ->add('group', null, array(
+                    'label'    => 'Groupe',
+                    'required' => false,
+                ))
+                ->add('dateOfBirth', 'sonata_type_date_picker', array(
+                    'label'       => 'Date de naissance',
+                    'format'      => 'dd/MM/yyyy',
+                    'dp_language' => 'fr',
+                ))
+                ->add('file', 'file', $pictureOptions)
                 ->add('firstname', null, array('required' => false))
                 ->add('lastname', null, array('required' => false))
-                ->add('website', 'url', array('required' => false))
-                ->add('biography', 'text', array('required' => false))
+                ->add('description', 'textarea', array(
+                    'attr' => array(
+                        'maxlength' => 500
+                    ),
+                    'required' => false,
+                    'label'    => 'Déscription'
+                ))
                 ->add('gender', 'sonata_user_gender', array(
                     'required'           => true,
                     'translation_domain' => $this->getTranslationDomain(),
                 ))
-                ->add('locale', 'locale', array('required' => false))
-                ->add('timezone', 'timezone', array('required' => false))
                 ->add('phone', null, array('required' => false))
+                ->add('address', 'textarea', array(
+                    'label' => 'Adresse',
+                    'required' => false,
+                    'attr'    => array(
+                      'maxlength' => 500
+                    ),
+                ))
+                ->add('city', null, array('label' => 'Ville', 'required' => false))
+                ->add('zipcode', null, array('label' => 'Code postal', 'required' => false))
             ->end()
         ;
 
@@ -161,8 +176,29 @@ class BaseUserAdmin extends AbstractAdmin
      */
     public function preUpdate($user)
     {
+        $user->setUpdatedAt(new \DateTime);
+        $user->setUsername($user->getEmail());
         $this->getUserManager()->updateCanonicalFields($user);
         $this->getUserManager()->updatePassword($user);
+
+        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
+
+        if ($user->getFile()) {
+            $user->uploadPicture($uploadPath);
+        }
+    }
+
+    public function prePersist($user)
+    {
+        $user->setCreatedAt(new \DateTime);
+        $user->setUsername($user->getEmail());
+
+        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
+        if ($user->getFile()) {
+            $user->uploadPicture($uploadPath);
+        }
+
+        return $user;
     }
 
     /**
@@ -225,7 +261,7 @@ class BaseUserAdmin extends AbstractAdmin
         $coach = parent::getNewInstance();
         $group = $this->getUserGroup();
 
-        $coach->addGroup($group);
+        $coach->setGroup($group);
         $coach->setEnabled(true);
 
         return $coach;
@@ -237,7 +273,7 @@ class BaseUserAdmin extends AbstractAdmin
      */
     public function getFilterParameters()
     {
-        $filterByGroup = ['groups' => ['value' => $this->getUserGroup() ? $this->getUserGroup()->getId() : '']];
+        $filterByGroup = ['group' => ['value' => $this->getUserGroup() ? $this->getUserGroup()->getId() : '']];
         $this->datagridValues = array_merge($filterByGroup, $this->datagridValues);
 
         return parent::getFilterParameters();

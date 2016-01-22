@@ -215,7 +215,7 @@ class Sport extends AbstractEntity implements EntityInterface
         }
 
         $this->getFile()->move($path, $this->getFile()->getClientOriginalName());
-        $this->setIcon($this->getFile()->getClientOriginalName());
+        $this->setPicture($this->getFile()->getClientOriginalName());
 
         $this->setFile(null);
     }

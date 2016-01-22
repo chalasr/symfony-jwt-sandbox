@@ -21,4 +21,9 @@ class Group extends BaseGroup
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
+
+    public function __toString()
+    {
+        return $this->getName() ?: 'Nouveau groupe';
+    }
 }

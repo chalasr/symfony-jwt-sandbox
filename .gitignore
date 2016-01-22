@@ -1,4 +1,5 @@
 /src/App/SportBundle/Resources/public/icons/*
+/src/App/UserBundle/Resources/public/pictures/*
 /app/config/parameters.yml
 /bin/
 /build/

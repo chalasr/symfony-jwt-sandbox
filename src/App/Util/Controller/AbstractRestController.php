@@ -86,7 +86,10 @@ abstract class AbstractRestController extends Controller
     {
         $view = View::create()->setStatusCode($statusCode);
 
+        if ($data) {
+            $view->setData($data);
+        }
+
         return $this->getViewHandler()->handle($view);
-        // $view->setData
     }
 }

@@ -25,6 +25,21 @@ class CoachInformationAdmin extends Admin
                 'label'       => 'Insurance policy expiration date',
                 'format'      => 'dd/MM/yyyy',
                 'dp_language' => 'en',
-            ));
+            ))
+            ->end()
+            ->with('Documents')
+                ->add('coachDocuments', 'sonata_type_model', array(
+                    'required'       => false,
+                    'by_reference'   => false,
+                    'multiple'       => true,
+                    'label'          => 'Document'
+                ), array(
+                    'edit' => 'inline',
+                    'inline' => 'table'
+                ))
+            ->end()
+        ;
+        // SNIP;
+
     }
 }

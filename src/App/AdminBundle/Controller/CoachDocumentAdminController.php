@@ -9,6 +9,6 @@ use Sonata\AdminBundle\Controller\CRUDController as Controller;
  * Required for each Admin class.
  * Allow to create custom methods and declare custom routes for back-office.
  */
-class CoachAdminController extends Controller
+class CoachDocumentAdminController extends Controller
 {
 }

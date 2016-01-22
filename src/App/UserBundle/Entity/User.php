@@ -4,14 +4,16 @@ namespace App\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Sonata\UserBundle\Entity\BaseUser;
+use Sonata\UserBundle\Model\User as BaseUser;
+use Sonata\UserBundle\Model\UserInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * User.
  *
  * @ORM\Table(name="fos_user_user")
  * @ORM\Entity
- * @JMS\ExclusionPolicy("all")
+ *
  */
 class User extends BaseUser
 {
@@ -21,7 +23,7 @@ class User extends BaseUser
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
+     * @JMS\Groups({"api"})
      * @JMS\Expose
      */
     protected $id;
@@ -34,19 +36,106 @@ class User extends BaseUser
     protected $facebookId;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var string
      *
-     * @ORM\ManyToMany(targetEntity="App\UserBundle\Entity\Group")
-     * @ORM\JoinTable(name="fos_user_user_group",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
-     *   }
-     * )
+     * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
+     *
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
      */
-    protected $groups;
+    protected $firstname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
+     *
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
+     */
+    protected $lastname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    protected $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", nullable=true)
+     */
+    protected $gender;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="picture", type="string", nullable=true)
+     *
+     */
+    protected $picture;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", nullable=true)
+     */
+    protected $phone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="text", nullable=true)
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
+     */
+    protected $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", nullable=true)
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
+     */
+    protected $city;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="zipcode", type="integer", nullable=true)
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
+     */
+    protected $zipcode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="date_of_birth", type="date", nullable=true)
+     */
+    protected $dateOfBirth;
+
+     /**
+      * @ORM\ManyToOne(targetEntity="Group")
+      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
+      *
+      * @JMS\Groups({"api"})
+      * @JMS\Expose
+      */
+    protected $group;
+
+    /**
+     * @ORM\Column(name="created_at", type="date", nullable=true)
+     */
+    protected $createdAt;
+
+    /**
+     * @ORM\Column(name="updated_at", type="date", nullable=true)
+     */
+    protected $updatedAt;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="follows")
@@ -55,11 +144,14 @@ class User extends BaseUser
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="follower_id", referencedColumnName="id")}
      * )
+     * @JMS\Expose
      */
     protected $followers;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="followers")
+     *
+     * @JMS\Expose
      */
     protected $follows;
 
@@ -76,14 +168,69 @@ class User extends BaseUser
     protected $coachInformation;
 
     /**
+     * @var string
+     */
+    private $file;
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Upload attachment file.
+     */
+    public function uploadPicture($path)
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        $this->getFile()->move($path, $this->getFile()->getClientOriginalName());
+        $this->setPicture($this->getFile()->getClientOriginalName());
+
+        $this->setFile(null);
+    }
+
+    /**
+     * Returns a string representation
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getEmail() ?: 'New'.$this->getGroup();
+    }
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         parent::__construct();
-        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function setEmail($email)
+    {
+         parent::setEmail($email);
+         $this->setUsername($email);
     }
 
     /**
@@ -240,5 +387,220 @@ class User extends BaseUser
     public function getFollows()
     {
         return $this->follows;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return User
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set group
+     *
+     * @param \App\UserBundle\Entity\Group $group
+     *
+     * @return User
+     */
+    public function setGroup(\App\UserBundle\Entity\Group $group = null)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return \App\UserBundle\Entity\Group
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * Hook on pre-persist operations
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime;
+        $this->updatedAt = new \DateTime;
+    }
+
+    /**
+     * Hook on pre-update operations
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime;
+    }
+
+    /**
+     * Returns the gender list
+     *
+     * @return array
+     */
+    public static function getGenderList()
+    {
+        return array(
+            UserInterface::GENDER_UNKNOWN => 'gender_unknown',
+            UserInterface::GENDER_FEMALE  => 'gender_female',
+            UserInterface::GENDER_MALE    => 'gender_male',
+        );
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     *
+     * @return User
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     *
+     * @return User
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set zipcode
+     *
+     * @param integer $zipcode
+     *
+     * @return User
+     */
+    public function setZipcode($zipcode)
+    {
+        $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    /**
+     * Get zipcode
+     *
+     * @return integer
+     */
+    public function getZipcode()
+    {
+        return $this->zipcode;
+    }
+
+    /**
+     * Set picture
+     *
+     * @param string $picture
+     *
+     * @return User
+     */
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Get picture
+     *
+     * @return string
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    /**
+     * Sets the creation date
+     *
+     * @param \DateTime|null $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * Returns the creation date
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Sets the last update date
+     *
+     * @param \DateTime|null $updatedAt
+     */
+    public function setUpdatedAt(\DateTime $updatedAt = null)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * Returns the last update date
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }
