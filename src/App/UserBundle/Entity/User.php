@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Sonata\UserBundle\Model\User as BaseUser;
 use Sonata\UserBundle\Model\UserInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * User.
@@ -146,6 +147,46 @@ class User extends BaseUser
      * @ORM\JoinColumn(name="coach_id", referencedColumnName="id", nullable=true)
      */
     protected $coachInformation;
+
+    /**
+     * @var string
+     */
+    private $file;
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Upload attachment file.
+     */
+    public function uploadPicture($path)
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        $this->getFile()->move($path, $this->getFile()->getClientOriginalName());
+        $this->setPicture($this->getFile()->getClientOriginalName());
+
+        $this->setFile(null);
+    }
 
     /**
      * Returns a string representation
