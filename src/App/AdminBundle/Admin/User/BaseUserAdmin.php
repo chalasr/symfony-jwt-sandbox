@@ -111,7 +111,6 @@ class BaseUserAdmin extends AbstractAdmin
 
         $formMapper
             ->with('Général')
-                ->add('username')
                 ->add('email')
                 ->add('plainPassword', 'password', array(
                     'label' => 'Mot de passe',
