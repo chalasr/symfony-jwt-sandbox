@@ -47,11 +47,12 @@ class BaseUserAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id', null, array('label' => 'id'))
+            ->addIdentifier('id', null, array('label' => 'Id'))
             ->add('email')
-            ->add('group')
-            ->add('enabled', null, array('editable' => true))
-            ->add('locked', null, array('editable' => true))
+            ->add('firstname')
+            ->add('lastname')
+            ->add('phone')
+            ->add('createdAt', 'date', array('label' => 'Créé le', 'format' => 'd/m/Y'))
             ->add('_action', 'actions', [
                 'actions' => array(
                     'edit'   => [],
@@ -69,7 +70,7 @@ class BaseUserAdmin extends AbstractAdmin
         $filterMapper
             ->add('id')
             ->add('email')
-            ->add('group')
+            ->add('lastname')
         ;
     }
 
@@ -157,6 +158,7 @@ class BaseUserAdmin extends AbstractAdmin
      */
     public function preUpdate($user)
     {
+        $user->setUpdatedAt(new \DateTime);
         $user->setUsername($user->getEmail());
         $this->getUserManager()->updateCanonicalFields($user);
         $this->getUserManager()->updatePassword($user);
@@ -164,6 +166,7 @@ class BaseUserAdmin extends AbstractAdmin
 
     public function prePersist($user)
     {
+        $user->setCreatedAt(new \DateTime);
         $user->setUsername($user->getEmail());
         return $user;
     }

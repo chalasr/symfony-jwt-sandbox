@@ -111,6 +111,16 @@ class User extends BaseUser
     protected $group;
 
     /**
+     * @ORM\Column(name="created_at", type="date", nullable=true)
+     */
+    protected $createdAt;
+
+    /**
+     * @ORM\Column(name="updated_at", type="date", nullable=true)
+     */
+    protected $updatedAt;
+
+    /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="follows")
      * @ORM\JoinTable(
      * 			name="follows",
@@ -492,5 +502,45 @@ class User extends BaseUser
     public function getPicture()
     {
         return $this->picture;
+    }
+
+    /**
+     * Sets the creation date
+     *
+     * @param \DateTime|null $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * Returns the creation date
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Sets the last update date
+     *
+     * @param \DateTime|null $updatedAt
+     */
+    public function setUpdatedAt(\DateTime $updatedAt = null)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * Returns the last update date
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }
