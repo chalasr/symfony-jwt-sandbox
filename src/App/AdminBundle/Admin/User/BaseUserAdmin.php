@@ -217,6 +217,7 @@ class BaseUserAdmin extends AbstractAdmin
     /**
      * In user _create, pre-set Group depending on type of
      * the created user. e.g. Coachs, Providers or Individuals.
+     *
      * @return [type] [description]
      */
     public function getNewInstance()
@@ -232,7 +233,7 @@ class BaseUserAdmin extends AbstractAdmin
 
     /**
      * Pre-filter lists depending on Group.
-     * e.g. In Provider List get only users with group = Providers
+     * e.g. In Provider List get only users with group = Providers.
      */
     public function getFilterParameters()
     {
