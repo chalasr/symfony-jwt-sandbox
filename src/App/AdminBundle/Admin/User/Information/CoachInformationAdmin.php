@@ -28,15 +28,16 @@ class CoachInformationAdmin extends Admin
             ))
             ->end()
             ->with('Documents')
-            ->add('coachDocuments', 'sonata_type_model_list', array(
-                'required' => false,
-                'by_reference' => false,
-                'label' => 'Document'
-            ), array(
+                ->add('coachDocuments', 'sonata_type_model', array(
+                    'required'       => false,
+                    'by_reference'   => false,
+                    'multiple'       => true,
+                    'label'          => 'Document'
+                ), array(
                     'edit' => 'inline',
                     'inline' => 'table'
-                )
-            )
+                ))
+            ->end()
         ;
         // SNIP;
 
