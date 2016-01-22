@@ -2,6 +2,10 @@ admin_home:
     resource: "@AppAdminBundle/Resources/config/routing.yml"
     prefix: /
 
+admin_security:
+    resource: "@AppAdminBundle/Resources/config/security.yml"
+    prefix: /admin
+
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
     prefix: /admin
@@ -11,6 +15,6 @@ _sonata_admin:
     type: sonata_admin
     prefix: /admin
 
-sonata_user:
-    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
-    prefix: /admin
+# sonata_user:
+#     resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+#     prefix: /admin

@@ -42,7 +42,7 @@ class SportAdminController extends AbstractAdminController
         $response->headers->set('Content-type', mime_content_type($path));
         $response->headers->set('Content-length', filesize($path));
         $response->sendHeaders();
-        $response->setContent(readfile($path));
+        $response->setContent(file_get_contents($path));
 
         return $response;
     }

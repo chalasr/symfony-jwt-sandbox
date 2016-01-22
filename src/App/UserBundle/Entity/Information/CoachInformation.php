@@ -18,12 +18,6 @@ use JMS\Serializer\Annotation as JMS;
 class CoachInformation extends AbstractEntity implements EntityInterface
 {
     /**
-     * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\User", inversedBy="coachInformation")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
-     */
-    protected $user;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="pro_card_expiration_date", type="date", nullable=true)
