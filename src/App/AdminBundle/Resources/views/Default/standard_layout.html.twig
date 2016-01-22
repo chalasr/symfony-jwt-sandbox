@@ -133,6 +133,7 @@
                                                     {% for menu in admin.breadcrumbs(action) %}
                                                         {% if not loop.last  %}
                                                             <li>
+                                                              
                                                                 {% if menu.uri is not empty %}
                                                                     <a href="{{ menu.uri }}">
                                                                         {% if 'List' in menu.label %}
