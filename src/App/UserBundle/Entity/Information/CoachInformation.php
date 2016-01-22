@@ -65,7 +65,6 @@ class CoachInformation extends AbstractEntity implements EntityInterface
         $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
      * To string.
      *

@@ -47,19 +47,19 @@ class BaseUserAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('username')
+            ->addIdentifier('id', null, array('label' => 'Id'))
             ->add('email')
-            ->add('groups')
-            ->add('enabled', null, array('editable' => true))
-            ->add('locked', null, array('editable' => true))
-            ->add('createdAt')
+            ->add('firstname')
+            ->add('lastname')
+            ->add('phone')
+            ->add('createdAt', 'date', array('label' => 'Créé le', 'format' => 'd/m/Y'))
+            ->add('_action', 'actions', [
+                'actions' => array(
+                    'edit'   => [],
+                    'delete' => [],
+                ),
+            ])
         ;
-
-        if ($this->isGranted('ROLE_ALLOWED_TO_SWITCH')) {
-            $listMapper
-                ->add('impersonating', 'string', array('template' => 'SonataUserBundle:Admin:Field/impersonating.html.twig'))
-            ;
-        }
     }
 
     /**
@@ -69,9 +69,8 @@ class BaseUserAdmin extends AbstractAdmin
     {
         $filterMapper
             ->add('id')
-            ->add('username')
-            ->add('locked')
             ->add('email')
+            ->add('lastname')
             ->add('group')
         ;
     }
@@ -83,18 +82,13 @@ class BaseUserAdmin extends AbstractAdmin
     {
         $showMapper
             ->with('General')
-                ->add('username')
                 ->add('email')
             ->end()
             ->with('Profile')
                 ->add('dateOfBirth')
                 ->add('firstname')
                 ->add('lastname')
-                ->add('website')
-                ->add('biography')
                 ->add('gender')
-                ->add('locale')
-                ->add('timezone')
                 ->add('phone')
             ->end()
         ;
@@ -111,7 +105,6 @@ class BaseUserAdmin extends AbstractAdmin
 
         $formMapper
             ->with('Général')
-                ->add('username')
                 ->add('email')
                 ->add('plainPassword', 'password', array(
                     'label' => 'Mot de passe',
@@ -123,7 +116,6 @@ class BaseUserAdmin extends AbstractAdmin
                     'label'    => 'Groupe',
                     'required' => false,
                 ))
-                // ->add('dateOfBirth', 'birthday', array('required' => false))
                 ->add('dateOfBirth', 'sonata_type_date_picker', array(
                     'label'       => 'Date de naissance',
                     'format'      => 'dd/MM/yyyy',
@@ -140,6 +132,9 @@ class BaseUserAdmin extends AbstractAdmin
                     'translation_domain' => $this->getTranslationDomain(),
                 ))
                 ->add('phone', null, array('required' => false))
+                ->add('address', 'text', array('label' => 'Adresse', 'required' => false))
+                ->add('city', null, array('label' => 'Ville', 'required' => false))
+                ->add('zipcode', null, array('label' => 'Code postal', 'required' => false))
             ->end()
         ;
 
@@ -164,8 +159,17 @@ class BaseUserAdmin extends AbstractAdmin
      */
     public function preUpdate($user)
     {
+        $user->setUpdatedAt(new \DateTime);
+        $user->setUsername($user->getEmail());
         $this->getUserManager()->updateCanonicalFields($user);
         $this->getUserManager()->updatePassword($user);
+    }
+
+    public function prePersist($user)
+    {
+        $user->setCreatedAt(new \DateTime);
+        $user->setUsername($user->getEmail());
+        return $user;
     }
 
     /**
@@ -227,7 +231,7 @@ class BaseUserAdmin extends AbstractAdmin
         $coach = parent::getNewInstance();
         $group = $this->getUserGroup();
 
-        $coach->addGroup($group);
+        $coach->setGroup($group);
         $coach->setEnabled(true);
 
         return $coach;
@@ -239,7 +243,7 @@ class BaseUserAdmin extends AbstractAdmin
      */
     public function getFilterParameters()
     {
-        $filterByGroup = ['groups' => ['value' => $this->getUserGroup() ? $this->getUserGroup()->getId() : '']];
+        $filterByGroup = ['group' => ['value' => $this->getUserGroup() ? $this->getUserGroup()->getId() : '']];
         $this->datagridValues = array_merge($filterByGroup, $this->datagridValues);
 
         return parent::getFilterParameters();

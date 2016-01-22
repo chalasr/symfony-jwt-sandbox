@@ -65,9 +65,37 @@ class User extends BaseUser
     /**
      * @var string
      *
+     * @ORM\Column(name="picture", type="string", nullable=true)
+     */
+    protected $picture;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="phone", type="string", nullable=true)
      */
     protected $phone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="text", nullable=true)
+     */
+    protected $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", nullable=true)
+     */
+    protected $city;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="zipcode", type="integer", nullable=true)
+     */
+    protected $zipcode;
 
     /**
      * @var string
@@ -81,6 +109,16 @@ class User extends BaseUser
       * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
       */
     protected $group;
+
+    /**
+     * @ORM\Column(name="created_at", type="date", nullable=true)
+     */
+    protected $createdAt;
+
+    /**
+     * @ORM\Column(name="updated_at", type="date", nullable=true)
+     */
+    protected $updatedAt;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="follows")
@@ -110,6 +148,16 @@ class User extends BaseUser
     protected $coachInformation;
 
     /**
+     * Returns a string representation
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getEmail() ?: '-';
+    }
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -117,6 +165,12 @@ class User extends BaseUser
         parent::__construct();
         $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function setEmail($email)
+    {
+         parent::setEmail($email);
+         $this->setUsername($email);
     }
 
     /**
@@ -352,5 +406,141 @@ class User extends BaseUser
             UserInterface::GENDER_FEMALE  => 'gender_female',
             UserInterface::GENDER_MALE    => 'gender_male',
         );
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     *
+     * @return User
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     *
+     * @return User
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set zipcode
+     *
+     * @param integer $zipcode
+     *
+     * @return User
+     */
+    public function setZipcode($zipcode)
+    {
+        $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    /**
+     * Get zipcode
+     *
+     * @return integer
+     */
+    public function getZipcode()
+    {
+        return $this->zipcode;
+    }
+
+    /**
+     * Set picture
+     *
+     * @param string $picture
+     *
+     * @return User
+     */
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Get picture
+     *
+     * @return string
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    /**
+     * Sets the creation date
+     *
+     * @param \DateTime|null $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * Returns the creation date
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Sets the last update date
+     *
+     * @param \DateTime|null $updatedAt
+     */
+    public function setUpdatedAt(\DateTime $updatedAt = null)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * Returns the last update date
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }

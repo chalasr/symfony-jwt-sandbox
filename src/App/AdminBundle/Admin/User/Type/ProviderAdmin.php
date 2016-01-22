@@ -30,13 +30,13 @@ class ProviderAdmin extends BaseUserAdmin
 
     public function configureDatagridFilters(DatagridMapper $filterMapper)
     {
+        parent::configureDatagridFilters($filterMapper);
         $filterMapper
             ->add('providerInformation.name', null, array(
                 'label' => 'Nom du provider',
             ))
+            ->add('zipcode')
         ;
-
-        parent::configureDatagridFilters($filterMapper);
     }
 
     /**
@@ -44,12 +44,9 @@ class ProviderAdmin extends BaseUserAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper
-            ->add('providerInformation.name', null, [
-                'label' => 'Nom du provider',
-            ])
-        ;
-
         parent::configureListFields($listMapper);
+        $listMapper
+            ->add('zipcode')
+        ;
     }
 }
