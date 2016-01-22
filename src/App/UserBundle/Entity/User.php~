@@ -5,7 +5,6 @@ namespace App\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Sonata\UserBundle\Model\User as BaseUser;
-use Sonata\UserBundle\Model\UserInterface;
 
 /**
  * User.
@@ -68,13 +67,6 @@ class User extends BaseUser
      * @ORM\Column(name="phone", type="string", nullable=true)
      */
     protected $phone;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="date_of_birth", type="date", nullable=true)
-     */
-    protected $dateOfBirth;
 
      /**
       * @ORM\ManyToOne(targetEntity="Group")
@@ -273,84 +265,5 @@ class User extends BaseUser
     public function getFollows()
     {
         return $this->follows;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return User
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set group
-     *
-     * @param \App\UserBundle\Entity\Group $group
-     *
-     * @return User
-     */
-    public function setGroup(\App\UserBundle\Entity\Group $group = null)
-    {
-        $this->group = $group;
-
-        return $this;
-    }
-
-    /**
-     * Get group
-     *
-     * @return \App\UserBundle\Entity\Group
-     */
-    public function getGroup()
-    {
-        return $this->group;
-    }
-
-    /**
-     * Hook on pre-persist operations
-     */
-    public function prePersist()
-    {
-        $this->createdAt = new \DateTime;
-        $this->updatedAt = new \DateTime;
-    }
-
-    /**
-     * Hook on pre-update operations
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime;
-    }
-
-    /**
-     * Returns the gender list
-     *
-     * @return array
-     */
-    public static function getGenderList()
-    {
-        return array(
-            UserInterface::GENDER_UNKNOWN => 'gender_unknown',
-            UserInterface::GENDER_FEMALE  => 'gender_female',
-            UserInterface::GENDER_MALE    => 'gender_male',
-        );
     }
 }
