@@ -30,10 +30,35 @@ class UsersController extends BaseController
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
         $query = $repo->createQueryBuilder('u')
-            ->select('u.id', 'u.username', 'u.email')
+            ->select('u.id', 'u.email', 'u.firstname', 'u.lastname')
             ->getQuery();
 
         return $query->getResult();
+    }
+
+    /**
+     * Get User by identfier.
+     *
+     * @Rest\Get("/users/{id}", requirements={"id" = "\d+"})
+     * @Rest\View(serializerGroups={"api"})
+     * @ApiDoc(
+     * 	 section="User",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	     200="OK",
+     * 	     401="Unauthorized (this resource require an access token)"
+     * 	 },
+     * )
+     *
+     * @return array
+     */
+    public function getUserAction($id)
+    {
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('AppUserBundle:User');
+        $user = $repo->find($id);
+
+        return $user;
     }
 
     /**

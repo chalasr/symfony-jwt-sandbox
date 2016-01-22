@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table(name="fos_user_user")
  * @ORM\Entity
- * @JMS\ExclusionPolicy("all")
+ *
  */
 class User extends BaseUser
 {
@@ -23,7 +23,7 @@ class User extends BaseUser
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
+     * @JMS\Groups({"api"})
      * @JMS\Expose
      */
     protected $id;
@@ -39,6 +39,9 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
+     *
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
      */
     protected $firstname;
 
@@ -46,6 +49,9 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
+     *
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
      */
     protected $lastname;
 
@@ -67,6 +73,7 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="picture", type="string", nullable=true)
+     *
      */
     protected $picture;
 
@@ -81,6 +88,8 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="address", type="text", nullable=true)
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
      */
     protected $address;
 
@@ -88,6 +97,8 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="city", type="string", nullable=true)
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
      */
     protected $city;
 
@@ -95,6 +106,8 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="zipcode", type="integer", nullable=true)
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
      */
     protected $zipcode;
 
@@ -108,6 +121,9 @@ class User extends BaseUser
      /**
       * @ORM\ManyToOne(targetEntity="Group")
       * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
+      *
+      * @JMS\Groups({"api"})
+      * @JMS\Expose
       */
     protected $group;
 
@@ -128,11 +144,14 @@ class User extends BaseUser
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="follower_id", referencedColumnName="id")}
      * )
+     * @JMS\Expose
      */
     protected $followers;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="followers")
+     *
+     * @JMS\Expose
      */
     protected $follows;
 
@@ -195,7 +214,7 @@ class User extends BaseUser
      */
     public function __toString()
     {
-        return $this->getEmail() ?: '-';
+        return $this->getEmail() ?: 'New'.$this->getGroup();
     }
 
     /**
