@@ -5,7 +5,7 @@ parameters:
     admin.tags.class: App\AdminBundle\Admin\Sport\TagAdmin
     admin.coach.class: App\AdminBundle\Admin\User\Type\CoachAdmin
     admin.provider.class: App\AdminBundle\Admin\User\Type\ProviderAdmin
-    admin.individual.class: App\AdminBundle\Admin\User\Type\IndividualAdmin
+    admin.sportrooper.class: App\AdminBundle\Admin\User\Type\SportrooperAdmin
     admin.admin.class: App\AdminBundle\Admin\User\Type\AdminsAdmin
 
 services:
@@ -59,14 +59,14 @@ services:
         calls:
             - [setUserManager, ['@fos_user.user_manager']]
 
-    sonata.admin.users_individuals:
-        class: "%admin.individual.class%"
+    sonata.admin.users_sportroopers:
+        class: "%admin.sportrooper.class%"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: user, label: "Individuals" }
+            - { name: sonata.admin, manager_type: orm, group: user, label: "Sportroopers" }
         arguments:
             - ~
             - App\UserBundle\Entity\User
-            - AppAdminBundle:IndividualAdmin
+            - AppAdminBundle:SportrooperAdmin
         calls:
             - [setUserManager, ['@fos_user.user_manager']]
 

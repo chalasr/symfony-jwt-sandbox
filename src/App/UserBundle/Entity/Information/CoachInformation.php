@@ -51,6 +51,21 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      */
     protected $insurancePolicyExpirationDate;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="coachInformation")
+     */
+    protected $documents;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
     /**
      * To string.
      *
@@ -179,5 +194,39 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Add document
+     *
+     * @param \App\UserBundle\Entity\Information\Document $document
+     *
+     * @return CoachInformation
+     */
+    public function addDocument(\App\UserBundle\Entity\Information\Document $document)
+    {
+        $this->documents[] = $document;
+
+        return $this;
+    }
+
+    /**
+     * Remove document
+     *
+     * @param \App\UserBundle\Entity\Information\Document $document
+     */
+    public function removeDocument(\App\UserBundle\Entity\Information\Document $document)
+    {
+        $this->documents->removeElement($document);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
     }
 }
