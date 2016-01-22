@@ -15,8 +15,10 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @JMS\ExclusionPolicy("all")
  */
-class Document extends AbstractEntity implements EntityInterface
+class CoachDocument extends AbstractEntity implements EntityInterface
 {
+    const SERVER_PATH_TO_IMAGE_FOLDER = '/media/datas/websites/sportroops.localhost/src/App/UserBundle/Resources/public/documents';
+
     /**
      * @var string
      *
@@ -33,7 +35,7 @@ class Document extends AbstractEntity implements EntityInterface
     protected $urlFile;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CoachInformation", inversedBy="documents")
+     * @ORM\ManyToOne(targetEntity="CoachInformation", inversedBy="coachDocuments")
      * @ORM\JoinColumn(name="id_user", referencedColumnName="id");
      */
     protected $coachInformation;
@@ -120,4 +122,6 @@ class Document extends AbstractEntity implements EntityInterface
     {
         return $this->coachInformation;
     }
+
+
 }

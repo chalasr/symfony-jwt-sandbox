@@ -7,6 +7,7 @@ parameters:
     admin.provider.class: App\AdminBundle\Admin\User\Type\ProviderAdmin
     admin.sportrooper.class: App\AdminBundle\Admin\User\Type\SportrooperAdmin
     admin.admin.class: App\AdminBundle\Admin\User\Type\AdminsAdmin
+    admin.coach_document.class: App\AdminBundle\Admin\User\Information\CoachDocumentAdmin
 
 services:
 
@@ -99,3 +100,15 @@ services:
             - ~
             - App\UserBundle\Entity\Information\ProviderInformation
             - AppAdminBundle:ProviderInformationAdmin
+
+
+
+    sonata.admin.coach_document:
+            class: App\AdminBundle\Admin\User\Information\CoachDocumentAdmin
+            tags:
+                - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Coach documents" , show_in_dashboard: false }
+            arguments:
+                - ~
+                - App\UserBundle\Entity\Information\CoachDocument
+                - AppAdminBundle:CoachDocumentAdmin
+                -

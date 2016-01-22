@@ -53,9 +53,9 @@ class CoachInformation extends AbstractEntity implements EntityInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Document", mappedBy="coachInformation")
+     * @ORM\OneToMany(targetEntity="CoachDocument", mappedBy="coachInformation")
      */
-    protected $documents;
+    protected $coachDocuments;
 
     /**
      * Constructor.
@@ -198,11 +198,11 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     /**
      * Add document
      *
-     * @param \App\UserBundle\Entity\Information\Document $document
+     * @param \App\UserBundle\Entity\Information\CoachDocument $document
      *
      * @return CoachInformation
      */
-    public function addDocument(\App\UserBundle\Entity\Information\Document $document)
+    public function addDocument(\App\UserBundle\Entity\Information\CoachDocument $document)
     {
         $this->documents[] = $document;
 
@@ -212,9 +212,9 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     /**
      * Remove document
      *
-     * @param \App\UserBundle\Entity\Information\Document $document
+     * @param \App\UserBundle\Entity\Information\CoachDocument $document
      */
-    public function removeDocument(\App\UserBundle\Entity\Information\Document $document)
+    public function removeDocument(\App\UserBundle\Entity\Information\CoachDocument $document)
     {
         $this->documents->removeElement($document);
     }
@@ -227,5 +227,39 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     public function getDocuments()
     {
         return $this->documents;
+    }
+
+    /**
+     * Add coachDocument
+     *
+     * @param \App\UserBundle\Entity\Information\CoachDocument $coachDocument
+     *
+     * @return CoachInformation
+     */
+    public function addCoachDocument(\App\UserBundle\Entity\Information\CoachDocument $coachDocument)
+    {
+        $this->coachDocuments[] = $coachDocument;
+
+        return $this;
+    }
+
+    /**
+     * Remove coachDocument
+     *
+     * @param \App\UserBundle\Entity\Information\CoachDocument $coachDocument
+     */
+    public function removeCoachDocument(\App\UserBundle\Entity\Information\CoachDocument $coachDocument)
+    {
+        $this->coachDocuments->removeElement($coachDocument);
+    }
+
+    /**
+     * Get coachDocuments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCoachDocuments()
+    {
+        return $this->coachDocuments;
     }
 }
