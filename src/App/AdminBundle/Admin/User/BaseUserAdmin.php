@@ -49,7 +49,7 @@ class BaseUserAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('username')
             ->add('email')
-            ->add('groups')
+            ->add('group')
             ->add('enabled', null, array('editable' => true))
             ->add('locked', null, array('editable' => true))
             ->add('createdAt')
@@ -227,7 +227,7 @@ class BaseUserAdmin extends AbstractAdmin
         $coach = parent::getNewInstance();
         $group = $this->getUserGroup();
 
-        $coach->addGroup($group);
+        $coach->setGroup($group);
         $coach->setEnabled(true);
 
         return $coach;
@@ -239,7 +239,7 @@ class BaseUserAdmin extends AbstractAdmin
      */
     public function getFilterParameters()
     {
-        $filterByGroup = ['groups' => ['value' => $this->getUserGroup() ? $this->getUserGroup()->getId() : '']];
+        $filterByGroup = ['group' => ['value' => $this->getUserGroup() ? $this->getUserGroup()->getId() : '']];
         $this->datagridValues = array_merge($filterByGroup, $this->datagridValues);
 
         return parent::getFilterParameters();
