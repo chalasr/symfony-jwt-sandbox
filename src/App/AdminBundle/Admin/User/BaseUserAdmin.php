@@ -72,7 +72,7 @@ class BaseUserAdmin extends AbstractAdmin
             ->add('username')
             ->add('locked')
             ->add('email')
-            ->add('groups')
+            ->add('group')
         ;
     }
 
@@ -110,32 +110,35 @@ class BaseUserAdmin extends AbstractAdmin
         $rolesChoices = self::flattenRoles($roles);
 
         $formMapper
-            ->with('General')
+            ->with('Général')
                 ->add('username')
                 ->add('email')
                 ->add('plainPassword', 'password', array(
+                    'label' => 'Mot de passe',
                     'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
                 ))
             ->end()
-            ->with('Groups')
-                ->add('groups', null, array(
-                    'required' => false,
-                    'expanded' => true,
-                    'multiple' => true,
-                ))
-            ->end()
             ->with('Profile')
-                ->add('dateOfBirth', 'birthday', array('required' => false))
+                ->add('group', null, array(
+                    'label'    => 'Groupe',
+                    'required' => false,
+                ))
+                // ->add('dateOfBirth', 'birthday', array('required' => false))
+                ->add('dateOfBirth', 'sonata_type_date_picker', array(
+                    'label'       => 'Date de naissance',
+                    'format'      => 'dd/MM/yyyy',
+                    'dp_language' => 'fr',
+                ))
                 ->add('firstname', null, array('required' => false))
                 ->add('lastname', null, array('required' => false))
-                ->add('website', 'url', array('required' => false))
-                ->add('biography', 'text', array('required' => false))
+                ->add('description', 'text', array(
+                    'required' => false,
+                    'label'    => 'Déscription'
+                ))
                 ->add('gender', 'sonata_user_gender', array(
                     'required'           => true,
                     'translation_domain' => $this->getTranslationDomain(),
                 ))
-                ->add('locale', 'locale', array('required' => false))
-                ->add('timezone', 'timezone', array('required' => false))
                 ->add('phone', null, array('required' => false))
             ->end()
         ;
