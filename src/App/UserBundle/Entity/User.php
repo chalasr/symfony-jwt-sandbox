@@ -110,6 +110,16 @@ class User extends BaseUser
     protected $coachInformation;
 
     /**
+     * Returns a string representation
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getEmail() ?: '-';
+    }
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -117,6 +127,12 @@ class User extends BaseUser
         parent::__construct();
         $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function setEmail($email)
+    {
+         parent::setEmail($email);
+         $this->setUsername($email);
     }
 
     /**
