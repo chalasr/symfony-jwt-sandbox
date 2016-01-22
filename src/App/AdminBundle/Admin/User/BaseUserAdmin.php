@@ -48,7 +48,7 @@ class BaseUserAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id', null, array('label' => 'Id'))
-            ->add('email')
+            ->addIdentifier('email')
             ->add('firstname')
             ->add('lastname')
             ->add('phone')
