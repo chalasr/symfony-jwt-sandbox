@@ -71,6 +71,7 @@ class BaseUserAdmin extends AbstractAdmin
             ->add('id')
             ->add('email')
             ->add('lastname')
+            ->add('group')
         ;
     }
 
