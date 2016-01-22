@@ -65,6 +65,13 @@ class User extends BaseUser
     /**
      * @var string
      *
+     * @ORM\Column(name="picture", type="string", nullable=true)
+     */
+    protected $picture;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="phone", type="string", nullable=true)
      */
     protected $phone;
@@ -461,5 +468,29 @@ class User extends BaseUser
     public function getZipcode()
     {
         return $this->zipcode;
+    }
+
+    /**
+     * Set picture
+     *
+     * @param string $picture
+     *
+     * @return User
+     */
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Get picture
+     *
+     * @return string
+     */
+    public function getPicture()
+    {
+        return $this->picture;
     }
 }
