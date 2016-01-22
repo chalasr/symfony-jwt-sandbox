@@ -276,7 +276,7 @@ class SecurityController extends Controller
         $userManager = $this->getUserManager();
 
         $em = $this->getEntityManager();
-        $group = $em->getRepository('AppUserBundle:Group')->findOneByName(['name' => 'Individuals']);
+        $group = $em->getRepository('AppUserBundle:Group')->findOneByName(['name' => 'Sportroopers']);
         $user = $userManager->createUser();
         $user->setUsername($data['name']);
         $user->setEmail($data['email']);
