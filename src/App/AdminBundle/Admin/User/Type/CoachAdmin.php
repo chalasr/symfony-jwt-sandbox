@@ -4,6 +4,7 @@ namespace App\AdminBundle\Admin\User\Type;
 
 use App\AdminBundle\Admin\User\BaseUserAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 
 class CoachAdmin extends BaseUserAdmin
 {
@@ -23,6 +24,22 @@ class CoachAdmin extends BaseUserAdmin
                 'edit'       => 'inline',
                 'admin_code' => 'sonata.admin.coach_information',
             ))
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureListFields(ListMapper $listMapper)
+    {
+        parent::configureListFields($listMapper);
+        $listMapper
+            ->add('_action', 'actions', [
+                'actions' => array(
+                    'edit'   => [],
+                    'delete' => [],
+                ),
+            ])
         ;
     }
 }

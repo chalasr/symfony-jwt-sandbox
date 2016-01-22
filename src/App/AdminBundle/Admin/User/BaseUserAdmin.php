@@ -53,12 +53,6 @@ class BaseUserAdmin extends AbstractAdmin
             ->add('lastname')
             ->add('phone')
             ->add('createdAt', 'date', array('label' => 'Créé le', 'format' => 'd/m/Y'))
-            ->add('_action', 'actions', [
-                'actions' => array(
-                    'edit'   => [],
-                    'delete' => [],
-                ),
-            ])
         ;
     }
 

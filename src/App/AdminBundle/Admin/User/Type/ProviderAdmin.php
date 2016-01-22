@@ -47,6 +47,12 @@ class ProviderAdmin extends BaseUserAdmin
         parent::configureListFields($listMapper);
         $listMapper
             ->add('zipcode')
+            ->add('_action', 'actions', [
+                'actions' => array(
+                    'edit'   => [],
+                    'delete' => [],
+                ),
+            ])
         ;
     }
 }
