@@ -117,7 +117,10 @@ class BaseUserAdmin extends AbstractAdmin
                 ))
                 ->add('firstname', null, array('required' => false))
                 ->add('lastname', null, array('required' => false))
-                ->add('description', 'text', array(
+                ->add('description', 'textarea', array(
+                    'attr' => array(
+                        'maxlength' => 500
+                    ),
                     'required' => false,
                     'label'    => 'Déscription'
                 ))
@@ -126,7 +129,13 @@ class BaseUserAdmin extends AbstractAdmin
                     'translation_domain' => $this->getTranslationDomain(),
                 ))
                 ->add('phone', null, array('required' => false))
-                ->add('address', 'text', array('label' => 'Adresse', 'required' => false))
+                ->add('address', 'textarea', array(
+                    'label' => 'Adresse',
+                    'required' => false,
+                    'attr'    => array(
+                      'maxlength' => 500
+                    ),
+                ))
                 ->add('city', null, array('label' => 'Ville', 'required' => false))
                 ->add('zipcode', null, array('label' => 'Code postal', 'required' => false))
             ->end()
