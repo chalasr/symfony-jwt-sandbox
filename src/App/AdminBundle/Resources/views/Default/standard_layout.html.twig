@@ -249,11 +249,7 @@
                                             {% block tab_menu_navbar_header %}
                                                 {% if _navbar_title is not empty %}
                                                     <div class="navbar-header">
-                                                        {% if admin.getCreateLabel() is defined %}
-                                                            <a class="navbar-brand" href="#">{{ admin.getCreateLabel()|raw }}</a>
-                                                        {% else %}
-                                                            <a class="navbar-brand" href="#">{{ _navbar_title|raw }}</a>
-                                                        {% endif %}
+                                                      <a class="navbar-brand" href="#">{{ _navbar_title|raw }}</a>
                                                     </div>
                                                 {% endif %}
                                             {% endblock %}
