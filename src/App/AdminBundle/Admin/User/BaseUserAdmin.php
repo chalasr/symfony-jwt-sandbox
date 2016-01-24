@@ -64,7 +64,7 @@ class BaseUserAdmin extends AbstractAdmin
         $filterMapper
             ->add('id')
             ->add('email')
-            ->add('lastname')
+            ->add('lastname', null, array('label' => 'Nom'))
             ->add('group')
         ;
     }
@@ -96,11 +96,11 @@ class BaseUserAdmin extends AbstractAdmin
         $container = $this->getContainer();
         $roles = $container->getParameter('security.role_hierarchy.roles');
         $rolesChoices = self::flattenRoles($roles);
-        /* Custom check displaying icon if is it */
+        /* Custom check displaying profile picture if is it */
         $pictureOptions =  array(
             'required'   => false,
             'data_class' => null,
-            'label'      => 'Icône',
+            'label'      => 'Photo de profil',
         );
         if ($this->getSubject()->getId()) {
             $subject = $this->getSubject();
@@ -129,8 +129,8 @@ class BaseUserAdmin extends AbstractAdmin
                     'dp_language' => 'fr',
                 ))
                 ->add('file', 'file', $pictureOptions)
-                ->add('firstname', null, array('required' => false))
-                ->add('lastname', null, array('required' => false))
+                ->add('firstname', null, array('required' => false, 'label' => 'Prénom'))
+                ->add('lastname', null, array('required' => false, 'label' => 'Nom'))
                 ->add('description', 'textarea', array(
                     'attr' => array(
                         'maxlength' => 500
@@ -140,6 +140,7 @@ class BaseUserAdmin extends AbstractAdmin
                 ))
                 ->add('gender', 'sonata_user_gender', array(
                     'required'           => true,
+                    'label'              => 'Genre',
                     'translation_domain' => $this->getTranslationDomain(),
                 ))
                 ->add('phone', null, array('required' => false))

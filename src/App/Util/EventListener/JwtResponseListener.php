@@ -37,7 +37,7 @@ use Doctrine\ORM\EntityManager;
          $data['user'] = array(
              'id'     => $fullUser->getId(),
              'email'  => $fullUser->getEmail(),
-             'group'  => $fullUser->getGroup() ? $fullUser->getGroup()->getName() : 'undefined',
+             'group'  => $fullUser->getFullGroup();
              'roles'  => $fullUser->getRoles(),
          );
 

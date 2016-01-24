@@ -122,10 +122,16 @@ class User extends BaseUser
       * @ORM\ManyToOne(targetEntity="Group")
       * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
       *
-      * @JMS\Groups({"api"})
-      * @JMS\Expose
       */
     protected $group;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     * @JMS\SerializedName("group")
+     * @JMS\Accessor(getter="getFullGroup", setter="")
+     */
+    protected $fullGroup;
 
     /**
      * @ORM\Column(name="created_at", type="date", nullable=true)
@@ -214,7 +220,7 @@ class User extends BaseUser
      */
     public function __toString()
     {
-        return $this->getEmail() ?: 'New'.$this->getGroup();
+        return $this->getEmail() ?: 'New'. $this->getFullGroup();
     }
 
     /**
@@ -435,6 +441,16 @@ class User extends BaseUser
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * Get fullyfilled group's name.
+     *
+     * @return string
+     */
+    public function getFullGroup()
+    {
+        return $this->getGroup()->getName();
     }
 
     /**

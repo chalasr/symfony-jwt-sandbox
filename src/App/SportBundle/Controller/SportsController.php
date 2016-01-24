@@ -173,7 +173,7 @@ class SportsController extends Controller
      * Delete a Sport entity.
      *
      * @Rest\Delete("/sports/{id}", requirements={"id" = "\d+"})
-     
+
      * @ApiDoc(
      *   section="Sport",
      * 	 resource=true,
