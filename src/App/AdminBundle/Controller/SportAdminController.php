@@ -25,17 +25,17 @@ class SportAdminController extends AbstractAdminController
         $entity = is_numeric($sport)
         ? $repo->findOrFail($sport)
         : $repo->findOneByOrFail(['name' => $sport]);
-        $iconName = $entity->getIcon();
-
-        if (!$iconName) {
-            throw new NotFoundHttpException(sprintf('The resource %s has not associated icon', $entity));
-        }
+        $iconName = $entity->getIcon() ?: 'default.png';
+        //
+        // if (!$iconName) {
+        //     $iconName = 'default.png';
+        // }
 
         $path = $this->locateResource('@AppSportBundle/Resources/public/icons/'.$iconName);
         $iconInfo = pathinfo($path);
 
         if (false === isset($iconInfo['extension'])) {
-            throw new NotFoundHttpException(sprintf('Unable to find icon with name \'%s\'', $iconName));
+            $path = $this->locateResource('@AppSportBundle/Resources/public/icons/default.png');
         }
 
         $response = new Http\Response();

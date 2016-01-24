@@ -12,5 +12,16 @@
 .logo img {
   max-height: 110%!important;
   max-width: 98px!important;
+}
 
+@media (max-width: 767px) {
+  .skin-black .main-header > .logo {
+    background-color: #FFFFFF;
+    color: #222222;
+    border-bottom: 0 solid transparent;
+    border-right: none;
+  }
+  .skin-black .main-header > .logo:hover {
+    background-color: #FFFFFF;
+  }
 }
