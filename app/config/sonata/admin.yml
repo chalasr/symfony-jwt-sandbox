@@ -35,7 +35,7 @@ sonata_admin:
         use_icheck:                             true      # enable iCheck
         pager_links:                            5         # pager max links to display
         dropdown_number_groups_per_colums:      2         # max items per column in dropdown menu (add button in top nav)
-        title_mode:           'both'                      # 'both', 'single_text' or 'single_image'
+        title_mode:           'single_image'              # 'both', 'single_text' or 'single_image'
     dashboard:
         groups:
             user:
@@ -57,6 +57,7 @@ sonata_admin:
     templates:
         layout:                    AppAdminBundle:Default:standard_layout.html.twig
         short_object_description:  SonataAdminBundle:Helper:short-object-description.html.twig
+        user_block:                AppAdminBundle:Block:user_block.html.twig
 
     admin_services:
         # Prototype

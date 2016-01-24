@@ -49,10 +49,8 @@ class SportAdmin extends AbstractAdmin
         );
         if ($this->getSubject()->getId()) {
             $subject = $this->getSubject();
-            if ($subject->getIcon()) {
-                $path = $this->generateUrl('show_icon', ['sport' => $subject->getName()]);
-                $iconFieldOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
-            }
+            $path = $this->generateUrl('show_icon', ['sport' => $subject->getName()]);
+            $iconFieldOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
         }
         /* End custom check */
 

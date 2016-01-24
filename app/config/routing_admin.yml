@@ -14,7 +14,3 @@ _sonata_admin:
     resource: .
     type: sonata_admin
     prefix: /admin
-
-# sonata_user:
-#     resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
-#     prefix: /admin
