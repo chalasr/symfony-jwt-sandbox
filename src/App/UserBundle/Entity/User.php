@@ -450,7 +450,7 @@ class User extends BaseUser
      */
     public function getFullGroup()
     {
-        return $this->getGroup()->getName();
+        return $this->getGroup() ? $this->getGroup()->getName() : '';
     }
 
     /**

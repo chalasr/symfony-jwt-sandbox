@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserBundle\EventListener;
+namespace App\Util\EventListener;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Doctrine\ORM\EntityManager;
@@ -30,15 +30,15 @@ use Doctrine\ORM\EntityManager;
      public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
      {
          $data = $event->getData();
-         $username = $event->getUser()->getUsername();
+         $username = $event->getUser() ? $event->getUser()->getUsername() : '';
          $userManager = $this->em->getRepository('AppUserBundle:User');
-         $fullUser = $userManager->findOneBy(['username' => $username]);
+         $user = $userManager->findOneBy(['username' => $username]);
 
          $data['user'] = array(
-             'id'     => $fullUser->getId(),
-             'email'  => $fullUser->getEmail(),
-             'group'  => $fullUser->getFullGroup();
-             'roles'  => $fullUser->getRoles(),
+             'id'     => $user->getId(),
+             'email'  => $user->getEmail(),
+             'group'  => $user->getFullGroup(),
+             'roles'  => $user->getRoles(),
          );
 
          $event->setData($data);

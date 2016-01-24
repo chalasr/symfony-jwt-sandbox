@@ -13,6 +13,8 @@ class BaseUserAdmin extends AbstractAdmin
 {
     protected $userManager;
 
+    public $realLabel;
+
     /**
      * {@inheritdoc}
      */
@@ -193,8 +195,8 @@ class BaseUserAdmin extends AbstractAdmin
     {
         $user->setCreatedAt(new \DateTime);
         $user->setUsername($user->getEmail());
-
         $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
+
         if ($user->getFile()) {
             $user->uploadPicture($uploadPath);
         }
@@ -239,6 +241,11 @@ class BaseUserAdmin extends AbstractAdmin
         return $flatRoles;
     }
 
+    /**
+     * Get the user's group of the current admin class.
+     *
+     * @return string
+     */
     protected function getUserGroup()
     {
         $group = $this->get('doctrine')
@@ -252,10 +259,28 @@ class BaseUserAdmin extends AbstractAdmin
     }
 
     /**
+     * Get the user's group of the current admin class.
+     *
+     * @return string
+     */
+    public function getRealLabel()
+    {
+        return $this->realLabel;
+    }
+
+    public function setRealLabel($label)
+    {
+        $this->realLabel = $label;
+
+        return $this;
+    }
+
+
+    /**
      * In user _create, pre-set Group depending on type of
      * the created user. e.g. Coachs, Providers or Individuals.
      *
-     * @return [type] [description]
+     * @return object
      */
     public function getNewInstance()
     {
