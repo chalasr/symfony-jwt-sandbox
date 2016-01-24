@@ -48,6 +48,7 @@ services:
             - AppAdminBundle:CoachAdmin
         calls:
             - [setUserManager, ["@fos_user.user_manager"]]
+            - [setRealLabel, ['Coach']]
 
     sonata.admin.users_providers:
         class: "%admin.provider.class%"
@@ -59,6 +60,7 @@ services:
             - AppAdminBundle:ProviderAdmin
         calls:
             - [setUserManager, ['@fos_user.user_manager']]
+            - [setRealLabel, ['Provider']]
 
     sonata.admin.users_sportroopers:
         class: "%admin.sportrooper.class%"
@@ -70,18 +72,21 @@ services:
             - AppAdminBundle:SportrooperAdmin
         calls:
             - [setUserManager, ['@fos_user.user_manager']]
+            - [setRealLabel, ['Sportrooper']]
 
     sonata.admin.users_admins:
         class: "%admin.admin.class%"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: user, label: "Admins" }
+            - { name: sonata.admin, manager_type: orm, group: user, label: "Administrateurs" }
         arguments:
             - ~
             - App\UserBundle\Entity\User
             - AppAdminBundle:AdminsAdmin
         calls:
             - [setUserManager, ['@fos_user.user_manager']]
+            - [setRealLabel, ['Administrateur']]
 
+#Embedded classes
     sonata.admin.coach_information:
         class: App\AdminBundle\Admin\User\Information\CoachInformationAdmin
         tags:
@@ -100,8 +105,6 @@ services:
             - ~
             - App\UserBundle\Entity\Information\ProviderInformation
             - AppAdminBundle:ProviderInformationAdmin
-
-
 
     sonata.admin.coach_document:
             class: App\AdminBundle\Admin\User\Information\CoachDocumentAdmin

@@ -41,12 +41,12 @@ sonata_admin:
             user:
                 label: "Utilisateurs"
                 items:
-                    - sonata.user.admin.user
-                    - sonata.user.admin.group
                     - sonata.admin.users_admins
                     - sonata.admin.users_sportroopers
                     - sonata.admin.users_coachs
                     - sonata.admin.users_providers
+                    - sonata.user.admin.user
+                    - sonata.user.admin.group
             sport:
                 label: "Sport"
 

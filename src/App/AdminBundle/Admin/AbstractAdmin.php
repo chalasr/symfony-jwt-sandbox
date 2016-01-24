@@ -15,6 +15,8 @@ abstract class AbstractAdmin extends Admin
 {
     use Injectable, Localizable;
 
+    public $realLabel;
+
     /**
      * Shortcut method for translate a string.
      *
