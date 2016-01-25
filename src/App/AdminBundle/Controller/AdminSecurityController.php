@@ -5,6 +5,7 @@ namespace App\AdminBundle\Controller;
 use FOS\UserBundle\Model\UserInterface;
 use Sonata\UserBundle\Controller\AdminSecurityController as BaseSecurityController;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminSecurityController extends BaseSecurityController
@@ -14,7 +15,7 @@ class AdminSecurityController extends BaseSecurityController
      *
      * @return RedirectResponse|resource
      */
-    public function loginAction()
+    public function loginAction(Request $request = null)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
