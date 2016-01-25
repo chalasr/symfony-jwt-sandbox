@@ -39,7 +39,9 @@ class BaseUserAdmin extends AbstractAdmin
     {
         // avoid security field to be exported
         return array_filter(parent::getExportFields(), function ($v) {
-            return !in_array($v, array('password', 'salt'));
+            return !in_array($v, array(
+                'password', 'salt', 'usernameCanonical', 'emailCanonical', 'locked',	'expired',	'expiresAt',	'confirmationToken',	'passwordRequestedAt',	'roles',	'credentialsExpired',	'credentialsExpireAt', 'createdAt',	'updatedAt', 'lastLogin'
+            ));
         });
     }
 
