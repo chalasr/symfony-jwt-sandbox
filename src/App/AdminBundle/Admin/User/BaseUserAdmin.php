@@ -108,8 +108,10 @@ class BaseUserAdmin extends AbstractAdmin
             $subject = $this->getSubject();
             if ($subject->getPicture()) {
                 $path = sprintf('http://%s/bundles/appuser/pictures/%s', $container->getParameter('domain'), $subject->getPicture());
-                $pictureOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
+            } else {
+                $path = sprintf('http://%s/bundles/appuser/pictures/default.jpg', $container->getParameter('domain'));
             }
+            $pictureOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
         }
         /* End custom check */
         $formMapper
