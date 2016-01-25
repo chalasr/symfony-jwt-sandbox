@@ -7,6 +7,8 @@ use App\Util\Controller\AbstractRestController as BaseController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class UsersController extends BaseController
 {
@@ -85,8 +87,16 @@ class UsersController extends BaseController
     {
         $em = $this->getEntityManager();
         $user = $this->getCurrentUser();
+        $follower = $this->findUserOrFail($follower);
 
-        $follower = $em->getRepository('AppUserBundle:User')->find($follower);
+        if (true === $this->iscurrentUser($follower)) {
+            throw new UnprocessableEntityHttpException('Un utilisateur ne peut pas se suivre lui même');
+        }
+
+        if (true === $user->hasFollower($follower)) {
+            throw new UnprocessableEntityHttpException('Cet utilisateur vous suit déjà');
+        }
+
         $user->addFollower($follower);
         $em->flush();
 
@@ -117,8 +127,12 @@ class UsersController extends BaseController
     {
         $em = $this->getEntityManager();
         $user = $this->getCurrentUser();
+        $follower = $this->findUserOrFail($follower);
 
-        $follower = $em->getRepository('AppUserBundle:User')->find($follower);
+        if (false === $user->hasFollower($follower)) {
+            throw new UnprocessableEntityHttpException('Vous ne suivez pas cet utilisateur');
+        }
+
         $user->removeFollower($follower);
 
         $em->flush();
@@ -150,9 +164,54 @@ class UsersController extends BaseController
     {
         $em = $this->getEntityManager();
         $user = $this->getCurrentUser();
+        $followed = $this->findUserOrFail($followed);
 
-        $followed = $em->getRepository('AppUserBundle:User')->find($followed);
+        if (true === $this->iscurrentUser($followed)) {
+            throw new UnprocessableEntityHttpException('Un utilisateur ne peut pas se suivre lui même');
+        }
+
+        if (true === $user->hasFollow($followed)) {
+            throw new UnprocessableEntityHttpException('Vous suivez déjà cet utilisateur');
+        }
+
         $user->addFollow($followed);
+
+        $em->flush();
+
+        return $this->handleView(204);
+    }
+
+    /**
+     * Remove a followed user from the current user.
+     *
+     * @Rest\Delete("/users/follows/{followed}", requirements={"followed" = "\d+"})
+     * @ApiDoc(
+     * 	section="User",
+     * 	resource=true,
+     * 	parameters={
+     *     {"name"="follow", "dataType"="integer", "required"=true, "description"="Follow"}
+     *   },
+     * 	 statusCodes={
+     * 	   204="No Content (follow successfully deleted)",
+     * 	   401="Unauthorized (this resource require an access token)"
+     * 	 },
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @return array
+     */
+    public function removeFollowedAction($followed)
+    {
+        $em = $this->getEntityManager();
+        $user = $this->getCurrentUser();
+        $followed = $this->findUserOrFail($followed);
+
+        if (false === $user->hasFollow($followed)) {
+            throw new UnprocessableEntityHttpException('Vous ne suivez pas cet utilisateur');
+        }
+
+        $user->removeFollow($followed);
 
         $em->flush();
 
@@ -178,11 +237,7 @@ class UsersController extends BaseController
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
-        $user = $repo->find($id);
-
-        if (null === $user) {
-            throw new NotFoundHttpException(sprintf('Unable to find user with id %d', $id));
-        }
+        $user = $this->findUserOrFail($id);
 
         return $user->getFollowers();
     }
@@ -206,12 +261,35 @@ class UsersController extends BaseController
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
+        $user = $this->findUserOrFail($id);
+
+        return $user->getFollows();
+    }
+
+    protected function findUserOrFail($id)
+    {
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('AppUserBundle:User');
         $user = $repo->find($id);
 
         if (null === $user) {
             throw new NotFoundHttpException(sprintf('Unable to find user with id %d', $id));
         }
 
-        return $user->getFollows();
+        return $user;
+    }
+
+    /**
+     * Check if user is the current user.
+     *
+     * @param  User $user
+     *
+     * @return boolean
+     */
+    protected function isCurrentUser($user)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        return $user->getId() == $currentUser->getId();
     }
 }

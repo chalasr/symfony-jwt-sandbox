@@ -344,6 +344,18 @@ class User extends BaseUser
     }
 
     /**
+     * Check if user has follower.
+     *
+     * @param  AppUserBundleEntityUser $follower
+     *
+     * @return boolean
+     */
+    public function hasFollower(\App\UserBundle\Entity\User $follower)
+    {
+        return $this->getFollowers()->contains($follower);
+    }
+
+    /**
      * Get followers.
      *
      * @return \Doctrine\Common\Collections\Collection
@@ -383,6 +395,19 @@ class User extends BaseUser
         if ($follow->getFollowers()->contains($this)) {
             $follow->removeFollower($this);
         }
+    }
+
+
+    /**
+     * Check if user has follower.
+     *
+     * @param  AppUserBundleEntityUser $follower
+     *
+     * @return boolean
+     */
+    public function hasFollow(\App\UserBundle\Entity\User $follow)
+    {
+        return $this->getFollows()->contains($follow);
     }
 
     /**
