@@ -160,35 +160,58 @@ class UsersController extends BaseController
     }
 
     /**
-     * Remove a followed user from the current user.
+     * Lists all followers.
      *
-     * @Rest\Delete("/users/follows/{followed}", requirements={"followed" = "\d+"})
+     * @Rest\Get("/users/{id}/followers")
      * @ApiDoc(
-     * 	section="User",
-     * 	resource=true,
-     * 	parameters={
-     *     {"name"="follow", "dataType"="integer", "required"=true, "description"="Follow"}
-     *   },
+     * 	 section="User",
+     * 	 resource=true,
      * 	 statusCodes={
-     * 	   204="No Content (follow successfully deleted)",
-     * 	   401="Unauthorized (this resource require an access token)"
+     * 	     200="OK (list all followers)",
+     * 	     401="Unauthorized (this resource require an access token)"
      * 	 },
      * )
      *
-     * @param ParamFetcher $paramFetcher
-     *
-     * @return array
+     * @return Doctrine\ORM\QueryBuilder $results
      */
-    public function removeFollowedAction($followed)
+    public function getFollowers($id)
     {
         $em = $this->getEntityManager();
-        $user = $this->getCurrentUser();
+        $repo = $em->getRepository('AppUserBundle:User');
+        $user = $repo->find($id);
 
-        $followed = $em->getRepository('AppUserBundle:User')->find($followed);
-        $user->removeFollow($followed);
+        if (null === $user) {
+            throw new NotFoundHttpException(sprintf('Unable to find user with id %d', $id));
+        }
 
-        $em->flush();
+        return $user->getFollowers();
+    }
 
-        return $this->handleView(204);
+    /**
+     * Lists all followers.
+     *
+     * @Rest\Get("/users/{id}/follows")
+     * @ApiDoc(
+     * 	 section="User",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	     200="OK (list all followers)",
+     * 	     401="Unauthorized (this resource require an access token)"
+     * 	 },
+     * )
+     *
+     * @return Doctrine\ORM\QueryBuilder $results
+     */
+    public function getFollows($id)
+    {
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('AppUserBundle:User');
+        $user = $repo->find($id);
+
+        if (null === $user) {
+            throw new NotFoundHttpException(sprintf('Unable to find user with id %d', $id));
+        }
+
+        return $user->getFollows();
     }
 }

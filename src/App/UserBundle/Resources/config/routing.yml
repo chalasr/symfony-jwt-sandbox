@@ -1,6 +1,5 @@
 # Users
 users:
-  type: rest
   resource: App\UserBundle\Controller\UsersController
 
 # Security
