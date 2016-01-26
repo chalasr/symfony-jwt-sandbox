@@ -173,6 +173,9 @@ class User extends BaseUser
      */
     protected $coachInformation;
 
+    /** @ORM\OneToMany(targetEntity="\App\SportBundle\Entity\SportUser", mappedBy="user", cascade={"persist"}) */
+    protected $sportUsers;
+
     /**
      * @var string
      */
@@ -231,6 +234,7 @@ class User extends BaseUser
         parent::__construct();
         $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sportUsers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function setEmail($email)
@@ -643,5 +647,40 @@ class User extends BaseUser
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Add sportUser
+     *
+     * @param \App\SportBundle\Entity\SportUser $sportUser
+     *
+     * @return User
+     */
+    public function addSportUser(\App\SportBundle\Entity\SportUser $sportUser)
+    {
+        $sportUser->setUser($this);
+        $this->sportUsers[] = $sportUser;
+
+        return $this;
+    }
+
+    /**
+     * Remove sportUser
+     *
+     * @param \App\SportBundle\Entity\SportUser $sportUser
+     */
+    public function removeSportUser(\App\SportBundle\Entity\SportUser $sportUser)
+    {
+        $this->sportUsers->removeElement($sportUser);
+    }
+
+    /**
+     * Get sportUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSportUsers()
+    {
+        return $this->sportUsers;
     }
 }

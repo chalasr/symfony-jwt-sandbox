@@ -157,8 +157,27 @@ class BaseUserAdmin extends AbstractAdmin
                       'maxlength' => 500
                     ),
                 ))
-                ->add('city', null, array('label' => 'Ville', 'required' => false))
-                ->add('zipcode', null, array('label' => 'Code postal', 'required' => false))
+                ->add('city', null, array(
+                    'label' => 'Ville',
+                    'required' => false
+                ))
+                ->add('zipcode', null, array(
+                    'label' => 'Code postal',
+                    'required' => false
+                ))
+            ->end()
+            ->with('Sports')
+                ->add('sportUsers')
+                ->add('sportUsers', 'sonata_type_collection', array(
+                    'by_reference'       => false,
+                    // 'cascade_validation' => true,
+                    'required' => false,
+                    'label' => 'Sports'
+                ),array(
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                    'admin_code' => 'app_admin.admin.sport_user'
+                ))
             ->end()
         ;
 

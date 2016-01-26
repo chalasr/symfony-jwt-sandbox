@@ -198,6 +198,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      */
     public function addDocument(\App\UserBundle\Entity\Information\CoachDocument $document)
     {
+        $document->setCoachInformation($this);
         $this->documents[] = $document;
 
         return $this;
