@@ -9,6 +9,8 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 
 class UsersController extends BaseController
 {
@@ -292,4 +294,45 @@ class UsersController extends BaseController
 
         return $user->getId() == $currentUser->getId();
     }
+
+
+    /**
+     * update user picture.
+     *
+     * @Rest\Post("/users/{id}/picture", requirements={"id" = "\d+"})
+     * @Rest\RequestParam(name="file",description="Picture")
+     * @ApiDoc(
+     * 	section="User",
+     * 	resource=true,
+     * 	 statusCodes={
+     * 	   204="No Content (picture successfully updated)",
+     * 	   401="Unauthorized (this resource require an access token)"
+     * 	 },
+     * )
+     *
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function updatePicture($id,Request $request)
+    {
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('AppUserBundle:User');
+
+        $picture = $request->files->get('file');
+
+        $user = $this->findUserOrFail($id);
+        $user->setFile($picture);
+
+        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
+
+        if ($user->getFile()) {
+            $user->uploadPicture($uploadPath);
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $user;
+    }
+
 }
