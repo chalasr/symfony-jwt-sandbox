@@ -27,7 +27,7 @@ class UsersController extends BaseController
      * 	 },
      * )
      *
-     * @return Doctrine\ORM\QueryBuilder $results
+     * @return Doctrine\ORM\QueryBuilder
      */
     public function getAllUsersAction()
     {
@@ -50,7 +50,8 @@ class UsersController extends BaseController
      * 	 resource=true,
      * 	 statusCodes={
      * 	     200="OK",
-     * 	     401="Unauthorized (this resource require an access token)"
+     * 	     401="Unauthorized (this resource require an access token)",
+     * 	     422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
      * 	 },
      * )
      *
@@ -77,7 +78,8 @@ class UsersController extends BaseController
      *   },
      * 	 statusCodes={
      * 	   204="No Content (follower successfully added)",
-     * 	   401="Unauthorized (this resource require an access token)"
+     * 	   401="Unauthorized (this resource require an access token)",
+     * 	   422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
      * 	 },
      * )
      *
@@ -150,7 +152,7 @@ class UsersController extends BaseController
      * 	section="User",
      * 	resource=true,
      * 	parameters={
-     *     {"name"="followerd", "dataType"="integer", "required"=true, "description"="Followed"}
+     *     {"name"="followed", "dataType"="integer", "required"=true, "description"="Followed"}
      *   },
      * 	 statusCodes={
      * 	   204="No Content (follow successfully added)",
@@ -191,11 +193,12 @@ class UsersController extends BaseController
      * 	section="User",
      * 	resource=true,
      * 	parameters={
-     *     {"name"="follow", "dataType"="integer", "required"=true, "description"="Follow"}
+     *     {"name"="followed", "dataType"="integer", "required"=true, "description"="Follow"}
      *   },
      * 	 statusCodes={
      * 	   204="No Content (follow successfully deleted)",
-     * 	   401="Unauthorized (this resource require an access token)"
+     * 	   401="Unauthorized (this resource require an access token)",
+     * 	   422="Unprocessable Entity (User not followed yet)"
      * 	 },
      * )
      *
@@ -229,11 +232,12 @@ class UsersController extends BaseController
      * 	 resource=true,
      * 	 statusCodes={
      * 	     200="OK (list all followers)",
-     * 	     401="Unauthorized (this resource require an access token)"
+     * 	     401="Unauthorized (this resource require an access token)",
+     * 	     404="User not found"
      * 	 },
      * )
      *
-     * @return Doctrine\ORM\QueryBuilder $results
+     * @return object
      */
     public function getFollowers($id)
     {
@@ -253,11 +257,12 @@ class UsersController extends BaseController
      * 	 resource=true,
      * 	 statusCodes={
      * 	     200="OK (list all followers)",
-     * 	     401="Unauthorized (this resource require an access token)"
+     * 	     401="Unauthorized (this resource require an access token)",
+     * 	     404="User not found"
      * 	 },
      * )
      *
-     * @return Doctrine\ORM\QueryBuilder $results
+     * @return object
      */
     public function getFollows($id)
     {
@@ -268,6 +273,15 @@ class UsersController extends BaseController
         return $user->getFollows();
     }
 
+    /**
+     * Get user.
+     *
+     * @param int $id
+     *
+     * @return User
+     *
+     * @throws NotFoundHttpException If the User does not exists
+     */
     protected function findUserOrFail($id)
     {
         $em = $this->getEntityManager();
@@ -295,7 +309,6 @@ class UsersController extends BaseController
         return $user->getId() == $currentUser->getId();
     }
 
-
     /**
      * update user picture.
      *
@@ -304,11 +317,10 @@ class UsersController extends BaseController
      * @ApiDoc(
      * 	section="User",
      * 	resource=true,
-     *
      * 	 statusCodes={
      * 	   204="No Content (picture successfully updated)",
      * 	   401="Unauthorized (this resource require an access token)"
-     * 	 },
+     * 	 }
      * )
      *
      * @param Request $request
