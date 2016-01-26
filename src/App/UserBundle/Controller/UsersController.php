@@ -27,7 +27,7 @@ class UsersController extends BaseController
      * 	 },
      * )
      *
-     * @return Doctrine\ORM\QueryBuilder $results
+     * @return Doctrine\ORM\QueryBuilder
      */
     public function getAllUsersAction()
     {
@@ -50,7 +50,7 @@ class UsersController extends BaseController
      * 	 resource=true,
      * 	 statusCodes={
      * 	     200="OK",
-     * 	     401="Unauthorized (this resource require an access token)"
+     * 	     401="Unauthorized (this resource require an access token)",
      * 	     422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
      * 	 },
      * )
@@ -193,7 +193,7 @@ class UsersController extends BaseController
      * 	section="User",
      * 	resource=true,
      * 	parameters={
-     *     {"name"="follow", "dataType"="integer", "required"=true, "description"="Follow"}
+     *     {"name"="followed", "dataType"="integer", "required"=true, "description"="Follow"}
      *   },
      * 	 statusCodes={
      * 	   204="No Content (follow successfully deleted)",
@@ -273,7 +273,6 @@ class UsersController extends BaseController
         return $user->getFollows();
     }
 
-
     /**
      * Get user.
      *
@@ -310,7 +309,6 @@ class UsersController extends BaseController
         return $user->getId() == $currentUser->getId();
     }
 
-
     /**
      * update user picture.
      *
@@ -319,11 +317,10 @@ class UsersController extends BaseController
      * @ApiDoc(
      * 	section="User",
      * 	resource=true,
-     *
      * 	 statusCodes={
      * 	   204="No Content (picture successfully updated)",
      * 	   401="Unauthorized (this resource require an access token)"
-     * 	 },
+     * 	 }
      * )
      *
      * @param Request $request
