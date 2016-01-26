@@ -185,7 +185,7 @@ class User extends BaseUser
      */
     protected $coachInformation;
 
-    /** @ORM\OneToMany(targetEntity="\App\SportBundle\Entity\SportUser", mappedBy="user", cascade={"persist"}) */
+    /** @ORM\OneToMany(targetEntity="\App\SportBundle\Entity\SportUser", mappedBy="user", cascade={"persist", "remove"}) */
     protected $sportUsers;
 
     /**
