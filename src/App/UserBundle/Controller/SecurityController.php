@@ -100,7 +100,7 @@ class SecurityController extends Controller
      */
     public function authenticateUserAction()
     {
-        // Handled by Security Component.
+        /** Virtual method originally handled by Security Component */
     }
 
     /**
@@ -235,6 +235,7 @@ class SecurityController extends Controller
             ->getQuery();
 
         $result = $query->getResult();
+
         $mailing = array(
             'lastname'  => $result[0]['lastname'],
             'firstname' => $result[0]['firstname'],
@@ -428,7 +429,7 @@ class SecurityController extends Controller
     protected function resourceAlreadyExistsError($prop, $val)
     {
         return new JsonResponse(array(
-            'message' => sprintf('User with %s \'%s\' already exists', $prop, $val),
+            'message' => sprintf('Un utilisateur existe déjà avec %s \'%s\'', $prop, $val),
         ), 422);
     }
 
