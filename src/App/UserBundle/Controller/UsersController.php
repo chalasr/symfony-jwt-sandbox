@@ -304,6 +304,7 @@ class UsersController extends BaseController
      * @ApiDoc(
      * 	section="User",
      * 	resource=true,
+     *
      * 	 statusCodes={
      * 	   204="No Content (picture successfully updated)",
      * 	   401="Unauthorized (this resource require an access token)"
