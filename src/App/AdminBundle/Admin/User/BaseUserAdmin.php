@@ -125,10 +125,6 @@ class BaseUserAdmin extends AbstractAdmin
                 ))
             ->end()
             ->with('Profile')
-                ->add('group', null, array(
-                    'label'    => 'Groupe',
-                    'required' => false,
-                ))
                 ->add('dateOfBirth', 'sonata_type_date_picker', array(
                     'label'       => 'Date de naissance',
                     'format'      => 'dd/MM/yyyy',
@@ -146,7 +142,7 @@ class BaseUserAdmin extends AbstractAdmin
                     'label'    => 'Déscription'
                 ))
                 ->add('gender', 'sonata_user_gender', array(
-                    'required'           => true,
+                    'required'           => false,
                     'label'              => 'Genre',
                     'translation_domain' => $this->getTranslationDomain(),
                 ))
@@ -168,17 +164,16 @@ class BaseUserAdmin extends AbstractAdmin
                 ))
             ->end()
             ->with('Sports')
-                ->add('sportUsers')
-                ->add('sportUsers', 'sonata_type_collection', array(
-                    'by_reference'       => false,
-                    // 'cascade_validation' => true,
-                    'required' => false,
-                    'label' => 'Sports'
-                ),array(
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                    'admin_code' => 'app_admin.admin.sport_user'
-                ))
+            ->add('sportUsers', 'sonata_type_collection', array(
+              'by_reference'       => false,
+              // 'cascade_validation' => true,
+              'required' => false,
+              'label' => 'Sports'
+            ),array(
+              'edit' => 'inline',
+              'inline' => 'table',
+              'admin_code' => 'app_admin.admin.sport_user'
+            ))
             ->end()
         ;
 

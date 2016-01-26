@@ -11,7 +11,7 @@ class ProviderInformationAdmin extends Admin
     {
         $formMapper
             ->add('name', null, array(
-                'label' => 'Provider name',
+                'label' => 'Nom',
             ));
     }
 }

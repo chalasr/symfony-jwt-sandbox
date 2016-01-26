@@ -11,20 +11,20 @@ class CoachInformationAdmin extends Admin
     {
         $formMapper
             ->add('proCardExpirationDate', 'sonata_type_date_picker', array(
-                'label'       => 'Card expiration date',
+                'label'       => 'Date d\'expiration de carte pro',
                 'format'      => 'dd/MM/yyyy',
-                'dp_language' => 'en',
+                'dp_language' => 'fr',
             ))
             ->add('insuranceCompanyName', null, array(
-                'label' => 'Insurance company name',
+                'label' => 'Nom de la compagnie fournissant la police d\'insurance',
             ))
             ->add('insurancePolicyNumber', null, array(
-                'label' => 'Insurance policy number',
+                'label' => 'Numéro de police d\'insurance',
             ))
             ->add('insurancePolicyExpirationDate', 'sonata_type_date_picker', array(
-                'label'       => 'Insurance policy expiration date',
+                'label'       => 'Date d\'expiration de la police d\'insurance',
                 'format'      => 'dd/MM/yyyy',
-                'dp_language' => 'en',
+                'dp_language' => 'fr',
             ))
             ->end()
             ->with('Documents')

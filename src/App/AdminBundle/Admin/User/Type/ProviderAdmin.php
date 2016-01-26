@@ -43,10 +43,6 @@ class ProviderAdmin extends BaseUserAdmin
                 ))
             ->end()
             ->with('Profile')
-                ->add('group', null, array(
-                    'label'    => 'Groupe',
-                    'required' => false,
-                ))
                 ->add('file', 'file', $pictureOptions)
                 ->add('description', 'textarea', array(
                     'attr' => array(
@@ -87,6 +83,7 @@ class ProviderAdmin extends BaseUserAdmin
             ->add('providerInformation', 'sonata_type_admin', array(
                 'by_reference' => false,
                 'required'     => false,
+                'label'        => 'Informations du provider'
             ), array(
                 'edit'       => 'inline',
                 'admin_code' => 'sonata.admin.provider_information',
