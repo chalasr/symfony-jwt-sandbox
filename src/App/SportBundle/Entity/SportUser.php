@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class SportUser extends AbstractEntity
 {
     /**
-     * @ORM\Column(type="decimal", precision=2, scale=1)
+     * @ORM\Column(type="float")
      */
     protected $price = 0;
 

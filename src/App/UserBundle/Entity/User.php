@@ -29,6 +29,13 @@ class User extends BaseUser
     protected $id;
 
     /**
+     * @JMS\Groups({"api"})
+     * @JMS\SerializedName("email")
+     * @JMS\Accessor(getter="getEmail", setter="setEmail")
+     */
+    protected $realEmail;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="facebook_id", type="string", nullable=true)
@@ -132,6 +139,14 @@ class User extends BaseUser
      * @JMS\Accessor(getter="getFullGroup", setter="")
      */
     protected $fullGroup;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     * @JMS\SerializedName("sports")
+     * @JMS\Accessor(getter="getFullSports", setter="")
+     */
+    protected $fullSports;
 
     /**
      * @ORM\Column(name="created_at", type="date", nullable=true)
@@ -682,5 +697,25 @@ class User extends BaseUser
     public function getSportUsers()
     {
         return $this->sportUsers;
+    }
+
+    /**
+     * Get sports list.
+     *
+     * @return array
+     */
+    public function getFullSports()
+    {
+        $this->sports = array();
+
+        foreach($this->sportUsers as $sportUser) {
+            $sport = $sportUser->getSport();
+            $this->sports[] = array(
+                'id'   => $sport->getId(),
+                'name' => $sport->getName(),
+            );
+        }
+
+        return $this->sports;
     }
 }

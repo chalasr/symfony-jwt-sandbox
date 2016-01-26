@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use App\Util\Validator\Constraints\Email;
+use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\SerializationContext;
 
 /**
  * Mangages users from mobile app in API.
@@ -311,19 +313,17 @@ class SecurityController extends Controller
      */
     protected function generateToken($user, $statusCode = 200)
     {
+        $serializer = SerializerBuilder::create()->build();
+        $context = SerializationContext::create()
+            ->setGroups(array('api'))
+            ->setSerializeNull(true);
+
         $response = array(
             'token'         => $this->get('lexik_jwt_authentication.jwt_manager')->create($user),
             'refresh_token' => $this->attachRefreshToken($user),
         );
 
-        $response['user'] = array(
-            'id'               => $user->getId(),
-            'username'         => $user->getUsername(),
-            'first_name'       => $user->getFirstname(),
-            'last_name'        => $user->getLastname(),
-            'email'            => $user->getEmail(),
-            'roles'            => $user->getRoles(),
-        );
+        $response['user'] = json_decode($serializer->serialize($user, 'json', $context));
 
         if (null !== $user->getFacebookId()) {
             $response['user']['facebook_id'] = $user->getFacebookId();

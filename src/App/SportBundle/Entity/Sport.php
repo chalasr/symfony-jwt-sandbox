@@ -22,7 +22,6 @@ class Sport extends AbstractEntity implements EntityInterface
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     *
      * @JMS\Expose
      */
     protected $name;
