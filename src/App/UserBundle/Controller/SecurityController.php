@@ -2,20 +2,20 @@
 
 namespace App\UserBundle\Controller;
 
+use App\Util\Validator\Constraints\Email;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 use Goutte\Client as HttpClient;
+use JMS\Serializer\SerializationContext;
+use JMS\Serializer\SerializerBuilder;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use App\Util\Validator\Constraints\Email;
-use JMS\Serializer\SerializerBuilder;
-use JMS\Serializer\SerializationContext;
 
 /**
  * Mangages users from mobile app in API.
@@ -100,7 +100,7 @@ class SecurityController extends Controller
      */
     public function authenticateUserAction()
     {
-        /** Virtual method originally handled by Security Component */
+        /* Virtual method originally handled by Security Component */
     }
 
     /**
@@ -225,7 +225,7 @@ class SecurityController extends Controller
         $user->setPlainPassword($password);
         $userManager->updateUser($user);
 
-        /* Get User informations for e-mail content **/
+        /* Retrieves User informations for e-mail content **/
         $query = $this->getEntityManager()
             ->createQueryBuilder('u')
             ->select('u.firstname', 'u.lastname', 'u.email')
@@ -243,7 +243,7 @@ class SecurityController extends Controller
             'password'  => $password,
         );
 
-        /* Prepare an email with data **/
+        /* Prepares an email with data **/
         $message = \Swift_Message::newInstance()
             ->setSubject('Sportroops reset password')
             ->setFrom('support@sportroops.com')
@@ -253,10 +253,10 @@ class SecurityController extends Controller
                 'text/html'
             );
 
-        /* Send email **/
+        /* Sends email **/
         $this->get('mailer')->send($message);
 
-        /* Serialize data before return response **/
+        /* Serializes data before return response **/
         $view = View::create()
            ->setStatusCode(200)
            ->setData($user);

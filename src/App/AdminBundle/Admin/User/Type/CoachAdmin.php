@@ -3,8 +3,8 @@
 namespace App\AdminBundle\Admin\User\Type;
 
 use App\AdminBundle\Admin\User\BaseUserAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 
 class CoachAdmin extends BaseUserAdmin
 {
@@ -20,7 +20,7 @@ class CoachAdmin extends BaseUserAdmin
             ->add('coachInformation', 'sonata_type_admin', array(
                 'by_reference' => false,
                 'required'     => false,
-                'label'       => false
+                'label'        => false,
             ), array(
                 'edit'       => 'inline',
                 'admin_code' => 'sonata.admin.coach_information',

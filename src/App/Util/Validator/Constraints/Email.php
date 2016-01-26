@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Util\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraints\Email as BaseEmailConstraint;

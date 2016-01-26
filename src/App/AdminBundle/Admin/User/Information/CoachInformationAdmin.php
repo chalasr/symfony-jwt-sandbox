@@ -32,14 +32,13 @@ class CoachInformationAdmin extends Admin
                     'required'       => false,
                     'by_reference'   => false,
                     'multiple'       => true,
-                    'label'          => 'Document'
+                    'label'          => 'Document',
                 ), array(
-                    'edit' => 'inline',
-                    'inline' => 'table'
+                    'edit'   => 'inline',
+                    'inline' => 'table',
                 ))
             ->end()
         ;
         // SNIP;
-
     }
 }

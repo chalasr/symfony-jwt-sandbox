@@ -3,7 +3,6 @@
 namespace App\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation as Http;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Controller of Sport admin class.

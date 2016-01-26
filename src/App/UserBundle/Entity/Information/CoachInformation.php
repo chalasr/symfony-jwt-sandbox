@@ -45,7 +45,6 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      */
     protected $insurancePolicyExpirationDate;
 
-
     /**
      * @ORM\OneToMany(targetEntity="CoachDocument", mappedBy="coachInformation")
      */
@@ -190,7 +189,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Add document
+     * Add document.
      *
      * @param \App\UserBundle\Entity\Information\CoachDocument $document
      *
@@ -205,7 +204,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Remove document
+     * Remove document.
      *
      * @param \App\UserBundle\Entity\Information\CoachDocument $document
      */
@@ -215,7 +214,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get documents
+     * Get documents.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -225,7 +224,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Add coachDocument
+     * Add coachDocument.
      *
      * @param \App\UserBundle\Entity\Information\CoachDocument $coachDocument
      *
@@ -239,7 +238,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Remove coachDocument
+     * Remove coachDocument.
      *
      * @param \App\UserBundle\Entity\Information\CoachDocument $coachDocument
      */
@@ -249,7 +248,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get coachDocuments
+     * Get coachDocuments.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

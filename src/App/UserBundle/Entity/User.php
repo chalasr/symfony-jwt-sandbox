@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table(name="fos_user_user")
  * @ORM\Entity
- *
  */
 class User extends BaseUser
 {
@@ -80,7 +79,6 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="picture", type="string", nullable=true)
-     *
      */
     protected $picture;
 
@@ -125,11 +123,10 @@ class User extends BaseUser
      */
     protected $dateOfBirth;
 
-     /**
-      * @ORM\ManyToOne(targetEntity="Group")
-      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
-      *
-      */
+    /**
+     * @ORM\ManyToOne(targetEntity="Group")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
+     */
     protected $group;
 
     /**
@@ -232,13 +229,13 @@ class User extends BaseUser
     }
 
     /**
-     * Returns a string representation
+     * Returns a string representation.
      *
      * @return string
      */
     public function __toString()
     {
-        return $this->getEmail() ?: 'New'. $this->getFullGroup();
+        return $this->getEmail() ?: 'New'.$this->getFullGroup();
     }
 
     /**
@@ -254,8 +251,8 @@ class User extends BaseUser
 
     public function setEmail($email)
     {
-         parent::setEmail($email);
-         $this->setUsername($email);
+        parent::setEmail($email);
+        $this->setUsername($email);
     }
 
     /**
@@ -365,9 +362,9 @@ class User extends BaseUser
     /**
      * Check if user has follower.
      *
-     * @param  AppUserBundleEntityUser $follower
+     * @param AppUserBundleEntityUser $follower
      *
-     * @return boolean
+     * @return bool
      */
     public function hasFollower(\App\UserBundle\Entity\User $follower)
     {
@@ -416,13 +413,12 @@ class User extends BaseUser
         }
     }
 
-
     /**
      * Check if user has follower.
      *
-     * @param  AppUserBundleEntityUser $follower
+     * @param AppUserBundleEntityUser $follower
      *
-     * @return boolean
+     * @return bool
      */
     public function hasFollow(\App\UserBundle\Entity\User $follow)
     {
@@ -440,7 +436,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
      *
@@ -454,7 +450,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -464,7 +460,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set group
+     * Set group.
      *
      * @param \App\UserBundle\Entity\Group $group
      *
@@ -478,7 +474,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get group
+     * Get group.
      *
      * @return \App\UserBundle\Entity\Group
      */
@@ -498,24 +494,24 @@ class User extends BaseUser
     }
 
     /**
-     * Hook on pre-persist operations
+     * Hook on pre-persist operations.
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime;
-        $this->updatedAt = new \DateTime;
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     /**
-     * Hook on pre-update operations
+     * Hook on pre-update operations.
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime;
+        $this->updatedAt = new \DateTime();
     }
 
     /**
-     * Returns the gender list
+     * Returns the gender list.
      *
      * @return array
      */
@@ -529,7 +525,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set address
+     * Set address.
      *
      * @param string $address
      *
@@ -543,7 +539,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get address
+     * Get address.
      *
      * @return string
      */
@@ -553,7 +549,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @param string $city
      *
@@ -567,7 +563,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get city
+     * Get city.
      *
      * @return string
      */
@@ -577,9 +573,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set zipcode
+     * Set zipcode.
      *
-     * @param integer $zipcode
+     * @param int $zipcode
      *
      * @return User
      */
@@ -591,9 +587,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get zipcode
+     * Get zipcode.
      *
-     * @return integer
+     * @return int
      */
     public function getZipcode()
     {
@@ -601,7 +597,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set picture
+     * Set picture.
      *
      * @param string $picture
      *
@@ -615,7 +611,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get picture
+     * Get picture.
      *
      * @return string
      */
@@ -625,7 +621,7 @@ class User extends BaseUser
     }
 
     /**
-     * Sets the creation date
+     * Sets the creation date.
      *
      * @param \DateTime|null $createdAt
      */
@@ -635,7 +631,7 @@ class User extends BaseUser
     }
 
     /**
-     * Returns the creation date
+     * Returns the creation date.
      *
      * @return \DateTime|null
      */
@@ -645,7 +641,7 @@ class User extends BaseUser
     }
 
     /**
-     * Sets the last update date
+     * Sets the last update date.
      *
      * @param \DateTime|null $updatedAt
      */
@@ -655,7 +651,7 @@ class User extends BaseUser
     }
 
     /**
-     * Returns the last update date
+     * Returns the last update date.
      *
      * @return \DateTime|null
      */
@@ -665,7 +661,7 @@ class User extends BaseUser
     }
 
     /**
-     * Add sportUser
+     * Add sportUser.
      *
      * @param \App\SportBundle\Entity\SportUser $sportUser
      *
@@ -680,7 +676,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove sportUser
+     * Remove sportUser.
      *
      * @param \App\SportBundle\Entity\SportUser $sportUser
      */
@@ -690,7 +686,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get sportUsers
+     * Get sportUsers.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -708,7 +704,7 @@ class User extends BaseUser
     {
         $this->sports = array();
 
-        foreach($this->sportUsers as $sportUser) {
+        foreach ($this->sportUsers as $sportUser) {
             $sport = $sportUser->getSport();
             $this->sports[] = array(
                 'id'   => $sport->getId(),

@@ -40,7 +40,7 @@ class BaseUserAdmin extends AbstractAdmin
         // avoid security field to be exported
         return array_filter(parent::getExportFields(), function ($v) {
             return !in_array($v, array(
-                'password', 'salt', 'usernameCanonical', 'emailCanonical', 'locked',	'expired',	'expiresAt',	'confirmationToken',	'passwordRequestedAt',	'roles',	'credentialsExpired',	'credentialsExpireAt', 'createdAt',	'updatedAt', 'lastLogin'
+                'password', 'salt', 'usernameCanonical', 'emailCanonical', 'locked',    'expired',    'expiresAt',    'confirmationToken',    'passwordRequestedAt',    'roles',    'credentialsExpired',    'credentialsExpireAt', 'createdAt',    'updatedAt', 'lastLogin',
             ));
         });
     }
@@ -120,7 +120,7 @@ class BaseUserAdmin extends AbstractAdmin
             ->with('Général')
                 ->add('email')
                 ->add('plainPassword', 'password', array(
-                    'label' => 'Mot de passe',
+                    'label'    => 'Mot de passe',
                     'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
                 ))
             ->end()
@@ -136,10 +136,10 @@ class BaseUserAdmin extends AbstractAdmin
                 ->add('lastname', null, array('required' => false, 'label' => 'Nom'))
                 ->add('description', 'textarea', array(
                     'attr' => array(
-                        'maxlength' => 500
+                        'maxlength' => 500,
                     ),
                     'required' => false,
-                    'label'    => 'Déscription'
+                    'label'    => 'Déscription',
                 ))
                 ->add('gender', 'sonata_user_gender', array(
                     'required'           => false,
@@ -148,19 +148,19 @@ class BaseUserAdmin extends AbstractAdmin
                 ))
                 ->add('phone', null, array('required' => false))
                 ->add('address', 'textarea', array(
-                    'label' => 'Adresse',
+                    'label'    => 'Adresse',
                     'required' => false,
-                    'attr'    => array(
-                      'maxlength' => 500
+                    'attr'     => array(
+                      'maxlength' => 500,
                     ),
                 ))
                 ->add('city', null, array(
-                    'label' => 'Ville',
-                    'required' => false
+                    'label'    => 'Ville',
+                    'required' => false,
                 ))
                 ->add('zipcode', null, array(
-                    'label' => 'Code postal',
-                    'required' => false
+                    'label'    => 'Code postal',
+                    'required' => false,
                 ))
             ->end()
             ->with('Sports')
@@ -168,11 +168,11 @@ class BaseUserAdmin extends AbstractAdmin
               'by_reference'       => false,
               // 'cascade_validation' => true,
               'required' => false,
-              'label' => 'Sports'
-            ),array(
-              'edit' => 'inline',
-              'inline' => 'table',
-              'admin_code' => 'app_admin.admin.sport_user'
+              'label'    => 'Sports',
+            ), array(
+              'edit'       => 'inline',
+              'inline'     => 'table',
+              'admin_code' => 'app_admin.admin.sport_user',
             ))
             ->end()
         ;
@@ -198,7 +198,7 @@ class BaseUserAdmin extends AbstractAdmin
      */
     public function preUpdate($user)
     {
-        $user->setUpdatedAt(new \DateTime);
+        $user->setUpdatedAt(new \DateTime());
         $user->setUsername($user->getEmail());
         $this->getUserManager()->updateCanonicalFields($user);
         $this->getUserManager()->updatePassword($user);
@@ -212,7 +212,7 @@ class BaseUserAdmin extends AbstractAdmin
 
     public function prePersist($user)
     {
-        $user->setCreatedAt(new \DateTime);
+        $user->setCreatedAt(new \DateTime());
         $user->setUsername($user->getEmail());
         $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
 
@@ -293,7 +293,6 @@ class BaseUserAdmin extends AbstractAdmin
 
         return $this;
     }
-
 
     /**
      * In user _create, pre-set Group depending on type of

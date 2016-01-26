@@ -2,33 +2,33 @@
 
 namespace App\Util\EventListener;
 
-use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Doctrine\ORM\EntityManager;
-use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\SerializationContext;
+use JMS\Serializer\SerializerBuilder;
+use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 
 /**
-* JWTResponseListener.
-*
-* @author Robin Chalas <rchalas@sutunam.com>
-*/
+ * JWTResponseListener.
+ *
+ * @author Robin Chalas <rchalas@sutunam.com>
+ */
 class JwtResponseListener
 {
     /**
-    * Constructor.
-    *
-    * @param EntityManager $entityManager
-    */
+     * Constructor.
+     *
+     * @param EntityManager $entityManager
+     */
     public function __construct(EntityManager $entityManager)
     {
         $this->em = $entityManager;
     }
 
     /**
-    * Add public data to the authentication response.
-    *
-    * @param AuthenticationSuccessEvent $event
-    */
+     * Add public data to the authentication response.
+     *
+     * @param AuthenticationSuccessEvent $event
+     */
     public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
     {
         $data = $event->getData();
@@ -44,5 +44,5 @@ class JwtResponseListener
         $data['user'] = $user;
 
         $event->setData($data);
-     }
+    }
 }

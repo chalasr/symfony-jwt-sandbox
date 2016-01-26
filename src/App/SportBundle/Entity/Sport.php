@@ -258,7 +258,7 @@ class Sport extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Add sportUser
+     * Add sportUser.
      *
      * @param \App\SportBundle\Entity\SportUser $sportUser
      *
@@ -272,7 +272,7 @@ class Sport extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Remove sportUser
+     * Remove sportUser.
      *
      * @param \App\SportBundle\Entity\SportUser $sportUser
      */
@@ -282,7 +282,7 @@ class Sport extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get sportUsers
+     * Get sportUsers.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

@@ -38,7 +38,7 @@ class ProviderAdmin extends BaseUserAdmin
             ->with('Général')
                 ->add('email')
                 ->add('plainPassword', 'password', array(
-                    'label' => 'Mot de passe',
+                    'label'    => 'Mot de passe',
                     'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
                 ))
             ->end()
@@ -46,17 +46,17 @@ class ProviderAdmin extends BaseUserAdmin
                 ->add('file', 'file', $pictureOptions)
                 ->add('description', 'textarea', array(
                     'attr' => array(
-                        'maxlength' => 500
+                        'maxlength' => 500,
                     ),
                     'required' => false,
-                    'label'    => 'Déscription'
+                    'label'    => 'Déscription',
                 ))
                 ->add('phone', null, array('required' => false))
                 ->add('address', 'textarea', array(
-                    'label' => 'Adresse',
+                    'label'    => 'Adresse',
                     'required' => false,
-                    'attr'    => array(
-                      'maxlength' => 500
+                    'attr'     => array(
+                      'maxlength' => 500,
                     ),
                 ))
                 ->add('city', null, array('label' => 'Ville', 'required' => false))
@@ -83,7 +83,7 @@ class ProviderAdmin extends BaseUserAdmin
             ->add('providerInformation', 'sonata_type_admin', array(
                 'by_reference' => false,
                 'required'     => false,
-                'label'        => 'Informations du provider'
+                'label'        => 'Informations du provider',
             ), array(
                 'edit'       => 'inline',
                 'admin_code' => 'sonata.admin.provider_information',

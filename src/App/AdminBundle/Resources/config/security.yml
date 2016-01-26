@@ -9,3 +9,11 @@ sonata_user_admin_security_check:
 sonata_user_admin_security_logout:
     path: /logout
     defaults: { _controller: AppAdminBundle:AdminSecurity:logout}
+
+sonata_user_admin_profile_edit:
+    path: /profile/edit
+    defaults: { _controller: AppAdminBundle:AdminSecurity:editProfile}
+
+sonata_user_admin_profile_show:
+    path: /profile
+    defaults: { _controller: AppAdminBundle:AdminSecurity:showProfile}

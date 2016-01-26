@@ -2,26 +2,34 @@
 
 namespace App\AdminBundle\Controller;
 
+use App\Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
 use FOS\UserBundle\Model\UserInterface;
 use Sonata\UserBundle\Controller\AdminSecurityController as BaseSecurityController;
-use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\SecurityContext;
 
+/**
+ * Custom AdminSecurityController extending from SonataUserBundle.
+ *
+ * @author Robin Chalas <rchalas@sutunam.com>
+ */
 class AdminSecurityController extends BaseSecurityController
 {
+    use CanCheckPermissions;
+
     /**
      * Overridden login.
      *
-     * @return RedirectResponse|resource
+     * @return RedirectResponse|Response
      */
     public function loginAction(Request $request = null)
     {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->getCurrentUser();
 
         if ($user instanceof UserInterface) {
             $this->container->get('session')->getFlashBag()->set('sonata_user_error', 'sonata_user_already_authenticated');
-            $url = $this->container->get('router')->generate('sonata_user_profile_show');
+            $url = $this->container->get('router')->generate('admin_user_profile_show');
 
             return new RedirectResponse($url);
         }
@@ -39,17 +47,14 @@ class AdminSecurityController extends BaseSecurityController
         }
 
         if ($error) {
-            // TODO: this is a potential security risk (see http://trac.symfony-project.org/ticket/9523)
             $error = $error->getMessage();
         }
-        // last username entered by the user
-        // $lastUsername = (null === $session) ? '' : $session->get(SecurityContext::LAST_USERNAME);
 
         $csrfToken = $this->container->has('form.csrf_provider')
         ? $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate')
         : null;
 
-        if ($this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if (true === $this->isAdmin()) {
             $refererUri = $request->server->get('HTTP_REFERER');
 
             return new RedirectResponse(
@@ -61,11 +66,39 @@ class AdminSecurityController extends BaseSecurityController
 
         return $this->container->get('templating')->renderResponse(
             'AppAdminBundle:Security:login.html.twig', array(
-                // 'last_username' => $lastUsername,
                 'error'         => $error,
                 'csrf_token'    => $csrfToken,
                 'base_template' => $this->container->get('sonata.admin.pool')->getTemplate('layout'),
-                'admin_pool'    => $this->container->get('sonata.admin.pool')
-            ));
+                'admin_pool'    => $this->container->get('sonata.admin.pool'),
+            )
+        );
+    }
+
+    /**
+     * Show current user's profile.
+     *
+     * @return Response Forwarded Response instance
+     */
+    public function showProfileAction()
+    {
+        return $this->forward('SonataAdminBundle:CRUD:show', array(
+            'id'            => $this->getCurrentUser()->getId(),
+            '_sonata_admin' => 'sonata.user.admin.user',
+            '_sonata_name'  => 'admin_app_user_user_show',
+        ));
+    }
+
+    /**
+     * Edit user profile.
+     *
+     * @return Response Forwarded Response instance
+     */
+    public function editProfileAction()
+    {
+        return $this->forward('SonataAdminBundle:CRUD:edit', array(
+            'id'            => $this->getCurrentUser()->getId(),
+            '_sonata_admin' => 'sonata.user.admin.user',
+            '_sonata_name'  => 'admin_app_user_user_edit',
+        ));
     }
 }

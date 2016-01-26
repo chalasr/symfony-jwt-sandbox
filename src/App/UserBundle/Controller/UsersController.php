@@ -4,16 +4,18 @@ namespace App\UserBundle\Controller;
 
 use App\UserBundle\Entity\User;
 use App\Util\Controller\AbstractRestController as BaseController;
+use App\Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
 
 class UsersController extends BaseController
 {
+    use CanCheckPermissions;
+
     /**
      * Lists all users.
      *
@@ -126,6 +128,8 @@ class UsersController extends BaseController
      * @param ParamFetcher $paramFetcher
      *
      * @return array
+     *
+     * @throws UnprocessableEntityHttpException If the association does not exist
      */
     public function removeFollowerAction($follower)
     {
@@ -205,6 +209,8 @@ class UsersController extends BaseController
      * @param ParamFetcher $paramFetcher
      *
      * @return array
+     *
+     * @throws UnprocessableEntityHttpException If the association does not exist
      */
     public function removeFollowedAction($followed)
     {
@@ -298,15 +304,13 @@ class UsersController extends BaseController
     /**
      * Check if user is the current user.
      *
-     * @param  User $user
+     * @param User $user
      *
-     * @return boolean
+     * @return bool
      */
     protected function isCurrentUser($user)
     {
-        $currentUser = $this->getCurrentUser();
-
-        return $user->getId() == $currentUser->getId();
+        return $user->getId() == $this->getCurrentUser()->getId();
     }
 
     /**
@@ -327,7 +331,7 @@ class UsersController extends BaseController
      *
      * @return array
      */
-    public function updatePicture($id,Request $request)
+    public function updatePicture($id, Request $request)
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
@@ -347,5 +351,4 @@ class UsersController extends BaseController
 
         return $user;
     }
-
 }

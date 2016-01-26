@@ -26,7 +26,6 @@ class CoachDocument extends AbstractEntity implements EntityInterface
      */
     protected $type;
 
-
     /**
      * @var string
      *
@@ -40,7 +39,6 @@ class CoachDocument extends AbstractEntity implements EntityInterface
      */
     protected $coachInformation;
 
-
     /**
      * To string.
      *
@@ -52,7 +50,7 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
      *
@@ -66,7 +64,7 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -76,7 +74,7 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set urlFile
+     * Set urlFile.
      *
      * @param string $urlFile
      *
@@ -90,7 +88,7 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get urlFile
+     * Get urlFile.
      *
      * @return string
      */
@@ -100,7 +98,7 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set coachInformation
+     * Set coachInformation.
      *
      * @param \App\UserBundle\Entity\Information\CoachInformation $coachInformation
      *
@@ -114,7 +112,7 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get coachInformation
+     * Get coachInformation.
      *
      * @return \App\UserBundle\Entity\Information\CoachInformation
      */
@@ -122,6 +120,4 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     {
         return $this->coachInformation;
     }
-
-
 }

@@ -3,10 +3,8 @@
 namespace App\SportBundle\Entity;
 
 use App\Util\Doctrine\Entity\AbstractEntity;
-use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * SportUser.
@@ -15,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="sport_user")
  *
  * @JMS\ExclusionPolicy("all")
-*/
+ */
 class SportUser extends AbstractEntity
 {
     /**
@@ -36,7 +34,7 @@ class SportUser extends AbstractEntity
     protected $user;
 
     /**
-     * Set price
+     * Set price.
      *
      * @param string $price
      *
@@ -50,7 +48,7 @@ class SportUser extends AbstractEntity
     }
 
     /**
-     * Get price
+     * Get price.
      *
      * @return string
      */
@@ -60,7 +58,7 @@ class SportUser extends AbstractEntity
     }
 
     /**
-     * Set sport
+     * Set sport.
      *
      * @param \App\SportBundle\Entity\Sport $sport
      *
@@ -74,7 +72,7 @@ class SportUser extends AbstractEntity
     }
 
     /**
-     * Get sport
+     * Get sport.
      *
      * @return \App\SportBundle\Entity\Sport
      */
@@ -84,7 +82,7 @@ class SportUser extends AbstractEntity
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \App\UserBundle\Entity\User $user
      *
@@ -98,7 +96,7 @@ class SportUser extends AbstractEntity
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \App\UserBundle\Entity\User
      */
