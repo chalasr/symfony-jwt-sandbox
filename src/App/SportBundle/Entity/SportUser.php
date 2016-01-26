@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @JMS\ExclusionPolicy("all")
 */
-class SportUser extends AbstractEntity implements EntityInterface
+class SportUser extends AbstractEntity
 {
     /**
      * @ORM\Column(type="decimal", precision=2, scale=1)
@@ -34,11 +34,6 @@ class SportUser extends AbstractEntity implements EntityInterface
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $user;
-
-
-    public function __toString(){
-        return "SportUser";
-    }
 
     /**
      * Set price

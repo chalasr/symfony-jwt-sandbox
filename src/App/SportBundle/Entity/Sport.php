@@ -55,7 +55,7 @@ class Sport extends AbstractEntity implements EntityInterface
      */
     protected $tags;
 
-    /** @ORM\OneToMany(targetEntity="SportUser", mappedBy="sport") */
+    /** @ORM\OneToMany(targetEntity="SportUser", mappedBy="sport", cascade={"persist"}) */
     protected $sportUsers;
 
     /**
@@ -70,6 +70,7 @@ class Sport extends AbstractEntity implements EntityInterface
     {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sportUsers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

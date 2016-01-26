@@ -173,7 +173,7 @@ class User extends BaseUser
      */
     protected $coachInformation;
 
-    /** @ORM\OneToMany(targetEntity="App\SportBundle\Entity\SportUser", mappedBy="user") */
+    /** @ORM\OneToMany(targetEntity="\App\SportBundle\Entity\SportUser", mappedBy="user", cascade={"persist"}) */
     protected $sportUsers;
 
     /**
@@ -234,6 +234,7 @@ class User extends BaseUser
         parent::__construct();
         $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sportUsers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function setEmail($email)
@@ -657,6 +658,7 @@ class User extends BaseUser
      */
     public function addSportUser(\App\SportBundle\Entity\SportUser $sportUser)
     {
+        $sportUser->setUser($this);
         $this->sportUsers[] = $sportUser;
 
         return $this;
