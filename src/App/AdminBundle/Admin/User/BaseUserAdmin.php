@@ -133,6 +133,7 @@ class BaseUserAdmin extends AbstractAdmin
                     'label'       => 'Date de naissance',
                     'format'      => 'dd/MM/yyyy',
                     'dp_language' => 'fr',
+                    'required'    => false,
                 ))
                 ->add('file', 'file', $pictureOptions)
                 ->add('firstname', null, array('required' => false, 'label' => 'Prénom'))

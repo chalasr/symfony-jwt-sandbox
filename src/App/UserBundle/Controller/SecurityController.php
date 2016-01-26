@@ -215,7 +215,7 @@ class SecurityController extends Controller
 
         if (null === $user = $userManager->findUserBy(['email' => $data['email']])) {
             throw new UnprocessableEntityHttpException(
-                sprintf('Unable to find user with email \'%s\'', $data['email'])
+                sprintf('Aucun utilisateur trouvable avec email \'%s\'', $data['email'])
             );
         }
 
@@ -280,16 +280,19 @@ class SecurityController extends Controller
         $user = $userManager->createUser();
         $user->setUsername($data['name']);
         $user->setEmail($data['email']);
-        $user->addGroup($group);
+        $user->setGroup($group);
         $user->setEnabled(true);
+        $user->setCreatedAt(new \DateTime());
         $user->setPlainPassword($data['password']);
 
         if (true === $isOAuth) {
             $user->setFacebookId($data['id']);
         }
+
         if (isset($data['first_name'])) {
             $user->setFirstname($data['first_name']);
         }
+
         if (isset($data['last_name'])) {
             $user->setLastname($data['last_name']);
         }
@@ -391,7 +394,7 @@ class SecurityController extends Controller
         $client = new HttpClient();
 
         $endpoint = sprintf('https://graph.facebook.com/me?access_token=%s', $facebookAccessToken);
-        $request    = $client->request('GET', $endpoint);
+        $request = $client->request('GET', $endpoint);
         $response = json_decode($client->getResponse()->getContent());
 
         return $response->id == $facebookId;
