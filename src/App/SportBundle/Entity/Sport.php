@@ -55,6 +55,9 @@ class Sport extends AbstractEntity implements EntityInterface
      */
     protected $tags;
 
+    /** @ORM\OneToMany(targetEntity="SportUser", mappedBy="sport") */
+    protected $sportUsers;
+
     /**
      * @var string
      */
@@ -252,5 +255,39 @@ class Sport extends AbstractEntity implements EntityInterface
     public function getTags()
     {
         return $this->tags;
+    }
+
+    /**
+     * Add sportUser
+     *
+     * @param \App\SportBundle\Entity\SportUser $sportUser
+     *
+     * @return Sport
+     */
+    public function addSportUser(\App\SportBundle\Entity\SportUser $sportUser)
+    {
+        $this->sportUsers[] = $sportUser;
+
+        return $this;
+    }
+
+    /**
+     * Remove sportUser
+     *
+     * @param \App\SportBundle\Entity\SportUser $sportUser
+     */
+    public function removeSportUser(\App\SportBundle\Entity\SportUser $sportUser)
+    {
+        $this->sportUsers->removeElement($sportUser);
+    }
+
+    /**
+     * Get sportUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSportUsers()
+    {
+        return $this->sportUsers;
     }
 }

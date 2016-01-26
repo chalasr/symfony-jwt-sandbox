@@ -173,6 +173,9 @@ class User extends BaseUser
      */
     protected $coachInformation;
 
+    /** @ORM\OneToMany(targetEntity="App\SportBundle\Entity\SportUser", mappedBy="user") */
+    protected $sportUsers;
+
     /**
      * @var string
      */
@@ -643,5 +646,39 @@ class User extends BaseUser
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Add sportUser
+     *
+     * @param \App\SportBundle\Entity\SportUser $sportUser
+     *
+     * @return User
+     */
+    public function addSportUser(\App\SportBundle\Entity\SportUser $sportUser)
+    {
+        $this->sportUsers[] = $sportUser;
+
+        return $this;
+    }
+
+    /**
+     * Remove sportUser
+     *
+     * @param \App\SportBundle\Entity\SportUser $sportUser
+     */
+    public function removeSportUser(\App\SportBundle\Entity\SportUser $sportUser)
+    {
+        $this->sportUsers->removeElement($sportUser);
+    }
+
+    /**
+     * Get sportUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSportUsers()
+    {
+        return $this->sportUsers;
     }
 }
