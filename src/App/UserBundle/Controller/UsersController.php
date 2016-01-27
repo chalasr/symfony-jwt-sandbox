@@ -317,7 +317,7 @@ class UsersController extends BaseController
      * update user picture.
      *
      * @Rest\Post("/users/{id}/picture", requirements={"id" = "\d+"})
-     *@Rest\RequestParam(name="file", requirements="[^/]+", nullable=true, description="picture")
+     * @Rest\RequestParam(name="file", requirements="[^/]+", nullable=true, description="picture")
      * @ApiDoc(
      * 	section="User",
      * 	resource=true,
@@ -348,6 +348,27 @@ class UsersController extends BaseController
             $em->flush();
         }
 
+        return $user;
+    }
+
+    /**
+     * Get User current.
+     * @Rest\Get("/users/current")
+     * @Rest\View(serializerGroups={"api"})
+     * @ApiDoc(
+     * 	 section="User",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	     200="OK",
+     * 	     401="Unauthorized (this resource require an access token)",
+     * 	 },
+     * )
+     *
+     * @return array
+     */
+    public function getCurrentUserAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
         return $user;
     }
 }
