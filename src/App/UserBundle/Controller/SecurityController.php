@@ -2,14 +2,12 @@
 
 namespace App\UserBundle\Controller;
 
-use App\Util\Validator\Constraints\Email;
+use App\Util\Validator\CanValidateTrait as CanValidate;
+use App\Util\Controller\EntitySerializableTrait as EntitySerializable;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
-use Goutte\Client as HttpClient;
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerBuilder;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,34 +23,36 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
  */
 class SecurityController extends Controller
 {
-    protected $rules;
+    use EntitySerializable, CanValidate;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->rules = [
+        $this->rules = array(
             'register' => ['password', 'email'],
             'basic'    => ['password', 'email'],
             'oauth'    => ['id', 'email', 'access_token'],
-        ];
+        );
     }
 
     /**
      * Register new user and process authentication.
      *
+     * @Rest\View(serializerGroups={"api"})
+     *
      * @ApiDoc(
      * 	 section="Security",
      *     parameters={
-     * 	     {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
+     *   	     {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
      *         {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
      *         {"name"="first_name", "dataType"="string", "required"=false, "description"="First name"},
      *         {"name"="last_name", "dataType"="string", "required"=false, "description"="Last name"},
      *     },
      * 	 statusCodes={
      * 	     201="Created (new user created, token generated, returns them with refresh_token)",
-     * 	     422="Unprocessable Entity (missing parameters)"
+     * 	     422="Unprocessable Entity (missing/invalid parameters | email already exists)"
      * 	 },
      * )
      */
@@ -61,24 +61,14 @@ class SecurityController extends Controller
         $data = $request->request->all();
         $userManager = $this->getUserManager();
 
-        if (false == $this->validator($data, 'register')) {
-            return $this->missingParametersError('register');
+        $this->check($data, 'register')) {
+            return $this->validationFailedException();
         }
 
         if ($userManager->findUserByEmail($data['email']) !== null) {
-            return $this->resourceAlreadyExistsError('email', $data['email']);
-        }
+            $this->errors = array('email' => 'already exists');
 
-        $firstname = isset($data['first_name']) ? $data['fist_name'] : null;
-        $lastname = isset($data['last_name']) ? $data['last_name'] : null;
-
-        if (null !== $firstname && null !== $lastname) {
-            $data['name'] = sprintf('%s %s', $firstname, $lastname);
-        } else {
-            $data['name'] = $data['email'];
-        }
-        if ($userManager->findUserByUsername($data['name']) !== null) {
-            return $this->resourceAlreadyExistsError('name', $data['name']);
+            return $this->validationFailedException();
         }
 
         return $this->generateToken($this->createUser($data), 201);
@@ -96,6 +86,7 @@ class SecurityController extends Controller
      * 	  statusCodes={
      * 	     200="OK (user authenticated, returns token, refresh_token and available user infos)",
      * 	     422="Unprocessable Entity (missing parameters)"
+     * 	     401="Unauthorized (bad credentials)"
      * 	  },
      * )
      */
@@ -123,7 +114,7 @@ class SecurityController extends Controller
         $guestId = 'guest@sportroops.fr';
 
         if (null === $guest = $userManager->findUserByEmail($guestId)) {
-            throw new NotFoundHttpException('Impossible de trouver l\'utilisateur guest (email \'guest@sportroops.fr\')');
+            throw new NotFoundHttpException('Impossible de trouver l\'utilisateur guest (email: \'guest@sportroops.fr\')');
         }
 
         return $this->generateToken($guest);
@@ -144,7 +135,7 @@ class SecurityController extends Controller
      * 	 statusCodes={
      * 	     200="OK (token generated for existing user, returns it with available user infos ans refresh_token)",
      * 	     201="Created (new user created, access token generated, returns them with refresh_token)",
-     * 	     422="Unprocessable Entity (missing parameters)"
+     * 	     422="Unprocessable Entity (missing parameters | invalid email|facebook_id)"
      * 	 },
      * )
      */
@@ -152,14 +143,12 @@ class SecurityController extends Controller
     {
         $data = $request->request->all();
 
-        if (false == $this->validator($data, 'oauth')) {
-            return $this->missingParametersError('authenticate', 'oauth');
+        if (false === $this->check($data, 'oauth')) {
+            return $this->validationFailedException();
         }
 
         if (false === $this->isValidFacebookAccount($data['id'], $data['access_token'])) {
-            return new JsonResponse(array(
-                'message' => 'The given facebook_id has no valid account associated',
-            ), 401);
+            throw new UnprocessableEntityHttpException('The given facebook_id has no valid account associated');
         }
 
         $userManager = $this->getUserManager();
@@ -208,7 +197,11 @@ class SecurityController extends Controller
      * 	section="Security",
      * 	parameters={
      *     {"name"="email", "dataType"="string", "required"=true, "description"="User email"}
-     *   }
+     *  },
+     *  statusCodes={
+     *  	 204="No Content (success)",
+     *  	 404="Not Found (user does not exist)"
+     *  }
      * )
      *
      * @param ParamFetcher $paramFetcher
@@ -221,7 +214,7 @@ class SecurityController extends Controller
         $data = $request->request->all();
 
         if (null === $user = $userManager->findUserBy(['email' => $data['email']])) {
-            throw new UnprocessableEntityHttpException(
+            throw new NotFoundHttpException(
                 sprintf('Aucun utilisateur trouvable avec email \'%s\'', $data['email'])
             );
         }
@@ -280,11 +273,11 @@ class SecurityController extends Controller
     protected function createUser($data, $isOAuth = false)
     {
         $userManager = $this->getUserManager();
-
         $em = $this->getEntityManager();
         $group = $em->getRepository('AppUserBundle:Group')->findOneByName(['name' => 'Sportroopers']);
+
         $user = $userManager->createUser();
-        $user->setUsername($data['name']);
+        $user->setUsername($data['email']);
         $user->setEmail($data['email']);
         $user->setGroup($group);
         $user->setEnabled(true);
@@ -317,45 +310,17 @@ class SecurityController extends Controller
      */
     protected function generateToken($user, $statusCode = 200)
     {
-        $serializer = SerializerBuilder::create()->build();
-        $context = SerializationContext::create()
-            ->setGroups(array('api'))
-            ->setSerializeNull(true);
-
         $response = array(
             'token'         => $this->get('lexik_jwt_authentication.jwt_manager')->create($user),
             'refresh_token' => $this->attachRefreshToken($user),
+            'user'          => json_decode($this->serialize($user, array('groups' => ['api']))),
         );
-
-        $response['user'] = json_decode($serializer->serialize($user, 'json', $context));
 
         if (null !== $user->getFacebookId()) {
             $response['user']['facebook_id'] = $user->getFacebookId();
         }
 
         return new JsonResponse($response, $statusCode);
-    }
-
-    /**
-     * Validates data based on $rules.
-     *
-     * @param array  $data
-     * @param string $type Origin of signup
-     *
-     * @return bool $validator
-     */
-    protected function validator($data, $type = 'basic')
-    {
-        $validator = true;
-
-        foreach ($this->rules[$type] as $prop) {
-            if (false === isset($data[$prop]) || null == $data[$prop]) {
-                $validator = false;
-                break;
-            }
-        }
-
-        return $validator;
     }
 
     /**
@@ -393,47 +358,15 @@ class SecurityController extends Controller
      *
      * @return bool Facebook account status
      */
-    protected function isValidFacebookAccount($facebookId, $facebookAccessToken)
+    protected function isValidFacebookAccount($id, $accessToken)
     {
-        $client = new HttpClient();
+        $client = new \Goutte\Client();
 
-        $endpoint = sprintf('https://graph.facebook.com/me?access_token=%s', $facebookAccessToken);
+        $endpoint = sprintf('https://graph.facebook.com/me?access_token=%s', $accessToken);
         $request = $client->request('GET', $endpoint);
         $response = json_decode($client->getResponse()->getContent());
 
-        return $response->id == $facebookId;
-    }
-
-    /**
-     * Returns an error caused by valid format but not good data.
-     *
-     * @param string $action
-     * @param string $user
-     *
-     * @return JsonResponse Unprocessable entity 422
-     */
-    protected function missingParametersError($action, $origin = null)
-    {
-        $required = implode('\', \'', array_values($this->rules[null == $origin ? $action : $origin]));
-
-        return new JsonResponse(array(
-            'message' => sprintf('Some mandatory parameters are missing for %s user (required: \'%s\')', $action, $required),
-        ), 422);
-    }
-
-    /**
-     * Returns an error caused by already existing entity on try to create a new.
-     *
-     * @param string $prop The property used
-     * @param string $val  Value of property
-     *
-     * @return JsonResponse Unprocessable entity 422
-     */
-    protected function resourceAlreadyExistsError($prop, $val)
-    {
-        return new JsonResponse(array(
-            'message' => sprintf('Un utilisateur existe déjà avec %s \'%s\'', $prop, $val),
-        ), 422);
+        return $response->id == $id;
     }
 
     /**
