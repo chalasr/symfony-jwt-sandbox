@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * User.
  *
  * @ORM\Table(name="fos_user_user")
+ * @JMS\ExclusionPolicy("all")
  * @ORM\Entity
  */
 class User extends BaseUser
@@ -29,6 +30,7 @@ class User extends BaseUser
 
     /**
      * @JMS\Groups({"api"})
+     * @JMS\Expose
      * @JMS\SerializedName("email")
      * @JMS\Accessor(getter="getEmail", setter="setEmail")
      */
@@ -65,6 +67,8 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
      */
     protected $description;
 
@@ -72,6 +76,9 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="gender", type="string", nullable=true)
+     *
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
      */
     protected $gender;
 
@@ -86,6 +93,8 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="phone", type="string", nullable=true)
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
      */
     protected $phone;
 
@@ -119,9 +128,22 @@ class User extends BaseUser
     /**
      * @var string
      *
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     * @JMS\SerializedName("birthday")
      * @ORM\Column(name="date_of_birth", type="date", nullable=true)
      */
     protected $dateOfBirth;
+
+    /**
+     * @var int
+     *
+     * @JMS\Groups({"api"})
+     * @JMS\Expose
+     * @JMS\SerializedName("age")
+     * @JMS\Accessor(getter="getAge", setter="")
+     */
+    protected $age;
 
     /**
      * @ORM\ManyToOne(targetEntity="Group")
@@ -133,25 +155,27 @@ class User extends BaseUser
      * @JMS\Expose
      * @JMS\Groups({"api"})
      * @JMS\SerializedName("group")
-     * @JMS\Accessor(getter="getFullGroup", setter="")
+     * @JMS\Accessor(getter="getVirtualGroup", setter="")
      */
-    protected $fullGroup;
+    protected $virtualGroup;
 
     /**
      * @JMS\Expose
      * @JMS\Groups({"api"})
      * @JMS\SerializedName("sports")
-     * @JMS\Accessor(getter="getFullSports", setter="")
+     * @JMS\Accessor(getter="getVirtualSports", setter="")
      */
-    protected $fullSports;
+    protected $virtualSports;
 
     /**
      * @ORM\Column(name="created_at", type="date", nullable=true)
+     * @JMS\Expose
      */
     protected $createdAt;
 
     /**
      * @ORM\Column(name="updated_at", type="date", nullable=true)
+     * @JMS\Expose
      */
     protected $updatedAt;
 
@@ -167,11 +191,27 @@ class User extends BaseUser
     protected $followers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="followers")
-     *
      * @JMS\Expose
+     * @JMS\Groups({"api"})
+     * @JMS\SerializedName("followers")
+     * @JMS\Accessor(getter="getVirtualFollowers", setter="")
+     *
+     * @var array
      */
+    protected $virtualFollowers;
+
+    /** @ORM\ManyToMany(targetEntity="User", mappedBy="followers") */
     protected $follows;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     * @JMS\SerializedName("follows")
+     * @JMS\Accessor(getter="getVirtualFollows", setter="")
+     *
+     * @var array
+     */
+    protected $virtualFollows;
 
     /**
      * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\Information\ProviderInformation", cascade={"persist"})
@@ -235,7 +275,7 @@ class User extends BaseUser
      */
     public function __toString()
     {
-        return $this->getEmail() ?: 'New'.$this->getFullGroup();
+        return $this->getEmail() ?: 'New'.$this->getVirtualGroup();
     }
 
     /**
@@ -249,10 +289,18 @@ class User extends BaseUser
         $this->sportUsers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * Set email.
+     *
+     * @param string $email
+     */
     public function setEmail($email)
     {
         parent::setEmail($email);
+
         $this->setUsername($email);
+
+        return $this;
     }
 
     /**
@@ -368,7 +416,7 @@ class User extends BaseUser
      */
     public function hasFollower(\App\UserBundle\Entity\User $follower)
     {
-        return $this->getFollowers()->contains($follower);
+        return $this->followers->contains($follower);
     }
 
     /**
@@ -379,6 +427,25 @@ class User extends BaseUser
     public function getFollowers()
     {
         return $this->followers;
+    }
+
+    /**
+     * Get serialized follows.
+     *
+     * @return array
+     */
+    public function getVirtualFollowers()
+    {
+        $this->virtualFollows = array();
+
+        foreach ($this->followers as $follower) {
+            $this->virtualFollows[] = array(
+                'id'    => $follower->getId(),
+                'email' => $follower->getEmail(),
+            );
+        }
+
+        return $this->virtualFollows;
     }
 
     /**
@@ -422,7 +489,7 @@ class User extends BaseUser
      */
     public function hasFollow(\App\UserBundle\Entity\User $follow)
     {
-        return $this->getFollows()->contains($follow);
+        return $this->follows->contains($follow);
     }
 
     /**
@@ -433,6 +500,25 @@ class User extends BaseUser
     public function getFollows()
     {
         return $this->follows;
+    }
+
+    /**
+     * Get serialized follows.
+     *
+     * @return array
+     */
+    public function getVirtualFollows()
+    {
+        $this->virtualFollows = array();
+
+        foreach ($this->follows as $follow) {
+            $this->virtualFollows[] = array(
+                'id'    => $follow->getId(),
+                'email' => $follow->getEmail(),
+            );
+        }
+
+        return $this->virtualFollows;
     }
 
     /**
@@ -488,7 +574,7 @@ class User extends BaseUser
      *
      * @return string
      */
-    public function getFullGroup()
+    public function getVirtualGroup()
     {
         return $this->getGroup() ? $this->getGroup()->getName() : '';
     }
@@ -700,7 +786,7 @@ class User extends BaseUser
      *
      * @return array
      */
-    public function getFullSports()
+    public function getVirtualSports()
     {
         $this->sports = array();
 
@@ -713,5 +799,23 @@ class User extends BaseUser
         }
 
         return $this->sports;
+    }
+
+    /**
+     * Get age from birhdate.
+     */
+    public function getAge()
+    {
+        $today = new \DateTime();
+        $birthdate = $this->getDateOfBirth();
+
+        if (null === $birthdate) {
+            return null;
+        }
+
+        $interval = $today->diff($birthdate);
+        $this->age = $interval->format('%y years');
+
+        return $this->age;
     }
 }
