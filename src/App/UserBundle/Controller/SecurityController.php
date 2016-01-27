@@ -119,7 +119,7 @@ class SecurityController extends Controller
     {
         $userManager = $this->getUserManager();
 
-        $guest = $userManager->findUserByUsername('guest');
+        $guest = $userManager->findUserByEmail('guest@sportroops.fr');
 
         return $this->generateToken($guest);
     }
@@ -258,7 +258,7 @@ class SecurityController extends Controller
 
         /* Serializes data before return response **/
         $view = View::create()->setStatusCode(204);
-        
+
         return $this->get('fos_rest.view_handler')->handle($view);
     }
 
