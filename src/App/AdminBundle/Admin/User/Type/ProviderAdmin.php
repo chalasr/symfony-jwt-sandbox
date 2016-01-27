@@ -96,9 +96,8 @@ class ProviderAdmin extends BaseUserAdmin
         $filterMapper
             ->add('id')
             ->add('email')
-            ->add('group')
             ->add('providerInformation.name', null, array(
-                'label' => 'Nom du provider',
+                'label' => 'Nom',
             ))
             ->add('zipcode')
         ;
@@ -112,7 +111,13 @@ class ProviderAdmin extends BaseUserAdmin
         $listMapper
             ->addIdentifier('id', null, array('label' => 'Id'))
             ->addIdentifier('email')
+            ->add('providerInformation.name', null, array(
+              'label' => 'Nom',
+            ))
+            ->add('group')
+            ->add('address')
             ->add('phone', null, array('label' => 'Téléphone'))
+            ->add('zipcode')
             ->add('createdAt', 'date', array('label' => 'Créé le', 'format' => 'd/m/Y'))
             ->add('_action', 'actions', [
                 'actions' => array(
