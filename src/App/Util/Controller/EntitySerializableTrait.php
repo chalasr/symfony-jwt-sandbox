@@ -3,6 +3,7 @@
 namespace App\Util\Controller;
 
 use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\SerializationContext;
 
 /**
  * Add serialization features.
@@ -15,14 +16,31 @@ trait EntitySerializableTrait
      * Serialize an entity or other object in given format.
      *
      * @param object $object The object to serialize
-     * @param string $format FOSRestBundle default format
+     * @param array $options Context options
      *
      * @return string The serialized object
      */
-    protected function serialize($object, $format = 'json')
+    protected function serialize($object, array $options = array())
     {
-        $serializer = SerializerBuilder::create()->build();
+        $default = array(
+            'format'         => 'json',
+            'serialize_null' => true,
+        );
 
-        return $serializer->serialize($object, $format);
+        // Prepare Serializer and Context
+        $options = array_replace($default, $options);
+        $serializer = SerializerBuilder::create()->build();
+        $context = SerializationContext::create();
+
+        // Serialize properties with a null value
+        $context->setSerializeNull($options['serialize_null']);
+
+        // Add groups to Serializer
+        if (true === isset($options['groups'])) {
+            $groups = $options['groups'];
+            $context->setGroups( ! is_array($groups) ? [$groups] : $groups);
+        }
+
+        return $serializer->serialize($object, $options['format'], $context);
     }
 }

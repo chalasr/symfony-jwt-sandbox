@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table(name="fos_user_user")
  * @JMS\ExclusionPolicy("all")
- * @JMS\AccessorOrder("custom", custom = {"id", "email", "firstname", "lastname","group", "birthday", "gender", "phone", "address", "description", "city", "zipcode", "age", "sports", "followers", "follows", "created_at", "updated_at"})
+ * @JMS\AccessorOrder("custom", custom = {"id", "email", "firstname", "lastname", "group", "gender", "phone", "address", "description", "city", "zipcode", "age", "birthday", "sports", "followers", "follows", "created_at", "updated_at"})
  * @ORM\Entity
  */
 class User extends BaseUser
@@ -127,11 +127,11 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @JMS\Expose
      * @JMS\Groups({"api"})
      * @JMS\SerializedName("birthday")
      * @JMS\Accessor(getter="getBirthday")
      * @JMS\Type("integer")
+     * @JMS\Expose
      * @ORM\Column(name="date_of_birth", type="date", nullable=true)
      */
     protected $dateOfBirth;

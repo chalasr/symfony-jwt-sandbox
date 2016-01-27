@@ -3,17 +3,18 @@
 namespace App\Util\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerBuilder;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use App\Util\Controller\EntitySerializableTrait as EntitySerializable;
 
 /**
- * JWTResponseListener.
+ * JWT Response listener.
  *
  * @author Robin Chalas <rchalas@sutunam.com>
  */
 class JwtResponseListener
 {
+    use EntitySerializable;
+
     /**
      * Constructor.
      *
@@ -34,12 +35,11 @@ class JwtResponseListener
         $data = $event->getData();
         $username = $event->getUser() ? $event->getUser()->getUsername() : '';
         $userManager = $this->em->getRepository('AppUserBundle:User');
-
         $user = $userManager->findOneBy(['username' => $username]);
-        $serializer = SerializerBuilder::create()->build();
-        $context = SerializationContext::create()->setSerializeNull(true)->setGroups(array('api'));
-        $user = json_decode($serializer->serialize($user, 'json', $context));
-        $data['user'] = $user;
+
+        $data['user'] = json_decode(
+            $this->serialize($user, array('groups' => ['api']))
+        );
 
         $event->setData($data);
     }
