@@ -29,7 +29,7 @@ trait CanCheckPermissionsTrait
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         if (null === $user) {
-            throw new NotFoundHttpException("Aucun utilisateur connecté");
+            throw new NotFoundHttpException('Aucun utilisateur connecté');
         }
 
         return $user;

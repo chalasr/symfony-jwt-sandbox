@@ -2,8 +2,8 @@
 
 namespace App\Util\Controller;
 
-use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\SerializationContext;
+use JMS\Serializer\SerializerBuilder;
 
 /**
  * Add serialization features.
@@ -15,8 +15,8 @@ trait EntitySerializableTrait
     /**
      * Serialize an entity or other object in given format.
      *
-     * @param object $object The object to serialize
-     * @param array $options Context options
+     * @param object $object  The object to serialize
+     * @param array  $options Context options
      *
      * @return string The serialized object
      */
@@ -38,7 +38,7 @@ trait EntitySerializableTrait
         // Add groups to Serializer
         if (true === isset($options['groups'])) {
             $groups = $options['groups'];
-            $context->setGroups( ! is_array($groups) ? [$groups] : $groups);
+            $context->setGroups(!is_array($groups) ? [$groups] : $groups);
         }
 
         return $serializer->serialize($object, $options['format'], $context);
