@@ -257,10 +257,8 @@ class SecurityController extends Controller
         $this->get('mailer')->send($message);
 
         /* Serializes data before return response **/
-        $view = View::create()
-           ->setStatusCode(200)
-           ->setData($user);
-
+        $view = View::create()->setStatusCode(204);
+        
         return $this->get('fos_rest.view_handler')->handle($view);
     }
 
