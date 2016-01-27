@@ -363,28 +363,6 @@ class UsersController extends BaseController
     }
 
     /**
-     * Get User current.
-     * @Rest\Get("/users/current")
-     * @Rest\View(serializerGroups={"api"})
-     * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK",
-     * 	     401="Unauthorized (this resource require an access token)",
-     * 	 },
-     * )
-     *
-     * @return array
-     */
-    public function getCurrentUserAction()
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-        return $user;
-    }
-
-
-    /**
      * Lists all followers.
      *
      * @Rest\Get("/users/{id}/sports", requirements={"id" = "\d+"})
