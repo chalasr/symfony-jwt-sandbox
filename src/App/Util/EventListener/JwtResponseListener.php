@@ -37,9 +37,7 @@ class JwtResponseListener
 
         $user = $userManager->findOneBy(['username' => $username]);
         $serializer = SerializerBuilder::create()->build();
-        $context = SerializationContext::create()
-            ->setGroups(array('api'))
-            ->setSerializeNull(true);
+        $context = SerializationContext::create()->setSerializeNull(true)->setGroups(array('api'));
         $user = json_decode($serializer->serialize($user, 'json', $context));
         $data['user'] = $user;
 

@@ -26,7 +26,13 @@ trait CanCheckPermissionsTrait
      */
     protected function getCurrentUser()
     {
-        return $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        if (null === $user) {
+            throw new NotFoundHttpException("Aucun utilisateur connecté");
+        }
+
+        return $user;
     }
 
     /**
@@ -51,5 +57,17 @@ trait CanCheckPermissionsTrait
         $rolesManager = $this->getRolesManager();
 
         return $rolesManager->isGranted('ROLE_GUEST') && !$rolesManager->isGranted('ROLE_ADMIN');
+    }
+
+    /**
+     * Check if user is the current user.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    protected function isCurrentUser($user)
+    {
+        return $user->getId() == $this->getCurrentUser()->getId();
     }
 }
