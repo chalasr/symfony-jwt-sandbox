@@ -371,4 +371,31 @@ class UsersController extends BaseController
         $user = $this->get('security.context')->getToken()->getUser();
         return $user;
     }
+
+
+    /**
+     * Lists all followers.
+     *
+     * @Rest\Get("/users/{id}/sports", requirements={"id" = "\d+"})
+     * @ApiDoc(
+     * 	 section="User",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	     200="OK (list all followers)",
+     * 	     401="Unauthorized (this resource require an access token)",
+     * 	     404="User not found"
+     * 	 },
+     * )
+     *
+     * @return object
+     */
+    public function getSports($id)
+    {
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('AppUserBundle:User');
+        $user = $this->findUserOrFail($id);
+
+        return $user->getFullSports();
+    }
+
 }
