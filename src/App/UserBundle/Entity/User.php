@@ -167,17 +167,27 @@ class User extends BaseUser
      */
     protected $virtualSports;
 
-    /**
-     * @ORM\Column(name="created_at", type="date", nullable=true)
-     * @JMS\Expose
-     */
+    /** @ORM\Column(name="created_at", type="date", nullable=true) */
     protected $createdAt;
 
-    /**
-     * @ORM\Column(name="updated_at", type="date", nullable=true)
-     * @JMS\Expose
-     */
+    /** @ORM\Column(name="updated_at", type="date", nullable=true) */
     protected $updatedAt;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     * @JMS\SerializedName("created_at")
+     * @JMS\Accessor(getter="getCreatedAtTimestamp", setter="")
+     */
+    protected $createdAtTimestamp;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     * @JMS\SerializedName("updated_at")
+     * @JMS\Accessor(getter="getUpdatedAtTimestamp", setter="")
+     */
+    protected $updatedAtTimestamp;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="follows")
@@ -735,6 +745,16 @@ class User extends BaseUser
     }
 
     /**
+     * Returns the creation date.
+     *
+     * @return int|null
+     */
+    public function getCreatedAtTimestamp()
+    {
+        return $this->createdAt ? $this->createdAt->getTimestamp() : null;
+    }
+
+    /**
      * Sets the last update date.
      *
      * @param \DateTime|null $updatedAt
@@ -742,6 +762,16 @@ class User extends BaseUser
     public function setUpdatedAt(\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * Returns the creation date.
+     *
+     * @return int|null
+     */
+    public function getUpdatedAtTimestamp()
+    {
+        return $this->updatedAt ? $this->updatedAt->getTimestamp(): null;
     }
 
     /**
