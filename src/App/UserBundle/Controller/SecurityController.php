@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
@@ -110,6 +111,7 @@ class SecurityController extends Controller
      *    section="Security",
      * 	  statusCodes={
      * 	     200="OK (user authenticated as guest, returns token and refresh_token)",
+     * 	     404="Not found (guest user not found)"
      * 	  },
      * )
      *
@@ -118,8 +120,11 @@ class SecurityController extends Controller
     public function authenticateGuestAction()
     {
         $userManager = $this->getUserManager();
+        $guestId = 'guest@sportroops.fr';
 
-        $guest = $userManager->findUserByEmail('guest@sportroops.fr');
+        if (null === $guest = $userManager->findUserByEmail($guestId)) {
+            throw new NotFoundHttpException('Impossible de trouver l\'utilisateur guest (email \'guest@sportroops.fr\')');
+        }
 
         return $this->generateToken($guest);
     }

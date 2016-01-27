@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table(name="fos_user_user")
  * @JMS\ExclusionPolicy("all")
+ * @JMS\AccessorOrder("custom", custom = {"id", "email", "firstname", "lastname","group", "birthday", "gender", "phone", "address", "description", "city", "zipcode", "age", "sports", "followers", "follows", "created_at", "updated_at"})
  * @ORM\Entity
  */
 class User extends BaseUser
@@ -31,10 +32,8 @@ class User extends BaseUser
     /**
      * @JMS\Groups({"api"})
      * @JMS\Expose
-     * @JMS\SerializedName("email")
-     * @JMS\Accessor(getter="getEmail", setter="setEmail")
      */
-    protected $realEmail;
+    protected $email;
 
     /**
      * @var string
@@ -131,6 +130,8 @@ class User extends BaseUser
      * @JMS\Expose
      * @JMS\Groups({"api"})
      * @JMS\SerializedName("birthday")
+     * @JMS\Accessor(getter="getBirthday")
+     * @JMS\Type("integer")
      * @ORM\Column(name="date_of_birth", type="date", nullable=true)
      */
     protected $dateOfBirth;
@@ -855,5 +856,15 @@ class User extends BaseUser
         $this->age = (int) $interval->format('%y');
 
         return $this->age;
+    }
+
+    /**
+     * Get Birthday as timestamp.
+     *
+     * @return int
+     */
+    public function getBirthday()
+    {
+        return null === $this->getDateOfBirth() ? null : $this->getDateOfBirth()->getTimestamp();
     }
 }
