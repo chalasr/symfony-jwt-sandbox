@@ -86,6 +86,10 @@ nelmio_api_doc:
 jms_serializer:
     metadata:
         auto_detection: true
+        directories:
+            FOSUserBundle:
+                path: "@AppUserBundle/Resources/config/serializer/FOS"
+                namespace_prefix: FOS\UserBundle
 
 
 # JWT Auth

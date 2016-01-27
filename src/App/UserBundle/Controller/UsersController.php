@@ -21,6 +21,7 @@ class UsersController extends BaseController
      * Lists all users.
      *
      * @Rest\Get("/users")
+     * @Rest\View(serializerGroups={"api"})
      * @ApiDoc(
      * 	 section="User",
      * 	 resource=true,
@@ -36,11 +37,8 @@ class UsersController extends BaseController
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
-        $query = $repo->createQueryBuilder('u')
-            ->select('u.id', 'u.email', 'u.firstname', 'u.lastname')
-            ->getQuery();
 
-        return $query->getResult();
+        return $repo->findAll();
     }
 
     /**
@@ -54,19 +52,17 @@ class UsersController extends BaseController
      * 	 statusCodes={
      * 	     200="OK",
      * 	     401="Unauthorized (this resource require an access token)",
-     * 	     422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
+     * 	     404="User not found)"
      * 	 },
      * )
      *
      * @return array
+     *
+     * @throws NotFoundHttpException If the user does not exist
      */
     public function getUserAction($id)
     {
-        $em = $this->getEntityManager();
-        $repo = $em->getRepository('AppUserBundle:User');
-        $user = $repo->find($id);
-
-        return $user;
+        return $this->findUserOrFail($id);;
     }
 
     /**
@@ -122,7 +118,8 @@ class UsersController extends BaseController
      *   },
      * 	 statusCodes={
      * 	   204="No Content (follower successfully deleted)",
-     * 	   401="Unauthorized (this resource require an access token)"
+     * 	   401="Unauthorized (this resource require an access token)",
+     * 	   422="Follow does not exist"
      * 	 },
      * )
      *
@@ -147,6 +144,32 @@ class UsersController extends BaseController
         $em->flush();
 
         return $this->handleView(204);
+    }
+
+    /**
+     * Get current user.
+     *
+     * @Rest\Get("/users/current")
+     * @Rest\View(serializerGroups={"api"})
+     * @ApiDoc(
+     * 	 section="User",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	     200="OK",
+     * 	     401="Unauthorized (this resource require an access token)",
+     * 	     422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
+     * 	 },
+     * )
+     *
+     * @return array
+     *
+     * @throws NotFoundHttpException If the user does not exist
+     */
+    public function getCurrentUserAction()
+    {
+        $user = $this->getCurrentUser();
+
+        return $this->getUserAction($user->getId());
     }
 
     /**
@@ -303,18 +326,6 @@ class UsersController extends BaseController
     }
 
     /**
-     * Check if user is the current user.
-     *
-     * @param User $user
-     *
-     * @return bool
-     */
-    protected function isCurrentUser($user)
-    {
-        return $user->getId() == $this->getCurrentUser()->getId();
-    }
-
-    /**
      * update user picture.
      *
      * @Rest\Post("/users/{id}/picture", requirements={"id" = "\d+"})
@@ -352,30 +363,10 @@ class UsersController extends BaseController
         return $user;
     }
 
+
     /**
-     * Get User current.
-     * @Rest\Get("/users/current")
-     * @Rest\View(serializerGroups={"api"})
-     * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK",
-     * 	     401="Unauthorized (this resource require an access token)",
-     * 	 },
-     * )
+     * Lists all sports from user.
      *
-     * @return array
-     */
-    public function getCurrentUserAction()
-    {
-        $user = $this->getCurrentUser();
-        return $user;
-    }
-
-
-    /**
-     * Lists all sport.
      *
      * @Rest\Get("/users/{id}/sports", requirements={"id" = "\d+"})
      * @ApiDoc(
@@ -400,7 +391,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * add sport.
+     * Add sport to a User.
      *
      * @Rest\Post("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
@@ -453,7 +444,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * add sport.
+     * Remove sport from a User.
      *
      * @Rest\Delete("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
