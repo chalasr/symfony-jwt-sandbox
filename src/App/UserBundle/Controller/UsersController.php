@@ -317,7 +317,7 @@ class UsersController extends BaseController
      * update user picture.
      *
      * @Rest\Post("/users/{id}/picture", requirements={"id" = "\d+"})
-     * @Rest\RequestParam(name="file",description="Picture")
+     *@Rest\RequestParam(name="file", requirements="[^/]+", nullable=true, description="picture")
      * @ApiDoc(
      * 	section="User",
      * 	resource=true,
@@ -337,7 +337,6 @@ class UsersController extends BaseController
         $repo = $em->getRepository('AppUserBundle:User');
 
         $picture = $request->files->get('file');
-
         $user = $this->findUserOrFail($id);
         $user->setFile($picture);
 
