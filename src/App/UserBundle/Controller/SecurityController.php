@@ -2,8 +2,8 @@
 
 namespace App\UserBundle\Controller;
 
-use App\Util\Validator\CanValidateTrait as CanValidate;
 use App\Util\Controller\EntitySerializableTrait as EntitySerializable;
+use App\Util\Validator\CanValidateTrait as CanValidate;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;

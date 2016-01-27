@@ -2,6 +2,7 @@
 
 namespace App\UserBundle\Controller;
 
+use App\SportBundle\Entity;
 use App\UserBundle\Entity\User;
 use App\Util\Controller\AbstractRestController as BaseController;
 use App\Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
@@ -11,7 +12,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use App\SportBundle\Entity;
 
 class UsersController extends BaseController
 {
@@ -62,7 +62,7 @@ class UsersController extends BaseController
      */
     public function getUserAction($id)
     {
-        return $this->findUserOrFail($id);;
+        return $this->findUserOrFail($id);
     }
 
     /**
@@ -363,7 +363,6 @@ class UsersController extends BaseController
         return $user;
     }
 
-
     /**
      * Lists all sports from user.
      *
@@ -404,14 +403,15 @@ class UsersController extends BaseController
      * 	     404="User not found"
      * 	 },
      * )
-     * @param int $id
+     *
+     * @param int          $id
      * @param ParamFetcher $paramFetcher
      *
      * @return array
      */
-    public function addSport($id,ParamFetcher $paramFetcher)
+    public function addSport($id, ParamFetcher $paramFetcher)
     {
-        $sport_id= $paramFetcher->get("sport_id");
+        $sport_id = $paramFetcher->get('sport_id');
 
         #get user
         $user = $this->findUserOrFail($id);
@@ -425,14 +425,13 @@ class UsersController extends BaseController
             throw new NotFoundHttpException(sprintf('Unable to find sport with id %d', $sport_id));
         }
 
-
         #set and update sportuser
-        $su=$em->getRepository('AppSportBundle:SportUser')->findBy(array('user'=>$id,'sport'=>$sport_id));
-        if($su){
-            throw new NotFoundHttpException(sprintf('Exist sport %d with user %d',$sport_id,$id));
+        $su = $em->getRepository('AppSportBundle:SportUser')->findBy(array('user' => $id, 'sport' => $sport_id));
+        if ($su) {
+            throw new NotFoundHttpException(sprintf('Exist sport %d with user %d', $sport_id, $id));
         }
 
-        $sportUser=new Entity\SportUser();
+        $sportUser = new Entity\SportUser();
         $sportUser->setUser($user);
         $sportUser->setSport($sport);
 
@@ -440,7 +439,6 @@ class UsersController extends BaseController
         $em->flush();
 
         return $sportUser;
-
     }
 
     /**
@@ -457,27 +455,26 @@ class UsersController extends BaseController
      * 	     404="User not found"
      * 	 },
      * )
-     * @param int $id
+     *
+     * @param int          $id
      * @param ParamFetcher $paramFetcher
      *
      * @return array
      */
-    public function removeSport($id,ParamFetcher $paramFetcher)
+    public function removeSport($id, ParamFetcher $paramFetcher)
     {
-        $sport_id= $paramFetcher->get("sport_id");
+        $sport_id = $paramFetcher->get('sport_id');
         $em = $this->getEntityManager();
-        $sportUsers=$em->getRepository('AppSportBundle:SportUser')->findBy(array('user'=>$id,'sport'=>$sport_id));
+        $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findBy(array('user' => $id, 'sport' => $sport_id));
 
-        if(!$sportUsers){
-            throw new NotFoundHttpException(sprintf('Unable to find sport %d with user %d',$sport_id,$id));
+        if (!$sportUsers) {
+            throw new NotFoundHttpException(sprintf('Unable to find sport %d with user %d', $sport_id, $id));
         }
-        foreach($sportUsers as $sportUser){
-
+        foreach ($sportUsers as $sportUser) {
             $em->remove($sportUser);
             $em->flush();
         }
+
         return $sportUser;
-
     }
-
 }

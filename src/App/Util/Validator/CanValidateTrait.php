@@ -40,7 +40,7 @@ trait CanValidateTrait
             }
 
             // Is not blank
-            if ( ! $data[$prop] || null == $data[$prop]) {
+            if (!$data[$prop] || null == $data[$prop]) {
                 $validator = false;
                 $this->errors[$prop] = 'empty';
                 unset($data[$prop]);
@@ -56,14 +56,13 @@ trait CanValidateTrait
             }
 
             // Break validation at first error if lazy is false
-            if ( ! empty($this->errors) && false === $lazy) {
+            if (!empty($this->errors) && false === $lazy) {
                 return false;
             }
         }
 
         return empty($this->errors);
     }
-
 
       /**
        * Validation failed.

@@ -772,7 +772,7 @@ class User extends BaseUser
      */
     public function getUpdatedAtTimestamp()
     {
-        return $this->updatedAt ? $this->updatedAt->getTimestamp(): null;
+        return $this->updatedAt ? $this->updatedAt->getTimestamp() : null;
     }
 
     /**
@@ -849,7 +849,7 @@ class User extends BaseUser
         $birthdate = $this->getDateOfBirth();
 
         if (null === $birthdate) {
-            return null;
+            return;
         }
 
         $interval = $today->diff($birthdate);

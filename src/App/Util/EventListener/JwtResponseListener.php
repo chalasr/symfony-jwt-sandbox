@@ -2,9 +2,9 @@
 
 namespace App\Util\EventListener;
 
+use App\Util\Controller\EntitySerializableTrait as EntitySerializable;
 use Doctrine\ORM\EntityManager;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use App\Util\Controller\EntitySerializableTrait as EntitySerializable;
 
 /**
  * JWT Response listener.
