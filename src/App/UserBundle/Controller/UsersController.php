@@ -348,7 +348,7 @@ class UsersController extends BaseController
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
 
-        $picture = $request->files->get('file');
+        $picture = $paramFetcher->get('file');
         $user = $this->findUserOrFail($id);
         $user->setFile($picture);
 

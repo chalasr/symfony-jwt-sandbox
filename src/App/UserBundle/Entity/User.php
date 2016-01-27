@@ -440,8 +440,12 @@ class User extends BaseUser
 
         foreach ($this->followers as $follower) {
             $this->virtualFollows[] = array(
-                'id'    => $follower->getId(),
-                'email' => $follower->getEmail(),
+              'id'        => $follower->getId(),
+              'email'     => $follower->getEmail(),
+              'firstname' => $follower->getFirstname(),
+              'lastname'  => $follower->getLastname(),
+              'group'     => $follower->getVirtualGroup(),
+              'age'       => $follower->getAge(),
             );
         }
 
@@ -513,8 +517,12 @@ class User extends BaseUser
 
         foreach ($this->follows as $follow) {
             $this->virtualFollows[] = array(
-                'id'    => $follow->getId(),
-                'email' => $follow->getEmail(),
+                'id'        => $follow->getId(),
+                'email'     => $follow->getEmail(),
+                'firstname' => $follow->getFirstname(),
+                'lastname'  => $follow->getLastname(),
+                'group'     => $follow->getVirtualGroup(),
+                'age'       => $follow->getAge(),
             );
         }
 
