@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use App\Util\Validator\Constraints\Email;
 
 /**
  * Mangages users from mobile app in API.
@@ -85,7 +86,7 @@ class SecurityController extends Controller
      *     },
      * 	  statusCodes={
      * 	     200="OK (user authenticated, returns token, refresh_token and available user infos)",
-     * 	     422="Unprocessable Entity (missing parameters)"
+     * 	     422="Unprocessable Entity (missing parameters)",
      * 	     401="Unauthorized (bad credentials)"
      * 	  },
      * )
