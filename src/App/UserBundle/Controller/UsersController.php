@@ -9,10 +9,17 @@ use App\Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
+/**
+ * Users Controller.
+ *
+ * @author Pham Xuan Thuy <phamxuanthuy@sutunam.com>
+ * @author Robin Chalas <rchalas@sutunam.com>
+ */
 class UsersController extends BaseController
 {
     use CanCheckPermissions;
@@ -22,6 +29,7 @@ class UsersController extends BaseController
      *
      * @Rest\Get("/users")
      * @Rest\View(serializerGroups={"api"})
+     *
      * @ApiDoc(
      * 	 section="User",
      * 	 resource=true,
@@ -398,7 +406,7 @@ class UsersController extends BaseController
      * 	 section="User",
      * 	 resource=true,
      * 	 statusCodes={
-     * 	     200="OK (list all followers)",
+     * 	     204="No content (success)",
      * 	     401="Unauthorized (this resource require an access token)",
      * 	     404="User not found"
      * 	 },
@@ -411,7 +419,7 @@ class UsersController extends BaseController
      */
     public function addSport($id, ParamFetcher $paramFetcher)
     {
-        $sport_id = $paramFetcher->get('sport_id');
+        $sportId = $paramFetcher->get('sport_id');
 
         #get user
         $user = $this->findUserOrFail($id);
@@ -419,17 +427,9 @@ class UsersController extends BaseController
         #get sport
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Sport');
-        $sport = $repo->find($sport_id);
-
-        if (null === $sport) {
-            throw new NotFoundHttpException(sprintf('Unable to find sport with id %d', $sport_id));
-        }
-
+        $sport = $repo->findOrFail($sportId);
         #set and update sportuser
-        $su = $em->getRepository('AppSportBundle:SportUser')->findBy(array('user' => $id, 'sport' => $sport_id));
-        if ($su) {
-            throw new NotFoundHttpException(sprintf('Exist sport %d with user %d', $sport_id, $id));
-        }
+        $su = $em->getRepository('AppSportBundle:SportUser')->findOneByAndFail(array('user' => $id, 'sport' => $sportId));
 
         $sportUser = new Entity\SportUser();
         $sportUser->setUser($user);
@@ -438,7 +438,7 @@ class UsersController extends BaseController
         $em->persist($sportUser);
         $em->flush();
 
-        return $sportUser;
+        return $this->handleView(204);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\SportBundle\Entity;
 
 use App\Util\Doctrine\Entity\AbstractEntity;
+use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 
@@ -14,7 +15,7 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @JMS\ExclusionPolicy("all")
  */
-class SportUser extends AbstractEntity
+class SportUser extends AbstractEntity implements EntityInterface
 {
     /**
      * @ORM\Column(type="float")
@@ -32,6 +33,11 @@ class SportUser extends AbstractEntity
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $user;
+
+    public function __toString()
+    {
+        return sprintf('User #%d - Sport #%d', $this->user->getId(), $this->sport->getId());
+    }
 
     /**
      * Set price.
