@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\HttpFoundation as Http;
 
 /**
  * Users Controller.
@@ -389,13 +390,19 @@ class UsersController extends BaseController
     public function getPicture($id, Request $request)
     {
         $user = $this->findUserOrFail($id);
-        $picture =$user->getPicture();
-        $path = sprintf('http://%s/bundles/appuser/pictures/%s', $this->container->getParameter('domain'), $picture);
-        return array(
-            'id'=>$user->getId(),
-            'picture'=>$picture,
-            'picture_url'=>$path
-        );
+
+        $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/'.$user->getPicture());
+        $iconInfo = pathinfo($path_picture);
+
+        if (false === isset($iconInfo['extension'])) {
+            $path = $this->locateResource('@AppUserBundle/Resources/public/pictures/default.png');
+        }
+        $response = new Http\Response();
+        $response->headers->set('Content-type', mime_content_type($path_picture));
+        $response->headers->set('Content-length', filesize($path_picture));
+        $response->sendHeaders();
+        $response->setContent(file_get_contents($path_picture));
+        return $response;
     }
 
     /**
@@ -509,6 +516,7 @@ class UsersController extends BaseController
      * Add sport to a User.
      *
      * @Rest\Post("/users/search")
+     * @Rest\RequestParam(name="name",nullable=true, description="user's name")
      * @ApiDoc(
      * 	 section="User",
      * 	 resource=true,
@@ -525,14 +533,18 @@ class UsersController extends BaseController
      */
     public function userSearch(ParamFetcher $paramFetcher)
     {
+        $name = $paramFetcher->get('name');
+
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $qb->select('u, g')
-            ->from('AppUserBundle:Producer', 'p')
-            ->join('p.translations', 'pt')
-            ->where($qb->expr()->eq('pt.locale', ':locale'))
-            ->setParameter('locale', 'en')
+        $x=$qb->select('U')
+            ->from('AppUserBundle:User', 'U')
+            ->Where('U.firstname LIKE :firstname')
+            ->orWhere('U.lastname LIKE :lastname')
+            ->setParameter('firstname', '%'.$name.'%')
+            ->setParameter('lastname', '%'.$name.'%')
             ->getQuery()
             ->getResult();
+        return $x;
     }
 }

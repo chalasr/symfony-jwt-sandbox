@@ -273,7 +273,6 @@ class BaseUserAdmin extends AbstractAdmin
                 'name' => $this->getLabel(),
             ))
         ;
-
         return $group;
     }
 

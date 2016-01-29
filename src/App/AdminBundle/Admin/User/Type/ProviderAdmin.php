@@ -100,6 +100,7 @@ class ProviderAdmin extends BaseUserAdmin
                 'label' => 'Nom',
             ))
             ->add('zipcode')
+            ->add('group')
         ;
     }
 
@@ -114,10 +115,9 @@ class ProviderAdmin extends BaseUserAdmin
             ->add('providerInformation.name', null, array(
               'label' => 'Nom',
             ))
-            ->add('group')
             ->add('address')
-            ->add('phone', null, array('label' => 'Téléphone'))
             ->add('zipcode')
+            ->add('phone', null, array('label' => 'Téléphone'))
             ->add('createdAt', 'date', array('label' => 'Créé le', 'format' => 'd/m/Y'))
             ->add('_action', 'actions', [
                 'actions' => array(
