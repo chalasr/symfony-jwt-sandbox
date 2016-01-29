@@ -7,6 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use RCH\Importer\Importer;
+use RCH\Importer\Reader\CsvReader;
+use RCH\Importer\Reader\ReaderInterface;
+use RCH\Importer\Recorder\RecorderInterface;
+use RCH\Importer\Recorder\DoctrineORMEntityRecorder;
+
+error_reporting(E_ALL);
 
 class ImportCommand extends ContainerAwareCommand
 {
@@ -34,10 +41,10 @@ class ImportCommand extends ContainerAwareCommand
         $now = new \DateTime();
         $output->writeln('<comment>Start import : '.$now->format('d-m-Y G:i:s').' ---</comment>');
 
-        $reader = new \RCH\Importer\Reader\CsvReader($path);
-        $recorder = new \RCH\Importer\Recorder\DoctrineORMEntityRecorder('AppUserBundle:User', $em);
+        $reader = new CsvReader($path);
+        $recorder = new DoctrineORMEntityRecorder('AppUserBundle:User', $em);
 
-        \RCH\Importer\Importer::create($reader, $recorder)->import();
+        Importer::create($reader, $recorder)->import();
 
         // $now = new \DateTime();
         // $output->writeln('<comment>End : '.$now->format('d-m-Y G:i:s').' ---</comment>', $output);
