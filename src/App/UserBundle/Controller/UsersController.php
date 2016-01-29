@@ -357,7 +357,6 @@ class UsersController extends BaseController
 
         $picture = $request->files->get('file');
         $user = $this->findUserOrFail($id);
-        return $user;
         $user->setFile($picture);
 
         $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
