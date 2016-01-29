@@ -37,7 +37,8 @@
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
         "symfony/phpunit-bridge": "~2.7",
-        "fabpot/php-cs-fixer": "^1.11"
+        "fabpot/php-cs-fixer": "^1.11",
+	"chalasr/importer": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [
