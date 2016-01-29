@@ -516,6 +516,7 @@ class UsersController extends BaseController
      * Add sport to a User.
      *
      * @Rest\Post("/users/search")
+     * @Rest\RequestParam(name="name",nullable=true, description="user's name")
      * @ApiDoc(
      * 	 section="User",
      * 	 resource=true,
@@ -532,11 +533,18 @@ class UsersController extends BaseController
      */
     public function userSearch(ParamFetcher $paramFetcher)
     {
+        $name = $paramFetcher->get('name');
+
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $qb->select('u, g')
+        $x=$qb->select('U')
             ->from('AppUserBundle:User', 'U')
+            ->Where('U.firstname LIKE :firstname')
+            ->orWhere('U.lastname LIKE :lastname')
+            ->setParameter('firstname', '%'.$name.'%')
+            ->setParameter('lastname', '%'.$name.'%')
             ->getQuery()
             ->getResult();
+        return $x;
     }
 }
