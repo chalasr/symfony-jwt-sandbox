@@ -369,6 +369,34 @@ class UsersController extends BaseController
 
         return $user;
     }
+    /**
+     * get user picture.
+     *
+     * @Rest\Get("/users/{id}/picture", requirements={"id" = "\d+"})
+     * @ApiDoc(
+     * 	section="User",
+     * 	resource=true,
+     * 	 statusCodes={
+     * 	   204="No Content (picture successfully updated)",
+     * 	   401="Unauthorized (this resource require an access token)"
+     * 	 }
+     * )
+     *
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function getPicture($id, Request $request)
+    {
+        $user = $this->findUserOrFail($id);
+        $picture =$user->getPicture();
+        $path = sprintf('http://%s/bundles/appuser/pictures/%s', $this->container->getParameter('domain'), $picture);
+        return array(
+            'id'=>$user->getId(),
+            'picture'=>$picture,
+            'picture_url'=>$path
+        );
+    }
 
     /**
      * Lists all sports from user.
