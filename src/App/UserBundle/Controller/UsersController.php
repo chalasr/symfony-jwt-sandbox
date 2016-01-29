@@ -337,7 +337,6 @@ class UsersController extends BaseController
      * update user picture.
      *
      * @Rest\Post("/users/{id}/picture", requirements={"id" = "\d+"})
-     * @Rest\RequestParam(name="file", requirements="[^/]+", nullable=true, description="picture")
      * @ApiDoc(
      * 	section="User",
      * 	resource=true,
@@ -356,7 +355,7 @@ class UsersController extends BaseController
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
 
-        $picture = $paramFetcher->get('file');
+        $picture = $request->files->get('file');
         $user = $this->findUserOrFail($id);
         $user->setFile($picture);
 
@@ -369,6 +368,34 @@ class UsersController extends BaseController
         }
 
         return $user;
+    }
+    /**
+     * get user picture.
+     *
+     * @Rest\Get("/users/{id}/picture", requirements={"id" = "\d+"})
+     * @ApiDoc(
+     * 	section="User",
+     * 	resource=true,
+     * 	 statusCodes={
+     * 	   204="No Content (picture successfully updated)",
+     * 	   401="Unauthorized (this resource require an access token)"
+     * 	 }
+     * )
+     *
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function getPicture($id, Request $request)
+    {
+        $user = $this->findUserOrFail($id);
+        $picture =$user->getPicture();
+        $path = sprintf('http://%s/bundles/appuser/pictures/%s', $this->container->getParameter('domain'), $picture);
+        return array(
+            'id'=>$user->getId(),
+            'picture'=>$picture,
+            'picture_url'=>$path
+        );
     }
 
     /**
@@ -476,5 +503,36 @@ class UsersController extends BaseController
         }
 
         return $sportUser;
+    }
+
+    /**
+     * Add sport to a User.
+     *
+     * @Rest\Post("/users/search")
+     * @ApiDoc(
+     * 	 section="User",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	     204="No content (success)",
+     * 	     401="Unauthorized (this resource require an access token)",
+     * 	     404="User not found"
+     * 	 },
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @return array
+     */
+    public function userSearch(ParamFetcher $paramFetcher)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('u, g')
+            ->from('AppUserBundle:Producer', 'p')
+            ->join('p.translations', 'pt')
+            ->where($qb->expr()->eq('pt.locale', ':locale'))
+            ->setParameter('locale', 'en')
+            ->getQuery()
+            ->getResult();
     }
 }
