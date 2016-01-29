@@ -16,6 +16,17 @@ class BaseUserAdmin extends AbstractAdmin
     public $realLabel;
 
     /**
+     * Default values to the datagrid.
+     *
+     * @var array
+     */
+    protected $datagridValues = array(
+        '_page'       => 1,
+        '_sort_order' => 'DESC',
+        '_sort_by'    => 'createdAt'
+    );
+
+    /**
      * {@inheritdoc}
      */
     public function getFormBuilder()
@@ -53,10 +64,20 @@ class BaseUserAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('id', null, array('label' => 'Id'))
             ->addIdentifier('email')
+            ->add('group', null, array('label' => 'Groupe'))
             ->add('firstname', null, array('label' => 'Prénom'))
             ->add('lastname', null, array('label' => 'Nom'))
+            ->add('address', null, array('label' => 'Adresse'))
+            ->add('zipcode', null, array('label' => 'Code postal'))
             ->add('phone', null, array('label' => 'Téléphone'))
             ->add('createdAt', 'date', array('label' => 'Créé le', 'format' => 'd/m/Y'))
+            ->add('_action', 'actions', [
+                'actions' => array(
+                    'show'   => [],
+                    'edit'   => [],
+                    'delete' => [],
+                ),
+            ])
         ;
     }
 

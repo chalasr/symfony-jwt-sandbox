@@ -10,7 +10,7 @@ services:
     sonata.user.admin.user:
         class: "%sonata.user.admin.user.class%"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: %sonata.user.admin.groupname%, label: "Tous les utilisateurs", label_catalogue: %sonata.user.admin.label_catalogue%", label_translator_strategy: sonata.admin.label.strategy.underscore, icon: "%sonata.user.admin.groupicon%"}
+            - { name: sonata.admin, manager_type: orm, group: %sonata.user.admin.groupname%, label: "Tous les utilisateurs", label_catalogue: %sonata.user.admin.label_catalogue%", icon: "%sonata.user.admin.groupicon%"}
         arguments:
             - ~
             - %sonata.user.admin.user.entity%
