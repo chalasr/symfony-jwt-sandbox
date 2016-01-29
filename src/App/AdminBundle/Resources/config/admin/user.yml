@@ -1,0 +1,104 @@
+parameters:
+    admin.coach.class: App\AdminBundle\Admin\User\Type\CoachAdmin
+    admin.provider.class: App\AdminBundle\Admin\User\Type\ProviderAdmin
+    admin.sportrooper.class: App\AdminBundle\Admin\User\Type\SportrooperAdmin
+    admin.admin.class: App\AdminBundle\Admin\User\Type\AdminsAdmin
+    admin.coach_document.class: App\AdminBundle\Admin\User\Information\CoachDocumentAdmin
+
+services:
+
+    sonata.user.admin.user:
+        class: "%sonata.user.admin.user.class%"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: %sonata.user.admin.groupname%, label: "Tous les utilisateurs", label_catalogue: %sonata.user.admin.label_catalogue%", label_translator_strategy: sonata.admin.label.strategy.underscore, icon: "%sonata.user.admin.groupicon%"}
+        arguments:
+            - ~
+            - %sonata.user.admin.user.entity%
+            - %sonata.user.admin.user.controller%
+        calls:
+            - [setUserManager, ["@fos_user.user_manager"]]
+            - [setTranslationDomain, ["%sonata.user.admin.user.translation_domain%"]]
+
+    sonata.admin.users_coachs:
+        class: "%admin.coach.class%"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: user, label: "Coachs" }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\User
+            - AppAdminBundle:CoachAdmin
+        calls:
+            - [setUserManager, ["@fos_user.user_manager"]]
+            - [setRealLabel, ['Coach']]
+
+    sonata.admin.users_providers:
+        class: "%admin.provider.class%"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: user, label: "Providers" }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\User
+            - AppAdminBundle:ProviderAdmin
+        calls:
+            - [setUserManager, ['@fos_user.user_manager']]
+            - [setRealLabel, ['Provider']]
+
+    sonata.admin.users_sportroopers:
+        class: "%admin.sportrooper.class%"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: user, label: "Sportroopers" }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\User
+            - AppAdminBundle:SportrooperAdmin
+        calls:
+            - [setUserManager, ['@fos_user.user_manager']]
+            - [setRealLabel, ['Sportrooper']]
+
+    sonata.admin.users_admins:
+        class: "%admin.admin.class%"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: user, label: "Administrateurs" }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\User
+            - AppAdminBundle:AdminsAdmin
+        calls:
+            - [setUserManager, ['@fos_user.user_manager']]
+            - [setRealLabel, ['Administrateur']]
+
+#Embedded classes
+    sonata.admin.coach_information:
+        class: App\AdminBundle\Admin\User\Information\CoachInformationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Coach informations" , show_in_dashboard: false }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\Information\CoachInformation
+            - AppAdminBundle:CoachInformationAdmin
+            -
+
+    sonata.admin.provider_information:
+        class: App\AdminBundle\Admin\User\Information\ProviderInformationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Provider informations" , show_in_dashboard: false }
+        arguments:
+            - ~
+            - App\UserBundle\Entity\Information\ProviderInformation
+            - AppAdminBundle:ProviderInformationAdmin
+
+    sonata.admin.coach_document:
+            class: App\AdminBundle\Admin\User\Information\CoachDocumentAdmin
+            tags:
+                - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Coach documents" , show_in_dashboard: false }
+            arguments:
+                - ~
+                - App\UserBundle\Entity\Information\CoachDocument
+                - AppAdminBundle:CoachDocumentAdmin
+                -
+
+    app_admin.admin.sport_user:
+        class: App\AdminBundle\Admin\SportUserAdmin
+        arguments: [~, App\SportBundle\Entity\SportUser, AppAdminBundle:SportUserAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: SportUser }
