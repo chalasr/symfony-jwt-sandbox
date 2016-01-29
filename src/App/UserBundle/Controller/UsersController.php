@@ -498,7 +498,14 @@ class UsersController extends BaseController
      */
     public function userSearch(ParamFetcher $paramFetcher)
     {
-        echo 'kkk';
-        die();
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('u, g')
+            ->from('AppUserBundle:Producer', 'p')
+            ->join('p.translations', 'pt')
+            ->where($qb->expr()->eq('pt.locale', ':locale'))
+            ->setParameter('locale', 'en')
+            ->getQuery()
+            ->getResult();
     }
 }
