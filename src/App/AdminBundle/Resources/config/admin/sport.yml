@@ -1,12 +1,7 @@
-parameters:
-    admin.sports.class: App\AdminBundle\Admin\Sport\SportAdmin
-    admin.categories.class: App\AdminBundle\Admin\Sport\CategoryAdmin
-    admin.tags.class: App\AdminBundle\Admin\Sport\TagAdmin
-
 services:
     # Sports
     sonata.admin.sports:
-        class: "%admin.sports.class%"
+        class: App\AdminBundle\Admin\Sport\SportAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: sport, label: "Sports" }
         arguments:
@@ -16,7 +11,7 @@ services:
 
     # Categories
     sonata.admin.categories:
-        class: "%admin.categories.class%"
+        class: App\AdminBundle\Admin\Sport\CategoryAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: sport, label: "Catégories" }
         arguments:
@@ -26,7 +21,7 @@ services:
 
     # Tags
     sonata.admin.tags:
-        class: "%admin.tags.class%"
+        class: App\AdminBundle\Admin\Sport\TagAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: sport, label: "Tags" }
         arguments:

@@ -43,6 +43,7 @@ class ImportCommand extends ContainerAwareCommand
 
         $reader = new CsvReader($path);
         $recorder = new DoctrineORMEntityRecorder('AppUserBundle:User', $em);
+        $recorder->setDateTimeFormat('m/d/Y');
 
         Importer::create($reader, $recorder)->import();
 
