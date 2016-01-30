@@ -17,7 +17,7 @@ app_demo:
     path: /
     defaults:
         _controller: FrameworkBundle:Template:template
-        template:    AppUserBundle:Default:list.html.twig
+        template:    demo.html.twig
 
 # Documentation of API , created by @ApiDoc annotation, accessible at /doc/v1
 NelmioApiDocBundle:

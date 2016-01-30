@@ -15,7 +15,7 @@
     function MainCtrl($scope, $rootScope, $http, $timeout, authService, AuthenticationService) {
       $scope.access = {};
       $scope.credentials = {
-          email: 'guest',
+          email: 'guest@sportroops.fr',
           password: 'guest'
       };
 
