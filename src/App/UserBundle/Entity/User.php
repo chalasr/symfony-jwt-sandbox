@@ -582,6 +582,10 @@ class User extends BaseUser
     {
         $this->group = $group;
 
+        if (null === $group) {
+            return $this;
+        }
+
         foreach ($group->getRoles() as $role) {
             $this->addRole($role);
         }
