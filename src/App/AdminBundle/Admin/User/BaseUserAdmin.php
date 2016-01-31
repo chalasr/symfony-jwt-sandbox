@@ -90,6 +90,7 @@ class BaseUserAdmin extends AbstractAdmin
             ->add('id')
             ->add('email')
             ->add('lastname', null, array('label' => 'Nom'))
+            ->add('zipcode', null, array('label' => 'Code postal'))
             ->add('group')
         ;
     }
