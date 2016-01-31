@@ -11,10 +11,14 @@ db_update:
 	 php app/console doctrine:schema:update --force
 
 create_user:
-	php app/console fos:user:create admin admin@sportroops.dev admin
+	php app/console fos:user:create admin@sutunam.com admin@sutunam.com admin
 
 promote_user:
-	php app/console fos:user:promote admin ROLE_ADMIN
+	php app/console fos:user:promote admin@sutunam.com ROLE_ADMIN
+
+create_guest_user:
+	php app/console fos:user:create guest@sportroops.fr guest@sportroops.fr guest
+	php app/console fos:user:promote guest@sportroops.fr ROLE_GUEST
 
 test:
 	phpunit

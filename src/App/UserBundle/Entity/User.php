@@ -264,6 +264,13 @@ class User extends BaseUser
         return $this->file;
     }
 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     /**
      * Upload attachment file.
      */
@@ -574,6 +581,10 @@ class User extends BaseUser
     public function setGroup(\App\UserBundle\Entity\Group $group = null)
     {
         $this->group = $group;
+
+        foreach ($group->getRoles() as $role) {
+            $this->addRole($role);
+        }
 
         return $this;
     }

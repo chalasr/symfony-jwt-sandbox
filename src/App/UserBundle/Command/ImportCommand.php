@@ -31,7 +31,7 @@ class ImportCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
 
         $path = $this->getContainer()
             ->get('kernel')
@@ -43,7 +43,8 @@ class ImportCommand extends ContainerAwareCommand
 
         $reader = new CsvReader($path);
         $recorder = new DoctrineORMEntityRecorder('AppUserBundle:User', $em);
-        $recorder->setDateTimeFormat('m/d/Y');
+        $recorder->setDateTimeFormat('m/d/Y')
+            ->setKeymap(array('group' => 'group.name'));
 
         Importer::create($reader, $recorder)->import();
 
