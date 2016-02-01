@@ -238,12 +238,13 @@ class SportsController extends Controller
         }
 
         $response = new Http\Response();
+        die('ffffffffffffffffffffffffffff');
         $response->headers->set('Content-type', mime_content_type($path));
         $response->headers->set('Content-length', filesize($path));
         $response->sendHeaders();
         $response->setContent(file_get_contents($path));
 
-        die('ffffffffffffffffffffffffffff');
+
         return $response;
     }
 }
