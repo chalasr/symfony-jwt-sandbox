@@ -220,9 +220,6 @@ class SportsController extends Controller
      */
     public function getIconBySportAction($sport)
     {
-        //test 500 error
-        die('kkk');
-        /*
         $repo = $this->getDoctrine()->getRepository('AppSportBundle:Sport');
         $entity = is_numeric($sport)
             ? $repo->findOrFail($sport)
@@ -247,6 +244,5 @@ class SportsController extends Controller
         $response->setContent(file_get_contents($path));
 
         return $response;
-        */
     }
 }
