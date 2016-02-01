@@ -27,14 +27,6 @@ class CoachInformationAdmin extends Admin
                 'dp_language' => 'fr',
             ))
             ->end()
-            ->with('Documents')
-            ->add('coachDocuments', 'sonata_type_collection', array(
-                'by_reference' => false
-            ), array(
-                'edit' => 'inline',
-                'inline' => 'table'
-            ))
-            ->end()
         ;
         // SNIP;
     }
