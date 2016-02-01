@@ -216,13 +216,10 @@ class SportsController extends Controller
      *
      * @param string|int $sport Sport entity
      *
-     * @return array
+     * @return response
      */
     public function getIconBySportAction($sport)
     {
-        //test 500 error
-        die('kkk');
-        /*
         $repo = $this->getDoctrine()->getRepository('AppSportBundle:Sport');
         $entity = is_numeric($sport)
             ? $repo->findOrFail($sport)
@@ -242,11 +239,14 @@ class SportsController extends Controller
 
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path));
+
         $response->headers->set('Content-length', filesize($path));
         $response->sendHeaders();
-        $response->setContent(file_get_contents($path));
 
+        #$response->setContent(file_get_contents($path));
+
+        echo mime_content_type($path);
+        die('xxxx');
         return $response;
-        */
     }
 }
