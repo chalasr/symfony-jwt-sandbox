@@ -216,7 +216,7 @@ class SportsController extends Controller
      *
      * @param string|int $sport Sport entity
      *
-     * @return array
+     * @return response
      */
     public function getIconBySportAction($sport)
     {
@@ -233,7 +233,6 @@ class SportsController extends Controller
         $path = $this->locateResource('@AppSportBundle/Resources/public/icons/'.$iconName);
         $iconInfo = pathinfo($path);
 
-        die('mmm');
         if (false === isset($iconInfo['extension'])) {
             $path = $this->locateResource('@AppSportBundle/Resources/public/icons/default.png');
         }
@@ -244,6 +243,7 @@ class SportsController extends Controller
         $response->sendHeaders();
         $response->setContent(file_get_contents($path));
 
+        die('ffffffffffffffffffffffffffff');
         return $response;
     }
 }
