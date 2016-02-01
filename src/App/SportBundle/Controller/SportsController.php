@@ -231,6 +231,7 @@ class SportsController extends Controller
         // }
 
         $path = $this->locateResource('@AppSportBundle/Resources/public/icons').'/'.$iconName;
+        $iconInfo = pathinfo($path);
 
         if (false === isset($iconInfo['extension'])) {
             $path = $this->locateResource('@AppSportBundle/Resources/public/icons').'/default.png';
