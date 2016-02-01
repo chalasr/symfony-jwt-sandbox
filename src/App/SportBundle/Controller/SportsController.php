@@ -240,9 +240,10 @@ class SportsController extends Controller
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path));
 
-        die('ffffffffffffffffffffffffffff');
         $response->headers->set('Content-length', filesize($path));
         $response->sendHeaders();
+
+        die('ffffffffffffffffffffffffffff');
         $response->setContent(file_get_contents($path));
 
 
