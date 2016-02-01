@@ -230,14 +230,11 @@ class SportsController extends Controller
         //     $iconName = 'default.png';
         // }
 
-        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
-        die($uploadPath);
-
-        $path = $this->locateResource('@AppSportBundle/Resources/public/icons/'.$iconName);
+        $path = $this->locateResource('@AppSportBundle/Resources/public/icons/').$iconName;
         $iconInfo = pathinfo($path);
 
         if (false === isset($iconInfo['extension'])) {
-            $path = $this->locateResource('@AppSportBundle/Resources/public/icons/default.png');
+            $path = $this->locateResource('@AppSportBundle/Resources/public/icons/').'default.png';
         }
 
         $response = new Http\Response();
