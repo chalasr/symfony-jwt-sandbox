@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation as Http;
 
 /**
  * Sports resource.
@@ -215,13 +216,37 @@ class SportsController extends Controller
      *
      * @param string|int $sport Sport entity
      *
-     * @return Response
+     * @return array
      */
     public function getIconBySportAction($sport)
     {
-        return $this->forward('AppAdminBundle:SportAdmin:showIcon', array(
-            'sport'          => $sport,
-            '_sonata_admin'  => 'sonata.admin.sports',
-        ));
+        //test 500 error
+        die('kkk');
+        /*
+        $repo = $this->getDoctrine()->getRepository('AppSportBundle:Sport');
+        $entity = is_numeric($sport)
+            ? $repo->findOrFail($sport)
+            : $repo->findOneByOrFail(['name' => $sport]);
+        $iconName = $entity->getIcon() ?: 'default.png';
+        //
+        // if (!$iconName) {
+        //     $iconName = 'default.png';
+        // }
+
+        $path = $this->locateResource('@AppSportBundle/Resources/public/icons/'.$iconName);
+        $iconInfo = pathinfo($path);
+
+        if (false === isset($iconInfo['extension'])) {
+            $path = $this->locateResource('@AppSportBundle/Resources/public/icons/default.png');
+        }
+
+        $response = new Http\Response();
+        $response->headers->set('Content-type', mime_content_type($path));
+        $response->headers->set('Content-length', filesize($path));
+        $response->sendHeaders();
+        $response->setContent(file_get_contents($path));
+
+        return $response;
+        */
     }
 }
