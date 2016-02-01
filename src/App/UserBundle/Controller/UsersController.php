@@ -451,6 +451,7 @@ class UsersController extends BaseController
      *
      * @return array
      */
+    
     public function addSport($id, ParamFetcher $paramFetcher)
     {
         $sportId = $paramFetcher->get('sport_id');
