@@ -243,7 +243,9 @@ class SportsController extends Controller
         $response->headers->set('Content-length', filesize($path));
         $response->sendHeaders();
 
-        die('ffffffffffffffffffffffffffff');
+        $x=file_get_contents($path);
+        echo $path;
+        die('mmm');
         $response->setContent(file_get_contents($path));
 
 
