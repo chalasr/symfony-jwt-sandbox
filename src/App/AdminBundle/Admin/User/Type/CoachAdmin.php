@@ -24,8 +24,20 @@ class CoachAdmin extends BaseUserAdmin
                 'label'        => false,
             ), array(
                 'edit'       => 'inline',
-                'admin_code' => 'sonata.admin.coach_information',
+                // 'admin_code' => 'sonata.admin.coach_information',
             ))
+            ->end()
+            ->with('Documents')
+            ->add('coachDocuments', 'sonata_type_collection', array(
+                'by_reference' => false,
+                'required'     => false,
+                'label'        => false,
+            ), array(
+                'edit'       => 'inline',
+                'inline'     => 'table',
+                'admin_code' => 'sonata.admin.coach_document',
+            ))
+            ->end()
         ;
     }
 
@@ -62,5 +74,19 @@ class CoachAdmin extends BaseUserAdmin
             ->add('lastname', null, array('label' => 'Nom'))
             ->add('group')
         ;
+    }
+
+    public function prePersist($object)
+    {
+        foreach ($object->getCoachDocuments() as $document) {
+            $document->setUser($object);
+        }
+    }
+
+    public function preUpdate($object)
+    {
+        foreach ($object->getCoachDocuments() as $document) {
+            $document->setUser($object);
+        }
     }
 }

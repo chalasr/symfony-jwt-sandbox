@@ -13,7 +13,6 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\Entity
  * @ORM\Table(name="document_coach")
  *
- * @JMS\ExclusionPolicy("all")
  */
 class CoachDocument extends AbstractEntity implements EntityInterface
 {
@@ -34,10 +33,17 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     protected $urlFile;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CoachInformation", inversedBy="coachDocuments")
-     * @ORM\JoinColumn(name="id_user", referencedColumnName="id");
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=512, nullable=true)
      */
-    protected $coachInformation;
+    protected $name;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\UserBundle\Entity\User", inversedBy="coachDocuments")
+     * @ORM\JoinColumn(name="coach_id", referencedColumnName="id", nullable=true)
+     */
+    protected $user;
 
     /**
      * To string.
@@ -98,26 +104,64 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set coachInformation.
+     * Set user
      *
-     * @param \App\UserBundle\Entity\Information\CoachInformation $coachInformation
+     * @param \App\UserBundle\Entity\User $user
      *
-     * @return Document
+     * @return CoachDocument
      */
-    public function setCoachInformation(\App\UserBundle\Entity\Information\CoachInformation $coachInformation = null)
+    public function setUser(\App\UserBundle\Entity\User $user)
     {
-        $this->coachInformation = $coachInformation;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get coachInformation.
+     * Get user
      *
-     * @return \App\UserBundle\Entity\Information\CoachInformation
+     * @return \App\UserBundle\Entity\User
      */
-    public function getCoachInformation()
+    public function getUser()
     {
-        return $this->coachInformation;
+        return $this->user;
+    }
+
+    /**
+     * Upload attachment file.
+     */
+    public function uploadDocument($path)
+    {
+        if (null === $file = $this->getUrlFile()) {
+            return;
+        }
+
+        $file->move($path, $file->getClientOriginalName());
+
+        $this->setName($file->getClientOriginalName());
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return CoachDocument
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
