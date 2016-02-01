@@ -244,7 +244,8 @@ class SportsController extends Controller
         $response->sendHeaders();
 
         #$response->setContent(file_get_contents($path));
-        echo $path;
+        echo 'path:',$path,'path';
+        die('mmmm');
         echo mime_content_type($path);
         die('xxxx');
         return $response;
