@@ -12,6 +12,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\HttpFoundation as Http;
 
@@ -353,11 +354,21 @@ class UsersController extends BaseController
      */
     public function updatePicture($id, Request $request)
     {
+        $user = $this->findUserOrFail($id);
+
+        if (!$this->isCurrentUserId($id) && !$this->isAdmin()) {
+            throw new AccessDeniedHttpException('This resource is only accessible by the user or an administrator');
+        }
+
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
 
         $picture = $request->files->get('file');
-        $user = $this->findUserOrFail($id);
+
+        if (!$picture) {
+            throw new UnprocessableEntityHttpException('The file parameter is missing');
+        }
+
         $user->setFile($picture);
 
         $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
@@ -397,6 +408,7 @@ class UsersController extends BaseController
         if (false === isset($iconInfo['extension'])) {
             $path = $this->locateResource('@AppUserBundle/Resources/public/pictures/default.png');
         }
+
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path_picture));
         $response->headers->set('Content-length', filesize($path_picture));
@@ -459,6 +471,10 @@ class UsersController extends BaseController
         #get user
         $user = $this->findUserOrFail($id);
 
+        if (!$this->isCurrentUserId($id) && !$this->isAdmin()) {
+            throw new AccessDeniedHttpException('This resource is only accessible by the user or an administrator');
+        }
+
         #get sport
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Sport');
@@ -487,7 +503,8 @@ class UsersController extends BaseController
      * 	 statusCodes={
      * 	     200="OK (list all followers)",
      * 	     401="Unauthorized (this resource require an access token)",
-     * 	     404="User not found"
+     * 	     404="User not found",
+     * 	     403="Forbidden (Only the user or an admin can access this resource)"
      * 	 },
      * )
      *
@@ -498,6 +515,12 @@ class UsersController extends BaseController
      */
     public function removeSport($id, ParamFetcher $paramFetcher)
     {
+        $this->findUserOrFail($id);
+
+        if (!$this->isCurrentUserId($id) && !$this->isAdmin()) {
+            throw new AccessDeniedHttpException('This resource is only accessible by the user or an administrator');
+        }
+
         $sport_id = $paramFetcher->get('sport_id');
         $em = $this->getEntityManager();
         $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findBy(array('user' => $id, 'sport' => $sport_id));

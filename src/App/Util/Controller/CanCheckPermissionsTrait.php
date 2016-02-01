@@ -70,4 +70,16 @@ trait CanCheckPermissionsTrait
     {
         return $user->getId() == $this->getCurrentUser()->getId();
     }
+
+    /**
+     * Check if user is the current user.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    protected function isCurrentUserId($id)
+    {
+        return $id == $this->getCurrentUser()->getId();
+    }
 }
