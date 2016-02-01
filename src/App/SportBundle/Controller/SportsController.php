@@ -237,7 +237,6 @@ class SportsController extends Controller
             $path = $this->locateResource('@AppSportBundle/Resources/public/icons').'/default.png';
         }
 
-        echo $path;die();
 
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path));
