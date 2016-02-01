@@ -225,13 +225,13 @@ class SportsController extends Controller
             ? $repo->findOrFail($sport)
             : $repo->findOneByOrFail(['name' => $sport]);
         $iconName = $entity->getIcon() ?: 'default.png';
-        die($iconName);
         //z
         // if (!$iconName) {
         //     $iconName = 'default.png';
         // }
 
         $path = $this->locateResource('@AppSportBundle/Resources/public/icons/'.$iconName);
+        echo $path;die();
         $iconInfo = pathinfo($path);
 
         if (false === isset($iconInfo['extension'])) {
