@@ -225,7 +225,8 @@ class SportsController extends Controller
             ? $repo->findOrFail($sport)
             : $repo->findOneByOrFail(['name' => $sport]);
         $iconName = $entity->getIcon() ?: 'default.png';
-        //
+        die($iconName);
+        //z
         // if (!$iconName) {
         //     $iconName = 'default.png';
         // }
