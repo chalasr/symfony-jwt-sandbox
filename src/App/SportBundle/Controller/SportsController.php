@@ -216,7 +216,7 @@ class SportsController extends Controller
      *
      * @param string|int $sport Sport entity
      *
-     * @return response
+     * @return Response
      */
     public function getIconBySportAction($sport)
     {
@@ -239,15 +239,10 @@ class SportsController extends Controller
 
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path));
-
         $response->headers->set('Content-length', filesize($path));
         $response->sendHeaders();
+        $response->setContent(file_get_contents($path));
 
-        #$response->setContent(file_get_contents($path));
-        echo 'path:',$path,'path';
-        die('mmmm');
-        echo mime_content_type($path);
-        die('xxxx');
         return $response;
     }
 }
