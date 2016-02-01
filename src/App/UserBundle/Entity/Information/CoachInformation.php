@@ -55,7 +55,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      */
     public function __construct()
     {
-        $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->coachDocuments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -191,14 +191,14 @@ class CoachInformation extends AbstractEntity implements EntityInterface
     /**
      * Add document.
      *
-     * @param \App\UserBundle\Entity\Information\CoachDocument $document
+     * @param \App\UserBundle\Entity\Information\CoachDocument $coachDocument
      *
      * @return CoachInformation
      */
-    public function addDocument(\App\UserBundle\Entity\Information\CoachDocument $document)
+    public function addDocument(\App\UserBundle\Entity\Information\CoachDocument $coachDocument)
     {
         $document->setCoachInformation($this);
-        $this->documents[] = $document;
+        $this->coachDocuments[] = $document;
 
         return $this;
     }
@@ -208,9 +208,9 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      *
      * @param \App\UserBundle\Entity\Information\CoachDocument $document
      */
-    public function removeDocument(\App\UserBundle\Entity\Information\CoachDocument $document)
+    public function removeDocument(\App\UserBundle\Entity\Information\CoachDocument $coachDocument)
     {
-        $this->documents->removeElement($document);
+        $this->coachDocuments->removeElement($coachDocument);
     }
 
     /**
@@ -220,7 +220,7 @@ class CoachInformation extends AbstractEntity implements EntityInterface
      */
     public function getDocuments()
     {
-        return $this->documents;
+        return $this->coachDocuments;
     }
 
     /**
