@@ -552,7 +552,7 @@ class UsersController extends BaseController
      *      filters={
      *          {"name"="name", "dataType"="string"},
      *          {"name"="sports", "dataType"="array string", "Example"="sports[] sport1, sports[] sport2"},
-     *          {"name"="category", "dataType"="array string", "Example"="groups[] group1, groups[] group2"},
+     *          {"name"="groups", "dataType"="array string", "Example"="groups[] group1, groups[] group2"},
      *      }
      * )
      *
