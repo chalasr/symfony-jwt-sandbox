@@ -27,7 +27,7 @@ class UsersController extends BaseController
     use CanCheckPermissions;
 
     /**
-     * Lists all users.
+     * List all users.
      *
      * @Rest\Get("/users")
      * @Rest\View(serializerGroups={"api"})
@@ -52,7 +52,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Get User by identfier.
+     * Get a user by id.
      *
      * @Rest\Get("/users/{id}", requirements={"id" = "\d+"})
      * @Rest\View(serializerGroups={"api"})
@@ -117,7 +117,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Remove a followed user from the current user.
+     * Remove a follower user from the current user.
      *
      * @Rest\Delete("/users/followers/{follower}", requirements={"follower" = "\d+"})
      * @ApiDoc(
@@ -157,7 +157,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Get current user.
+     * Get the current user.
      *
      * @Rest\Get("/users/current")
      * @Rest\View(serializerGroups={"api"})
@@ -264,7 +264,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Lists all followers.
+     * Get the followers list of a given user.
      *
      * @Rest\Get("/users/{id}/followers")
      * @ApiDoc(
@@ -289,7 +289,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Lists all followers.
+     * Get the followings list of a given user.
      *
      * @Rest\Get("/users/{id}/follows")
      * @ApiDoc(
@@ -314,7 +314,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Get user.
+     * Get a user.
      *
      * @param int $id
      *
@@ -336,7 +336,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * update user picture.
+     * Update the picture of a given user.
      *
      * @Rest\Post("/users/{id}/picture", requirements={"id" = "\d+"})
      * @ApiDoc(
@@ -382,7 +382,7 @@ class UsersController extends BaseController
         return $user;
     }
     /**
-     * get user picture.
+     * Get the picture from a given user.
      *
      * @Rest\Get("/users/{id}/picture", requirements={"id" = "\d+"})
      * @ApiDoc(
@@ -418,7 +418,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Lists all sports from user.
+     * List all sports from a given user.
      *
      *
      * @Rest\Get("/users/{id}/sports", requirements={"id" = "\d+"})
@@ -444,7 +444,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Add sport to a User.
+     * Add a sport to a given user.
      *
      * @Rest\Post("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
@@ -493,7 +493,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Remove sport from a User.
+     * Remove sport from a given user.
      *
      * @Rest\Delete("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
@@ -537,7 +537,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Add sport to a User.
+     * ??????.
      *
      * @Rest\Post("/users/search")
      * @Rest\RequestParam(name="name",nullable=true, description="user's name")
