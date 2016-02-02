@@ -601,5 +601,6 @@ class UsersController extends BaseController
             ->getQuery()
             ->getResult();
         return $results;
+
     }
 }
