@@ -5,14 +5,12 @@ namespace App\UserBundle\Entity\Information;
 use App\Util\Doctrine\Entity\AbstractEntity;
 use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Province.
  *
  * @ORM\Entity
  * @ORM\Table(name="coach_user")
- *
  */
 class CoachInformation extends AbstractEntity implements EntityInterface
 {

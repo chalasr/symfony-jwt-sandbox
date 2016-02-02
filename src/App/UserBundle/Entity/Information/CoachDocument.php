@@ -5,14 +5,12 @@ namespace App\UserBundle\Entity\Information;
 use App\Util\Doctrine\Entity\AbstractEntity;
 use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Province.
  *
  * @ORM\Entity
  * @ORM\Table(name="document_coach")
- *
  */
 class CoachDocument extends AbstractEntity implements EntityInterface
 {
@@ -104,7 +102,7 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \App\UserBundle\Entity\User $user
      *
@@ -118,7 +116,7 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \App\UserBundle\Entity\User
      */
@@ -142,7 +140,7 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -156,7 +154,7 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */

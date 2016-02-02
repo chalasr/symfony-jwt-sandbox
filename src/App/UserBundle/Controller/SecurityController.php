@@ -332,6 +332,10 @@ class SecurityController extends Controller
             $response['user']['facebook_id'] = $user->getFacebookId();
         }
 
+        if ('guest@sportroops.fr' == $user->getUsername()) {
+            unset($response['user']);
+        }
+
         return new JsonResponse($response, $statusCode);
     }
 

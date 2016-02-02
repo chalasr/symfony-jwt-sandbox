@@ -2,8 +2,6 @@
 
 namespace App\AdminBundle\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
-use App\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 
 class SportUserAdmin extends AbstractAdmin
@@ -15,10 +13,11 @@ class SportUserAdmin extends AbstractAdmin
     {
         $em = $this->get('doctrine')->getManager();
         $query = $em->createQueryBuilder('s')
-                ->select('s')
-                ->from('AppSportBundle:Sport', 's')
-                ->where('s.isActive = 1')
-                ->orderBy('s.id', 'ASC');
+            ->select('s')
+            ->from('AppSportBundle:Sport', 's')
+            ->where('s.isActive = 1')
+            ->orderBy('s.id', 'ASC')
+        ;
 
         $formMapper
             ->add('sport', 'sonata_type_model', array(

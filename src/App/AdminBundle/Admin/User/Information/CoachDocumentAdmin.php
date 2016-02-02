@@ -2,7 +2,6 @@
 
 namespace App\AdminBundle\Admin\User\Information;
 
-use Sonata\AdminBundle\Admin\Admin;
 use App\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 
@@ -15,11 +14,9 @@ class CoachDocumentAdmin extends AbstractAdmin
             //     'label' => 'File type',
             // ))
             ->add('urlFile', 'file', array(
-                'label' => 'Upload',
+                'label'      => 'Upload',
                 'data_class' => null,
             ));
-
-        ;
         // SNIP;
     }
 
@@ -45,5 +42,4 @@ class CoachDocumentAdmin extends AbstractAdmin
 
         return $document;
     }
-
 }
