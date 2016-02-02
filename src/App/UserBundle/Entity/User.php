@@ -239,6 +239,9 @@ class User extends BaseUser
     /** @ORM\OneToMany(targetEntity="\App\SportBundle\Entity\SportUser", mappedBy="user", cascade={"persist", "remove"}) */
     protected $sportUsers;
 
+    /** @ORM\OneToMany(targetEntity="\App\UserBundle\Entity\Information\CoachDocument", mappedBy="user", cascade={"persist", "remove"}) */
+    protected $coachDocuments;
+
     /**
      * @var string
      */
@@ -305,6 +308,7 @@ class User extends BaseUser
         $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sportUsers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->coachDocuments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -901,5 +905,40 @@ class User extends BaseUser
         }
 
         return $this->sports;
+    }
+
+    /**
+     * Add coachDocument
+     *
+     * @param \App\UserBundle\Entity\Information\CoachDocument $coachDocument
+     *
+     * @return User
+     */
+    public function addCoachDocument(\App\UserBundle\Entity\Information\CoachDocument $coachDocument)
+    {
+        $this->coachDocuments[] = $coachDocument;
+        $coachDocument->setUser($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove coachDocument
+     *
+     * @param \App\UserBundle\Entity\Information\CoachDocument $coachDocument
+     */
+    public function removeCoachDocument(\App\UserBundle\Entity\Information\CoachDocument $coachDocument)
+    {
+        $this->coachDocuments->removeElement($coachDocument);
+    }
+
+    /**
+     * Get coachDocuments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCoachDocuments()
+    {
+        return $this->coachDocuments;
     }
 }

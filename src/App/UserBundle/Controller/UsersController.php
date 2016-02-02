@@ -12,6 +12,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\HttpFoundation as Http;
 
@@ -26,7 +27,7 @@ class UsersController extends BaseController
     use CanCheckPermissions;
 
     /**
-     * Lists all users.
+     * List all users.
      *
      * @Rest\Get("/users")
      * @Rest\View(serializerGroups={"api"})
@@ -51,7 +52,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Get User by identfier.
+     * Get a user by id.
      *
      * @Rest\Get("/users/{id}", requirements={"id" = "\d+"})
      * @Rest\View(serializerGroups={"api"})
@@ -116,7 +117,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Remove a followed user from the current user.
+     * Remove a follower user from the current user.
      *
      * @Rest\Delete("/users/followers/{follower}", requirements={"follower" = "\d+"})
      * @ApiDoc(
@@ -156,7 +157,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Get current user.
+     * Get the current user.
      *
      * @Rest\Get("/users/current")
      * @Rest\View(serializerGroups={"api"})
@@ -263,7 +264,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Lists all followers.
+     * Get the followers list of a given user.
      *
      * @Rest\Get("/users/{id}/followers")
      * @ApiDoc(
@@ -288,7 +289,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Lists all followers.
+     * Get the followings list of a given user.
      *
      * @Rest\Get("/users/{id}/follows")
      * @ApiDoc(
@@ -313,7 +314,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Get user.
+     * Get a user.
      *
      * @param int $id
      *
@@ -335,7 +336,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * update user picture.
+     * Update the picture of a given user.
      *
      * @Rest\Post("/users/{id}/picture", requirements={"id" = "\d+"})
      * @ApiDoc(
@@ -353,11 +354,21 @@ class UsersController extends BaseController
      */
     public function updatePicture($id, Request $request)
     {
+        $user = $this->findUserOrFail($id);
+
+        if (!$this->isCurrentUserId($id) && !$this->isAdmin()) {
+            throw new AccessDeniedHttpException('This resource is only accessible by the user or an administrator');
+        }
+
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppUserBundle:User');
 
         $picture = $request->files->get('file');
-        $user = $this->findUserOrFail($id);
+
+        if (!$picture) {
+            throw new UnprocessableEntityHttpException('The file parameter is missing');
+        }
+
         $user->setFile($picture);
 
         $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
@@ -372,7 +383,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * get user picture.
+     * Get the picture from a given user.
      *
      * @Rest\Get("/users/{id}/picture", requirements={"id" = "\d+"})
      * @ApiDoc(
@@ -398,6 +409,7 @@ class UsersController extends BaseController
         if (false === isset($iconInfo['extension'])) {
             $path = $this->locateResource('@AppUserBundle/Resources/public/pictures/default.png');
         }
+
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path_picture));
         $response->headers->set('Content-length', filesize($path_picture));
@@ -407,7 +419,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Lists all sports from user.
+     * List all sports from a given user.
      *
      *
      * @Rest\Get("/users/{id}/sports", requirements={"id" = "\d+"})
@@ -433,7 +445,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Add sport to a User.
+     * Add a sport to a given user.
      *
      * @Rest\Post("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
@@ -460,6 +472,10 @@ class UsersController extends BaseController
         #get user
         $user = $this->findUserOrFail($id);
 
+        if (!$this->isCurrentUserId($id) && !$this->isAdmin()) {
+            throw new AccessDeniedHttpException('This resource is only accessible by the user or an administrator');
+        }
+
         #get sport
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Sport');
@@ -478,19 +494,19 @@ class UsersController extends BaseController
     }
 
     /**
-     * Remove sport from a User.
+     * Remove sport from a given user.
      *
      * @Rest\Delete("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
      * @ApiDoc(
-     *     section="User",
-     *     resource=true,
-     *     statusCodes={
-     *         200="OK (list all followers)",
-     *         401="Unauthorized (this resource require an access token)",
-     *         404="User not found"
-     *     },
-     * )
+     * 	 section="User",
+     * 	 resource=true,
+     * 	 statusCodes={
+     * 	     200="OK (list all followers)",
+     * 	     401="Unauthorized (this resource require an access token)",
+     * 	     404="User not found",
+     * 	     403="Forbidden (Only the user or an admin can access this resource)"
+     * 	 },
      *
      * @param int $id
      * @param ParamFetcher $paramFetcher
@@ -499,6 +515,12 @@ class UsersController extends BaseController
      */
     public function removeSport($id, ParamFetcher $paramFetcher)
     {
+        $this->findUserOrFail($id);
+
+        if (!$this->isCurrentUserId($id) && !$this->isAdmin()) {
+            throw new AccessDeniedHttpException('This resource is only accessible by the user or an administrator');
+        }
+
         $sport_id = $paramFetcher->get('sport_id');
         $em = $this->getEntityManager();
         $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findBy(array('user' => $id, 'sport' => $sport_id));
@@ -515,7 +537,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Add sport to a User.
+     * search user
      *
      * @Rest\Post("/users/search")
      * @Rest\RequestParam(name="name",nullable=true, description="user's name")
