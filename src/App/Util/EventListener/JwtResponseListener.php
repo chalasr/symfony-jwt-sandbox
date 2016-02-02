@@ -41,6 +41,11 @@ class JwtResponseListener
             $this->serialize($user, array('groups' => ['api']))
         );
 
+        if ('guest@sportroops.fr' == $username) {
+            unset($data['user']);
+        }
+
+
         $event->setData($data);
     }
 }

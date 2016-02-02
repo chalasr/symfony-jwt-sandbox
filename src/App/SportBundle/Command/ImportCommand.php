@@ -4,7 +4,6 @@ namespace App\SportBundle\Command;
 
 use App\SportBundle\Entity\Sport;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -68,7 +67,7 @@ class ImportCommand extends ContainerAwareCommand
      */
     protected function import(InputInterface $input, OutputInterface $output, $data)
     {
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
         $repo = $em->getRepository('AppSportBundle:Sport');
         $categoryRepo = $em->getRepository('AppSportBundle:Category');
@@ -91,14 +90,10 @@ class ImportCommand extends ContainerAwareCommand
                 $sport->addTag($tag);
             }
 
-            try {
-                $em->persist($sport);
-                $output->writeln(sprintf('%s created', $sport->getName()));
-            } catch (Exception $e) {
-                $output->writeln($e->getMessage());
-            }
+            $em->persist($sport);
+            $output->writeln(sprintf('%s created', $sport->getName()));
 
-            if (($count % $batchSize) === 0) {
+            if (($i % $batchSize) === 0) {
                 $em->flush();
                 $em->clear();
             }

@@ -23,7 +23,7 @@ class BaseUserAdmin extends AbstractAdmin
     protected $datagridValues = array(
         '_page'       => 1,
         '_sort_order' => 'DESC',
-        '_sort_by'    => 'createdAt'
+        '_sort_by'    => 'createdAt',
     );
 
     /**
@@ -295,6 +295,7 @@ class BaseUserAdmin extends AbstractAdmin
                 'name' => $this->getLabel(),
             ))
         ;
+
         return $group;
     }
 

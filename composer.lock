@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8984eeb436b4a45514b92093c51a3709",
-    "content-hash": "5ccd317d40f41cee658e0b4f89307af5",
+    "hash": "285dc6e11ee28874843a842f7382b2f3",
+    "content-hash": "1b4b403c73a562ef0713743fe1227003",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -2149,16 +2149,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "1.1.5",
+            "version": "1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "dd8998b7c846f6909f4e7a5f67fabebfc412a4f7"
+                "reference": "e6f80ab77885151908d0ec743689ca700886e8b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/dd8998b7c846f6909f4e7a5f67fabebfc412a4f7",
-                "reference": "dd8998b7c846f6909f4e7a5f67fabebfc412a4f7",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/e6f80ab77885151908d0ec743689ca700886e8b0",
+                "reference": "e6f80ab77885151908d0ec743689ca700886e8b0",
                 "shasum": ""
             },
             "require": {
@@ -2193,7 +2193,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-01-06 13:31:20"
+            "time": "2016-01-29 16:19:52"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -2640,12 +2640,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "750b26988c90a1004710a3d950a4caa755d55b39"
+                "reference": "34a171da0686721eeab3f94cb2aa84533a2d777e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/750b26988c90a1004710a3d950a4caa755d55b39",
-                "reference": "750b26988c90a1004710a3d950a4caa755d55b39",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/34a171da0686721eeab3f94cb2aa84533a2d777e",
+                "reference": "34a171da0686721eeab3f94cb2aa84533a2d777e",
                 "shasum": ""
             },
             "require": {
@@ -2718,7 +2718,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2016-01-28 15:33:52"
+            "time": "2016-02-02 12:46:53"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -4446,6 +4446,63 @@
     ],
     "packages-dev": [
         {
+            "name": "chalasr/importer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chalasr/importer.git",
+                "reference": "dec1644f2a33f010226c405e151eed43b8c848b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chalasr/importer/zipball/dec1644f2a33f010226c405e151eed43b8c848b6",
+                "reference": "dec1644f2a33f010226c405e151eed43b8c848b6",
+                "shasum": ""
+            },
+            "require": {
+                "fabpot/php-cs-fixer": "^1.11",
+                "php": ">=5.3.9",
+                "symfony/property-access": ">=2.0"
+            },
+            "suggest": {
+                "doctrine/dbal": ">=2.4-dev,<2.6-dev",
+                "doctrine/orm": ">=2.4",
+                "ext-pdo": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "RCH\\Importer": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Robin Chalas",
+                    "email": "robin.chalas@gmail.com",
+                    "homepage": "https://github.com/chalasr"
+                }
+            ],
+            "description": "Light Importer library",
+            "homepage": "https://github.com/chalasr/Importer",
+            "keywords": [
+                "convert",
+                "csv",
+                "data",
+                "doctrine",
+                "import",
+                "json",
+                "orm",
+                "propel",
+                "xls",
+                "xml"
+            ],
+            "time": "2016-01-31 11:49:28"
+        },
+        {
             "name": "fabpot/php-cs-fixer",
             "version": "v1.11.1",
             "source": {
@@ -4665,7 +4722,8 @@
         "sonata-project/block-bundle": 20,
         "jms/serializer-bundle": 20,
         "nelmio/api-doc-bundle": 20,
-        "sonata-project/datagrid-bundle": 20
+        "sonata-project/datagrid-bundle": 20,
+        "chalasr/importer": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

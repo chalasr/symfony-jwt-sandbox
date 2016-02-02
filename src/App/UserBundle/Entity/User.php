@@ -908,7 +908,7 @@ class User extends BaseUser
     }
 
     /**
-     * Add coachDocument
+     * Add coachDocument.
      *
      * @param \App\UserBundle\Entity\Information\CoachDocument $coachDocument
      *
@@ -923,7 +923,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove coachDocument
+     * Remove coachDocument.
      *
      * @param \App\UserBundle\Entity\Information\CoachDocument $coachDocument
      */
@@ -933,7 +933,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get coachDocuments
+     * Get coachDocuments.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
