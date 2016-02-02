@@ -541,9 +541,6 @@ class UsersController extends BaseController
      * search user
      *
      * @Rest\Post("/users/search")
-     * @Rest\RequestParam(name="name",nullable=true, description="user's name")
-     * @Rest\RequestParam(name="sports",nullable=true, description="sports name")
-     * @Rest\RequestParam(name="groups",nullable=true, description="groups name")
      * @ApiDoc(
      *     section="User",
      *     resource=true,
@@ -552,6 +549,11 @@ class UsersController extends BaseController
      *         401="Unauthorized (this resource require an access token)",
      *         404="User not found"
      *     },
+     *      filters={
+     *          {"name"="name", "dataType"="string"},
+     *          {"name"="sports", "dataType"="array string name"},
+     *          {"name"="category", "dataType"="array string name"},
+     *      }
      * )
      *
      * @param Request $request
@@ -608,5 +610,32 @@ class UsersController extends BaseController
             ->getQuery()
             ->getResult();
         return $results;
+    }
+
+    /**
+     * Update current user profile
+     *
+     * @Rest\Post("/users/profile")
+     * @ApiDoc(
+     *     section="User",
+     *     resource=true,
+     *     statusCodes={
+     *         200="OK",
+     *         401="Unauthorized (this resource require an access token)",
+     *     },
+     * )
+     *
+     * * @param ParamFetcher $paramFetcher
+     *
+     * @return array
+     *
+     */
+    public function updateCurrentUserProfile(ParamFetcher $paramFetcher)
+    {
+        $pr=$paramFetcher->getParams();
+        print_r($pr);die();
+        $user = $this->getCurrentUser();
+
+        return $this->getUserAction($user->getId());
     }
 }
