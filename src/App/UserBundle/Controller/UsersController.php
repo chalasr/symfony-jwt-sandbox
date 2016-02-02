@@ -568,10 +568,16 @@ class UsersController extends BaseController
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $query = $qb->select('U')
-            ->from('AppUserBundle:User', 'U')
-            ->JOIN('U.group', 'G')
-            ->JOIN('U.sportUsers', 'SU')
-            ->JOIN('AppSportBundle:Sport', 'S');
+            ->from('AppUserBundle:User', 'U');
+
+        if ($groups) {
+            $query->JOIN('U.group', 'G');
+
+        }
+        if ($sports) {
+            $query->JOIN('U.sportUsers', 'SU')
+                ->JOIN('AppSportBundle:Sport', 'S');
+        }
         if ($name) {
             $query->Where('U.firstname LIKE :firstname')
                 ->orWhere('U.lastname LIKE :lastname')
