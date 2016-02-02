@@ -34,9 +34,15 @@ class UsersController extends BaseController
     {
         $this->rules = array(
             'edit' => [
-                'password' => 'nonempty',
-                'email'    => 'nonempty|email',
-                'firstname'
+                'password'      => 'nonempty',
+                'email'         => 'nonempty|email',
+                'first_name'    => 'nonempty',
+                'last_name'     => 'nonempty',
+                'date_of_birth' => 'nonempty',
+                'description'   => 'nonempty',
+                'address'       => 'nonempty',
+                'city'          => 'nonempty',
+                'zipcode'       => 'nonempty',
             ],
         );
     }
@@ -554,7 +560,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * search user
+     * Search user
      *
      * @Rest\Post("/users/search")
      * @ApiDoc(
@@ -644,16 +650,37 @@ class UsersController extends BaseController
      *     },
      * )
      *
-     * * @param ParamFetcher $paramFetcher
+     * @param Request $request
      *
      * @return array
      *
      */
-    public function updateCurrentUserProfile(ParamFetcher $paramFetcher)
+    public function updateCurrentUserProfile(Request $request)
     {
-        $pr = $paramFetcher->getParams();
-        print_r($pr);die();
+        $data = $request->request->all(); // Give an array of params like paramFetcher->getParams
+        // $pr = $paramFetcher->getParams();
+        print_r($data);die();
         $user = $this->getCurrentUser();
+
+        // @Thuy, for this resource, don't use the ParamFetcher.
+        // Look at the constructor of this controlller, you will see
+        // an array called $rules , which contains a list of fields.
+        // For each field, we have defined one (or more) rules.
+        // Like for 'email' => non empty (if is set because nothing is required in edit,
+        // just not null), and 'email' (email rule mean : a valid email)
+        // Then, just use the validator I've created, like:
+        // if ($this->check($data, 'edit', true)) {
+        //    Success in validation,
+        //    Do your logic with existing fields
+        // }
+        // The last parameter of the check() method is corresponding to lazy = true,
+        // If this parameter is to true, the validation will not be stopped at the first error,
+        // But will be continued and check each field, to return a response like :
+        // [
+        //    'email'    => 'not a valid email',
+        //    'password' => 'is empty'
+        // ]
+        // Instead of throw an exception at the first error.
 
         return $user;
     }

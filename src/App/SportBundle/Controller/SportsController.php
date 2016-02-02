@@ -64,6 +64,7 @@ class SportsController extends Controller
      * 	   201="Created",
      * 	   400="Bad Request",
      * 	   401="Unauthorized",
+     * 	   403="Forbidden (The request must be done by the user directly or an admin)"
      * 	 },
      * )
      *
@@ -131,6 +132,8 @@ class SportsController extends Controller
     /**
      * Update an existing entity.
      *
+     * @Security("has_role('ROLE_ADMIN')")
+     *
      * @Rest\Patch("/sports/{id}", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="name", requirements="[^/]+", nullable=true, description="Name")
      * @Rest\RequestParam(name="isActive", requirements="[^/]+", nullable=true, description="Name")
@@ -175,6 +178,8 @@ class SportsController extends Controller
 
     /**
      * Delete a Sport entity.
+     *
+     * @Security("has_role('ROLE_ADMIN')")
      *
      * @Rest\Delete("/sports/{id}", requirements={"id" = "\d+"})
      *
