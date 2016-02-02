@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,6 +50,8 @@ class SportsController extends Controller
 
     /**
      * Creates a new Sport entity.
+     *
+     * @Security("has_role('ROLE_ADMIN')")
      *
      * @Rest\Post("/sports")
      * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")

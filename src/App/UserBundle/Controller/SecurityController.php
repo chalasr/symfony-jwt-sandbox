@@ -32,9 +32,19 @@ class SecurityController extends Controller
     public function __construct()
     {
         $this->rules = array(
-            'register' => ['password', 'email'],
-            'basic'    => ['password', 'email'],
-            'oauth'    => ['id', 'email', 'access_token'],
+            'register' => [
+                'password' => 'nonempty|required',
+                'email'    => 'nonempty|required|email'
+            ],
+            'basic' => [
+                'password' => 'nonempty|required',
+                'email'    => 'nonempty|required|email'
+            ],
+            'oauth' => [
+                'id'           => 'nonempty|required',
+                'email'        => 'nonempty|required|email',
+                'access_token' => 'nonempty|required'
+            ],
         );
     }
 
@@ -62,7 +72,7 @@ class SecurityController extends Controller
         $data = $request->request->all();
         $userManager = $this->getUserManager();
 
-        if (false === $this->check($data, 'register')) {
+        if (false === $this->check($data, 'register', true)) {
             return $this->validationFailedException();
         }
 
@@ -116,7 +126,7 @@ class SecurityController extends Controller
         $guestId = 'guest@sportroops.fr';
 
         if (null === $guest = $userManager->findUserByEmail($guestId)) {
-            throw new NotFoundHttpException('Impossible de trouver l\'utilisateur guest (email: \'guest@sportroops.fr\')');
+            $guest = $this->createGuestUser();
         }
 
         return $this->generateToken($guest);
@@ -369,6 +379,26 @@ class SecurityController extends Controller
         $response = json_decode($client->getResponse()->getContent());
 
         return $response->id == $id;
+    }
+
+    protected function createGuestUser()
+    {
+        $em = $this->getEntityManager();
+        $userManager = $this->getUserManager();
+        $guestEmail = 'guest@sportroops.fr';
+
+
+        $user = $userManager->createUser();
+        $user->setUsername($guestEmail);
+        $user->setEmail($guestEmail);
+        $user->setEnabled(true);
+        $user->addRole('ROLE_GUEST');
+        $user->setCreatedAt(new \DateTime());
+        $user->setPlainPassword('guest');
+
+        $userManager->updateUser($user);
+
+        return $user;
     }
 
     /**

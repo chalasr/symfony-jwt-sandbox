@@ -6,6 +6,7 @@ use App\SportBundle\Entity;
 use App\UserBundle\Entity\User;
 use App\Util\Controller\AbstractRestController as BaseController;
 use App\Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
+use App\Util\Validator\CanValidateTrait as CanValidate;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -24,7 +25,21 @@ use Symfony\Component\HttpFoundation as Http;
  */
 class UsersController extends BaseController
 {
-    use CanCheckPermissions;
+    use CanCheckPermissions, CanValidate;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->rules = array(
+            'edit' => [
+                'password' => 'nonempty',
+                'email'    => 'nonempty|email',
+                'firstname'
+            ],
+        );
+    }
 
     /**
      * List all users.
@@ -344,7 +359,8 @@ class UsersController extends BaseController
      *    resource=true,
      *     statusCodes={
      *       204="No Content (picture successfully updated)",
-     *       401="Unauthorized (this resource require an access token)"
+     *       401="Unauthorized (this resource require an access token)",
+     *       403="Forbidden (must be the user or an admin)"
      *     }
      * )
      *
@@ -455,7 +471,8 @@ class UsersController extends BaseController
      *     statusCodes={
      *         204="No content (success)",
      *         401="Unauthorized (this resource require an access token)",
-     *         404="User not found"
+     *         404="User not found",
+     *         403="Forbidden (must be the user or an admin)"
      *     },
      * )
      *
@@ -468,8 +485,6 @@ class UsersController extends BaseController
     public function addSport($id, ParamFetcher $paramFetcher)
     {
         $sportId = $paramFetcher->get('sport_id');
-
-        #get user
         $user = $this->findUserOrFail($id);
 
         if (!$this->isCurrentUserId($id) && !$this->isAdmin()) {
@@ -529,6 +544,7 @@ class UsersController extends BaseController
         if (!$sportUsers) {
             throw new NotFoundHttpException(sprintf('Unable to find sport %d with user %d', $sport_id, $id));
         }
+
         foreach ($sportUsers as $sportUser) {
             $em->remove($sportUser);
             $em->flush();
@@ -632,7 +648,7 @@ class UsersController extends BaseController
      */
     public function updateCurrentUserProfile(ParamFetcher $paramFetcher)
     {
-        $pr=$paramFetcher->getParams();
+        $pr = $paramFetcher->getParams();
         print_r($pr);die();
         $user = $this->getCurrentUser();
 
