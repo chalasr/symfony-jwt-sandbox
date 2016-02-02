@@ -32,12 +32,12 @@ class UsersController extends BaseController
      * @Rest\View(serializerGroups={"api"})
      *
      * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK (list all users)",
-     * 	     401="Unauthorized (this resource require an access token)"
-     * 	 },
+     *     section="User",
+     *     resource=true,
+     *     statusCodes={
+     *         200="OK (list all users)",
+     *         401="Unauthorized (this resource require an access token)"
+     *     },
      * )
      *
      * @return Doctrine\ORM\QueryBuilder
@@ -56,13 +56,13 @@ class UsersController extends BaseController
      * @Rest\Get("/users/{id}", requirements={"id" = "\d+"})
      * @Rest\View(serializerGroups={"api"})
      * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK",
-     * 	     401="Unauthorized (this resource require an access token)",
-     * 	     404="User not found)"
-     * 	 },
+     *     section="User",
+     *     resource=true,
+     *     statusCodes={
+     *         200="OK",
+     *         401="Unauthorized (this resource require an access token)",
+     *         404="User not found)"
+     *     },
      * )
      *
      * @return array
@@ -79,16 +79,16 @@ class UsersController extends BaseController
      *
      * @Rest\Post("/users/followers/{follower}", requirements={"follower" = "\d+"})
      * @ApiDoc(
-     * 	section="User",
-     * 	resource=true,
-     * 	parameters={
+     *    section="User",
+     *    resource=true,
+     *    parameters={
      *     {"name"="follower", "dataType"="integer", "required"=true, "description"="Follower"}
      *   },
-     * 	 statusCodes={
-     * 	   204="No Content (follower successfully added)",
-     * 	   401="Unauthorized (this resource require an access token)",
-     * 	   422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
-     * 	 },
+     *     statusCodes={
+     *       204="No Content (follower successfully added)",
+     *       401="Unauthorized (this resource require an access token)",
+     *       422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
+     *     },
      * )
      *
      * @param ParamFetcher $paramFetcher
@@ -120,16 +120,16 @@ class UsersController extends BaseController
      *
      * @Rest\Delete("/users/followers/{follower}", requirements={"follower" = "\d+"})
      * @ApiDoc(
-     * 	section="User",
-     * 	resource=true,
-     * 	parameters={
+     *    section="User",
+     *    resource=true,
+     *    parameters={
      *     {"name"="follower", "dataType"="integer", "required"=true, "description"="Follower"}
      *   },
-     * 	 statusCodes={
-     * 	   204="No Content (follower successfully deleted)",
-     * 	   401="Unauthorized (this resource require an access token)",
-     * 	   422="Follow does not exist"
-     * 	 },
+     *     statusCodes={
+     *       204="No Content (follower successfully deleted)",
+     *       401="Unauthorized (this resource require an access token)",
+     *       422="Follow does not exist"
+     *     },
      * )
      *
      * @param ParamFetcher $paramFetcher
@@ -161,13 +161,13 @@ class UsersController extends BaseController
      * @Rest\Get("/users/current")
      * @Rest\View(serializerGroups={"api"})
      * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK",
-     * 	     401="Unauthorized (this resource require an access token)",
-     * 	     422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
-     * 	 },
+     *     section="User",
+     *     resource=true,
+     *     statusCodes={
+     *         200="OK",
+     *         401="Unauthorized (this resource require an access token)",
+     *         422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
+     *     },
      * )
      *
      * @return array
@@ -186,15 +186,15 @@ class UsersController extends BaseController
      *
      * @Rest\Post("/users/follows/{followed}", requirements={"followed" = "\d+"})
      * @ApiDoc(
-     * 	section="User",
-     * 	resource=true,
-     * 	parameters={
+     *    section="User",
+     *    resource=true,
+     *    parameters={
      *     {"name"="followed", "dataType"="integer", "required"=true, "description"="Followed"}
      *   },
-     * 	 statusCodes={
-     * 	   204="No Content (follow successfully added)",
-     * 	   401="Unauthorized (this resource require an access token)"
-     * 	 },
+     *     statusCodes={
+     *       204="No Content (follow successfully added)",
+     *       401="Unauthorized (this resource require an access token)"
+     *     },
      * )
      *
      * @param ParamFetcher $paramFetcher
@@ -227,16 +227,16 @@ class UsersController extends BaseController
      *
      * @Rest\Delete("/users/follows/{followed}", requirements={"followed" = "\d+"})
      * @ApiDoc(
-     * 	section="User",
-     * 	resource=true,
-     * 	parameters={
+     *    section="User",
+     *    resource=true,
+     *    parameters={
      *     {"name"="followed", "dataType"="integer", "required"=true, "description"="Follow"}
      *   },
-     * 	 statusCodes={
-     * 	   204="No Content (follow successfully deleted)",
-     * 	   401="Unauthorized (this resource require an access token)",
-     * 	   422="Unprocessable Entity (User not followed yet)"
-     * 	 },
+     *     statusCodes={
+     *       204="No Content (follow successfully deleted)",
+     *       401="Unauthorized (this resource require an access token)",
+     *       422="Unprocessable Entity (User not followed yet)"
+     *     },
      * )
      *
      * @param ParamFetcher $paramFetcher
@@ -267,13 +267,13 @@ class UsersController extends BaseController
      *
      * @Rest\Get("/users/{id}/followers")
      * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK (list all followers)",
-     * 	     401="Unauthorized (this resource require an access token)",
-     * 	     404="User not found"
-     * 	 },
+     *     section="User",
+     *     resource=true,
+     *     statusCodes={
+     *         200="OK (list all followers)",
+     *         401="Unauthorized (this resource require an access token)",
+     *         404="User not found"
+     *     },
      * )
      *
      * @return object
@@ -292,13 +292,13 @@ class UsersController extends BaseController
      *
      * @Rest\Get("/users/{id}/follows")
      * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK (list all followers)",
-     * 	     401="Unauthorized (this resource require an access token)",
-     * 	     404="User not found"
-     * 	 },
+     *     section="User",
+     *     resource=true,
+     *     statusCodes={
+     *         200="OK (list all followers)",
+     *         401="Unauthorized (this resource require an access token)",
+     *         404="User not found"
+     *     },
      * )
      *
      * @return object
@@ -339,12 +339,12 @@ class UsersController extends BaseController
      *
      * @Rest\Post("/users/{id}/picture", requirements={"id" = "\d+"})
      * @ApiDoc(
-     * 	section="User",
-     * 	resource=true,
-     * 	 statusCodes={
-     * 	   204="No Content (picture successfully updated)",
-     * 	   401="Unauthorized (this resource require an access token)"
-     * 	 }
+     *    section="User",
+     *    resource=true,
+     *     statusCodes={
+     *       204="No Content (picture successfully updated)",
+     *       401="Unauthorized (this resource require an access token)"
+     *     }
      * )
      *
      * @param Request $request
@@ -370,17 +370,18 @@ class UsersController extends BaseController
 
         return $user;
     }
+
     /**
      * get user picture.
      *
      * @Rest\Get("/users/{id}/picture", requirements={"id" = "\d+"})
      * @ApiDoc(
-     * 	section="User",
-     * 	resource=true,
-     * 	 statusCodes={
-     * 	   204="No Content (picture successfully updated)",
-     * 	   401="Unauthorized (this resource require an access token)"
-     * 	 }
+     *    section="User",
+     *    resource=true,
+     *     statusCodes={
+     *       204="No Content (picture successfully updated)",
+     *       401="Unauthorized (this resource require an access token)"
+     *     }
      * )
      *
      * @param Request $request
@@ -391,7 +392,7 @@ class UsersController extends BaseController
     {
         $user = $this->findUserOrFail($id);
 
-        $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/'.$user->getPicture());
+        $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/' . $user->getPicture());
         $iconInfo = pathinfo($path_picture);
 
         if (false === isset($iconInfo['extension'])) {
@@ -411,13 +412,13 @@ class UsersController extends BaseController
      *
      * @Rest\Get("/users/{id}/sports", requirements={"id" = "\d+"})
      * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK (list all followers)",
-     * 	     401="Unauthorized (this resource require an access token)",
-     * 	     404="User not found"
-     * 	 },
+     *     section="User",
+     *     resource=true,
+     *     statusCodes={
+     *         200="OK (list all followers)",
+     *         401="Unauthorized (this resource require an access token)",
+     *         404="User not found"
+     *     },
      * )
      *
      * @return array
@@ -437,21 +438,21 @@ class UsersController extends BaseController
      * @Rest\Post("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
      * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     204="No content (success)",
-     * 	     401="Unauthorized (this resource require an access token)",
-     * 	     404="User not found"
-     * 	 },
+     *     section="User",
+     *     resource=true,
+     *     statusCodes={
+     *         204="No content (success)",
+     *         401="Unauthorized (this resource require an access token)",
+     *         404="User not found"
+     *     },
      * )
      *
-     * @param int          $id
+     * @param int $id
      * @param ParamFetcher $paramFetcher
      *
      * @return array
      */
-    
+
     public function addSport($id, ParamFetcher $paramFetcher)
     {
         $sportId = $paramFetcher->get('sport_id');
@@ -482,16 +483,16 @@ class UsersController extends BaseController
      * @Rest\Delete("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
      * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     200="OK (list all followers)",
-     * 	     401="Unauthorized (this resource require an access token)",
-     * 	     404="User not found"
-     * 	 },
+     *     section="User",
+     *     resource=true,
+     *     statusCodes={
+     *         200="OK (list all followers)",
+     *         401="Unauthorized (this resource require an access token)",
+     *         404="User not found"
+     *     },
      * )
      *
-     * @param int          $id
+     * @param int $id
      * @param ParamFetcher $paramFetcher
      *
      * @return array
@@ -518,34 +519,65 @@ class UsersController extends BaseController
      *
      * @Rest\Post("/users/search")
      * @Rest\RequestParam(name="name",nullable=true, description="user's name")
+     * @Rest\RequestParam(name="sports",nullable=true, description="sports name")
+     * @Rest\RequestParam(name="groups",nullable=true, description="groups name")
      * @ApiDoc(
-     * 	 section="User",
-     * 	 resource=true,
-     * 	 statusCodes={
-     * 	     204="No content (success)",
-     * 	     401="Unauthorized (this resource require an access token)",
-     * 	     404="User not found"
-     * 	 },
+     *     section="User",
+     *     resource=true,
+     *     statusCodes={
+     *         204="No content (success)",
+     *         401="Unauthorized (this resource require an access token)",
+     *         404="User not found"
+     *     },
      * )
      *
-     * @param ParamFetcher $paramFetcher
+     * @param Request $request
      *
      * @return array
      */
-    public function userSearch(ParamFetcher $paramFetcher)
+    public function userSearch(Request $request)
     {
-        $name = $paramFetcher->get('name');
+        $name = $request->request->get('name');
+        $sports = $request->request->get('sports');
+        $groups = $request->request->get('groups');
+
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $x=$qb->select('U')
+        $query = $qb->select('U', 'S')
             ->from('AppUserBundle:User', 'U')
-            ->Where('U.firstname LIKE :firstname')
-            ->orWhere('U.lastname LIKE :lastname')
-            ->setParameter('firstname', '%'.$name.'%')
-            ->setParameter('lastname', '%'.$name.'%')
+            ->JOIN('U.group', 'G')
+            ->JOIN('U.sportUsers', 'SU')
+            ->JOIN('AppSportBundle:Sport', 'S');
+        if ($name) {
+            $query->Where('U.firstname LIKE :firstname')
+                ->orWhere('U.lastname LIKE :lastname')
+                ->setParameter('firstname', '%' . $name . '%')
+                ->setParameter('lastname', '%' . $name . '%');
+        }
+        if ($sports) {
+            if(is_array($sports)){
+                foreach ($sports as &$value) $value = "'".$value."'";
+                unset($value);
+            }else{
+                $sports="'{$sports}'";
+            }
+            $query->andWhere("S.name IN (" . implode(',', $sports) . ")");
+        }
+        if ($groups) {
+            if(is_array($groups)){
+                foreach ($groups as &$value) $value = "'".$value."'";
+                unset($value);
+            }else{
+                $groups="'{$groups}'";
+            }
+            $query->andWhere("S.name IN (" . implode(',', $groups) . ")");
+        }
+
+        $results = $query->setFirstResult(0)
+            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
-        return $x;
+        return $results;
     }
 }
