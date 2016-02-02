@@ -567,7 +567,7 @@ class UsersController extends BaseController
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $query = $qb->select('U', 'S')
+        $query = $qb->select('U')
             ->from('AppUserBundle:User', 'U')
             ->JOIN('U.group', 'G')
             ->JOIN('U.sportUsers', 'SU')
