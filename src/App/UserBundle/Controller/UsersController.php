@@ -545,9 +545,9 @@ class UsersController extends BaseController
      *     section="User",
      *     resource=true,
      *     statusCodes={
-     *         204="No content (success)",
-     *         401="Unauthorized (this resource require an access token)",
-     *         404="User not found"
+     *        200="OK (list users)",
+     * 	      401="Unauthorized (this resource require an access token)",
+     * 	      404="User not found",
      *     },
      *      filters={
      *          {"name"="name", "dataType"="string"},
@@ -609,6 +609,9 @@ class UsersController extends BaseController
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
+        if (!$results) {
+            throw new NotFoundHttpException(sprintf('Unable to find user '));
+        }
         return $results;
     }
 
@@ -632,10 +635,8 @@ class UsersController extends BaseController
      */
     public function updateCurrentUserProfile(ParamFetcher $paramFetcher)
     {
-        $pr=$paramFetcher->getParams();
-        print_r($pr);die();
         $user = $this->getCurrentUser();
 
-        return $this->getUserAction($user->getId());
+        return $user;
     }
 }
