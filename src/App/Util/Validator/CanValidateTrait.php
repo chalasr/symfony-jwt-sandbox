@@ -130,10 +130,10 @@ trait CanValidateTrait
     /**
      * Check if field has rule.
      *
-     * @param array   $propertyRules
-     * @param string  $rule
+     * @param array  $propertyRules
+     * @param string $rule
      *
-     * @return boolean
+     * @return bool
      */
     protected function hasRule($propertyRules, $rule)
     {

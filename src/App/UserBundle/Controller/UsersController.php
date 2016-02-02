@@ -10,12 +10,11 @@ use App\Util\Validator\CanValidateTrait as CanValidate;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\HttpFoundation as Http;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
  * Users Controller.
@@ -425,7 +424,7 @@ class UsersController extends BaseController
     {
         $user = $this->findUserOrFail($id);
 
-        $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/' . $user->getPicture());
+        $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/'.$user->getPicture());
         $iconInfo = pathinfo($path_picture);
 
         if (false === isset($iconInfo['extension'])) {
@@ -437,6 +436,7 @@ class UsersController extends BaseController
         $response->headers->set('Content-length', filesize($path_picture));
         $response->sendHeaders();
         $response->setContent(file_get_contents($path_picture));
+
         return $response;
     }
 
@@ -471,6 +471,7 @@ class UsersController extends BaseController
      *
      * @Rest\Post("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
+     *  
      * @ApiDoc(
      *     section="User",
      *     resource=true,
@@ -482,12 +483,11 @@ class UsersController extends BaseController
      *     },
      * )
      *
-     * @param int $id
+     * @param int          $id
      * @param ParamFetcher $paramFetcher
      *
      * @return array
      */
-
     public function addSport($id, ParamFetcher $paramFetcher)
     {
         $sportId = $paramFetcher->get('sport_id');
@@ -530,7 +530,7 @@ class UsersController extends BaseController
      * 	 },
      * )
      *
-     * @param int $id
+     * @param int          $id
      * @param ParamFetcher $paramFetcher
      *
      * @return array
@@ -560,7 +560,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Search user
+     * Search user.
      *
      * @Rest\Post("/users/search")
      * @ApiDoc(
@@ -588,7 +588,6 @@ class UsersController extends BaseController
         $sports = $request->request->get('sports');
         $groups = $request->request->get('groups');
 
-
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $query = $qb->select('U')
@@ -596,7 +595,6 @@ class UsersController extends BaseController
 
         if ($groups) {
             $query->JOIN('U.group', 'G');
-
         }
         if ($sports) {
             $query->JOIN('U.sportUsers', 'SU')
@@ -605,26 +603,30 @@ class UsersController extends BaseController
         if ($name) {
             $query->Where('U.firstname LIKE :firstname')
                 ->orWhere('U.lastname LIKE :lastname')
-                ->setParameter('firstname', '%' . $name . '%')
-                ->setParameter('lastname', '%' . $name . '%');
+                ->setParameter('firstname', '%'.$name.'%')
+                ->setParameter('lastname', '%'.$name.'%');
         }
         if ($sports) {
-            if(is_array($sports)){
-                foreach ($sports as &$value) $value = "'".$value."'";
+            if (is_array($sports)) {
+                foreach ($sports as &$value) {
+                    $value = "'".$value."'";
+                }
                 unset($value);
-            }else{
-                $sports="'{$sports}'";
+            } else {
+                $sports = "'{$sports}'";
             }
-            $query->andWhere("S.name IN (" . implode(',', $sports) . ")");
+            $query->andWhere('S.name IN ('.implode(',', $sports).')');
         }
         if ($groups) {
-            if(is_array($groups)){
-                foreach ($groups as &$value) $value = "'".$value."'";
+            if (is_array($groups)) {
+                foreach ($groups as &$value) {
+                    $value = "'".$value."'";
+                }
                 unset($value);
-            }else{
-                $groups="'{$groups}'";
+            } else {
+                $groups = "'{$groups}'";
             }
-            $query->andWhere("S.name IN (" . implode(',', $groups) . ")");
+            $query->andWhere('S.name IN ('.implode(',', $groups).')');
         }
 
         $results = $query->setFirstResult(0)
@@ -634,11 +636,12 @@ class UsersController extends BaseController
         if (!$results) {
             throw new NotFoundHttpException(sprintf('Unable to find user '));
         }
+
         return $results;
     }
 
     /**
-     * Update current user profile
+     * Update current user profile.
      *
      * @Rest\Post("/users/profile")
      * @ApiDoc(
@@ -653,13 +656,13 @@ class UsersController extends BaseController
      * @param Request $request
      *
      * @return array
-     *
      */
     public function updateCurrentUserProfile(Request $request)
     {
         $data = $request->request->all(); // Give an array of params like paramFetcher->getParams
         // $pr = $paramFetcher->getParams();
-        print_r($data);die();
+        print_r($data);
+        die();
         $user = $this->getCurrentUser();
 
         // @Thuy, for this resource, don't use the ParamFetcher.
