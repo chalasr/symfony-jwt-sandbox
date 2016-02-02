@@ -507,6 +507,7 @@ class UsersController extends BaseController
      * 	     404="User not found",
      * 	     403="Forbidden (Only the user or an admin can access this resource)"
      * 	 },
+     * )
      *
      * @param int $id
      * @param ParamFetcher $paramFetcher
@@ -601,6 +602,5 @@ class UsersController extends BaseController
             ->getQuery()
             ->getResult();
         return $results;
-
     }
 }
