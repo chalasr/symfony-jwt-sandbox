@@ -561,14 +561,14 @@ class UsersController extends BaseController
      *     section="User",
      *     resource=true,
      *     statusCodes={
-     *         204="No content (success)",
-     *         401="Unauthorized (this resource require an access token)",
-     *         404="User not found"
+     *        200="OK (list users)",
+     * 	      401="Unauthorized (this resource require an access token)",
+     * 	      404="User not found",
      *     },
      *      filters={
      *          {"name"="name", "dataType"="string"},
-     *          {"name"="sports", "dataType"="array string name"},
-     *          {"name"="category", "dataType"="array string name"},
+     *          {"name"="sports", "dataType"="array string", "Example"="sports[] sport1, sports[] sport2"},
+     *          {"name"="groups", "dataType"="array string", "Example"="groups[] group1, groups[] group2"},
      *      }
      * )
      *
@@ -625,6 +625,9 @@ class UsersController extends BaseController
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
+        if (!$results) {
+            throw new NotFoundHttpException(sprintf('Unable to find user '));
+        }
         return $results;
     }
 
@@ -652,6 +655,6 @@ class UsersController extends BaseController
         print_r($pr);die();
         $user = $this->getCurrentUser();
 
-        return $this->getUserAction($user->getId());
+        return $user;
     }
 }
