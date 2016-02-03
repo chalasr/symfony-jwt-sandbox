@@ -24,6 +24,7 @@ class CoachAdmin extends BaseUserAdmin
             'data_class' => null,
             'label'      => 'Photo de profil',
         );
+
         if ($this->getSubject()->getId()) {
             $subject = $this->getSubject();
             if ($subject->getPicture()) {
@@ -34,6 +35,7 @@ class CoachAdmin extends BaseUserAdmin
             $pictureOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
         }
         /* End custom check */
+
         $formMapper
             ->with('Profil')
                 ->add('firstname', null, array('required' => false, 'label' => 'Prénom'))
@@ -167,15 +169,27 @@ class CoachAdmin extends BaseUserAdmin
 
     public function prePersist($object)
     {
+        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/coach_documents');
+
         foreach ($object->getCoachDocuments() as $document) {
             $document->setUser($object);
+
+            if ($document->getUrlFile()) {
+                $document->uploadDocument($uploadPath);
+            }
         }
     }
 
     public function preUpdate($object)
     {
+        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/coach_documents');
+
         foreach ($object->getCoachDocuments() as $document) {
             $document->setUser($object);
+
+            if ($document->getUrlFile()) {
+                $document->uploadDocument($uploadPath);
+            }
         }
     }
 }

@@ -58,6 +58,7 @@ sonata_admin:
         layout:                    AppAdminBundle:Default:standard_layout.html.twig
         short_object_description:  SonataAdminBundle:Helper:short-object-description.html.twig
         user_block:                AppAdminBundle:Block:user_block.html.twig
+        # edit_orm_one_to_many:      AppAdminBundle:CRUD:edit_orm_one_to_many.html.twig
 
     admin_services:
         # Prototype
