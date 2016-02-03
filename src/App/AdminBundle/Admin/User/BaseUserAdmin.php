@@ -139,14 +139,14 @@ class BaseUserAdmin extends AbstractAdmin
         }
         /* End custom check */
         $formMapper
-            ->with('Général')
-                ->add('email')
-                ->add('plainPassword', 'password', array(
-                    'label'    => 'Mot de passe',
-                    'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
+            ->with('Profil')
+                ->add('firstname', null, array('required' => false, 'label' => 'Prénom'))
+                ->add('lastname', null, array('required' => false, 'label' => 'Nom'))
+                ->add('gender', 'sonata_user_gender', array(
+                    'required'           => false,
+                    'label'              => 'Sexe',
+                    'translation_domain' => $this->getTranslationDomain(),
                 ))
-            ->end()
-            ->with('Profile')
                 ->add('dateOfBirth', 'sonata_type_date_picker', array(
                     'label'       => 'Date de naissance',
                     'format'      => 'dd/MM/yyyy',
@@ -154,8 +154,6 @@ class BaseUserAdmin extends AbstractAdmin
                     'required'    => false,
                 ))
                 ->add('file', 'file', $pictureOptions)
-                ->add('firstname', null, array('required' => false, 'label' => 'Prénom'))
-                ->add('lastname', null, array('required' => false, 'label' => 'Nom'))
                 ->add('description', 'textarea', array(
                     'attr' => array(
                         'maxlength' => 500,
@@ -163,12 +161,7 @@ class BaseUserAdmin extends AbstractAdmin
                     'required' => false,
                     'label'    => 'Déscription',
                 ))
-                ->add('gender', 'sonata_user_gender', array(
-                    'required'           => false,
-                    'label'              => 'Genre',
-                    'translation_domain' => $this->getTranslationDomain(),
-                ))
-                ->add('phone', null, array('required' => false))
+                ->add('phone', null, array('required' => false, 'label' => 'Téléphone'))
                 ->add('address', 'textarea', array(
                     'label'    => 'Adresse',
                     'required' => false,
@@ -186,22 +179,28 @@ class BaseUserAdmin extends AbstractAdmin
                 ))
             ->end()
             ->with('Sports')
-            ->add('sportUsers', 'sonata_type_collection', array(
-              'by_reference'       => false,
-              // 'cascade_validation' => true,
-              'required' => false,
-              'label'    => 'Sports',
-            ), array(
-              'edit'       => 'inline',
-              'inline'     => 'table',
-              'admin_code' => 'app_admin.admin.sport_user',
-            ))
+                ->add('sportUsers', 'sonata_type_collection', array(
+                    'by_reference' => false,
+                    'required'     => false,
+                    'label'        => false,
+                ), array(
+                    'edit'       => 'inline',
+                    'inline'     => 'table',
+                    'admin_code' => 'app_admin.admin.sport_user',
+                ))
+            ->end()
+            ->with('Accès')
+                ->add('email')
+                ->add('plainPassword', 'password', array(
+                    'label'    => 'Mot de passe',
+                    'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
+                ))
             ->end()
         ;
 
         if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
             $formMapper
-                ->with('Management')
+                ->with('Gestion')
                     ->add('realRoles', 'choice', array(
                         'label'    => 'Rôles',
                         'choices'  => $rolesChoices,

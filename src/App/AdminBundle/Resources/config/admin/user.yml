@@ -25,6 +25,8 @@ services:
         calls:
             - [setUserManager, ["@fos_user.user_manager"]]
             - [setRealLabel, ['Coach']]
+            - [setTranslationDomain, ["%sonata.user.admin.user.translation_domain%"]]
+
 
     # Providers
     sonata.admin.users_providers:
@@ -38,6 +40,7 @@ services:
         calls:
             - [setUserManager, ['@fos_user.user_manager']]
             - [setRealLabel, ['Provider']]
+            - [setTranslationDomain, ["%sonata.user.admin.user.translation_domain%"]]
 
     # Sportroopers
     sonata.admin.users_sportroopers:
@@ -51,6 +54,8 @@ services:
         calls:
             - [setUserManager, ['@fos_user.user_manager']]
             - [setRealLabel, ['Sportrooper']]
+            - [setTranslationDomain, ["%sonata.user.admin.user.translation_domain%"]]
+
 
     # Administrators
     sonata.admin.users_admins:
@@ -64,6 +69,8 @@ services:
         calls:
             - [setUserManager, ['@fos_user.user_manager']]
             - [setRealLabel, ['Administrateur']]
+            - [setTranslationDomain, ["%sonata.user.admin.user.translation_domain%"]]
+
 
 # User associations
      # User -> CoachInformation
