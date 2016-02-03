@@ -196,12 +196,16 @@ class UsersController extends BaseController
      *
      * @throws NotFoundHttpException If the user does not exist
      */
-    public function getCurrentUserAction()
-    {
-        $user = $this->getCurrentUser();
+     public function getCurrentUserAction()
+     {
+         $user = $this->getCurrentUser();
 
-        return $this->getUserAction($user->getId());
-    }
+         if ($user->getEmail() == 'guest@sportroops.fr') {
+             return new JsonResponse([], 204);
+         }
+
+         return $this->getUserAction($user->getId());
+     }
 
     /**
      * Add a followed user to the current user.
