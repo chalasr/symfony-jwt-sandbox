@@ -637,6 +637,7 @@ class UsersController extends BaseController
      *     parameters={
      *      {"name"="first_name", "dataType"="string", "required"=false, "description"="first_name"},
      *     {"name"="last_name", "dataType"="string", "required"=false, "description"="last_name"},
+     *      {"name"="email", "dataType"="string", "required"=false, "description"="email"},
      *      {"name"="password", "dataType"="string", "required"=false, "description"="password"},
      *      {"name"="date_of_birth", "dataType"="integer", "required"=false, "description"="date_of_birth"},
      *      {"name"="address", "dataType"="string", "required"=false, "description"="address"},
