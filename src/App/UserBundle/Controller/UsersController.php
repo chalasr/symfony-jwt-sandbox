@@ -560,7 +560,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Search user.
+     * Search users by name, groups, sports.
      *
      * @Rest\Post("/users/search")
      * @ApiDoc(
@@ -573,8 +573,8 @@ class UsersController extends BaseController
      *     },
      *      filters={
      *          {"name"="name", "dataType"="string"},
-     *          {"name"="sports", "dataType"="array string", "Example"="sports[] sport1, sports[] sport2"},
-     *          {"name"="groups", "dataType"="array string", "Example"="groups[] group1, groups[] group2"},
+     *          {"name"="sports", "dataType"="string", "Example"="sports = sport1,sport2"},
+     *          {"name"="groups", "dataType"="string", "Example"="groups = group1,group2"},
      *      }
      * )
      *
@@ -593,10 +593,12 @@ class UsersController extends BaseController
             ->from('AppUserBundle:User', 'U');
 
         if ($groups) {
+            $groups=array_filter(explode(',',$groups),'trim');
             $query->JOIN('U.group', 'G','WITH',"G.name IN (:groups)")
             ->setParameter('groups', $groups);
         }
         if ($sports) {
+            $sports=array_filter(explode(',',$sports),'trim');
             $query->JOIN('U.sportUsers', 'SU')
                 ->JOIN('SU.sport', 'S',"WITH","S.name IN (:sports)")
                 ->setParameter('sports', $sports);
