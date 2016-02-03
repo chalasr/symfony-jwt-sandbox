@@ -16,7 +16,7 @@ class SportUserAdmin extends AbstractAdmin
             ->select('s')
             ->from('AppSportBundle:Sport', 's')
             ->where('s.isActive = 1')
-            ->orderBy('s.id', 'ASC')
+            ->orderBy('s.name', 'ASC')
         ;
 
         $formMapper
@@ -24,7 +24,7 @@ class SportUserAdmin extends AbstractAdmin
                 'required' => true,
                 'query'    => $query,
             ))
-            ->add('price')
+            ->add('price', null, array('label' => 'Prix'))
         ;
     }
 }

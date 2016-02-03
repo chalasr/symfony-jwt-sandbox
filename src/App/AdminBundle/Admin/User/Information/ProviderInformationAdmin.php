@@ -9,9 +9,8 @@ class ProviderInformationAdmin extends Admin
 {
     public function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper
-            ->add('name', null, array(
-                'label' => 'Nom',
-            ));
+        $formMapper->add('name', null, array(
+            'label' => 'Nom',
+        ));
     }
 }

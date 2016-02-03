@@ -402,6 +402,11 @@ class SecurityController extends Controller
         return $response->id == $id;
     }
 
+    /**
+     * Creates the guest user.
+     *
+     * @return User The newly created guest user
+     */
     protected function createGuestUser()
     {
         $em = $this->getEntityManager();
