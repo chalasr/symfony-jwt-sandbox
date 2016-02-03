@@ -715,7 +715,5 @@ class UsersController extends BaseController
         //    'password' => 'is empty'
         // ]
         // Instead of throw an exception at the first error.
-
-        return $user;
     }
 }
