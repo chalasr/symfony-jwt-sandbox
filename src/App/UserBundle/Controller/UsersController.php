@@ -650,17 +650,33 @@ class UsersController extends BaseController
      */
     public function updateCurrentUserProfile(Request $request)
     {
+
+        $em = $this->getEntityManager();
+
         $data = $request->request->all();
         $user = $this->getCurrentUser();
-
-        return $user;
 
         $this->check($data,'edit',true);
         if(count($this->errors)){
             return $this->errors;
         }else{
-            if(isset($data['password'])) $user->setEmail($data['password']);
-            if(isset($data['email'])) $user->setEmail($data['email']);
+            if(isset($data['password'])){
+                $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+                $new_pwd_encoded = $encoder->encodePassword($data['password'], $user->getSalt());
+                $user->setPassword($new_pwd_encoded);
+            }
+
+            if(isset($data['email'])){
+                $userEmail=$em->getRepository('AppUserBundle:User')->findOneBy(array('email'=>$data['email']));
+                if($userEmail){
+                    if($userEmail->getId()!=$user->getId()){
+                        return array('email'=>'Exist email on system');
+                    }
+                }else{
+                    $user->setEmail($data['email']);
+                }
+
+            }
             if(isset($data['first_name'])) $user->setFirstName($data['first_name']);
             if(isset($data['last_name'])) $user->setLastName($data['last_name']);
             if(isset($data['date_of_birth'])) $user->setDateOfBirth($data['date_of_birth']);
@@ -668,7 +684,6 @@ class UsersController extends BaseController
             if(isset($data['address'])) $user->setAddress($data['address']);
             if(isset($data['city'])) $user->setCity($data['city']);
             if(isset($data['zipcode'])) $user->setZipcode($data['zipcode']);
-            $em = $this->getEntityManager();
             $em->persist($user);
             $em->flush();
             return $data;
