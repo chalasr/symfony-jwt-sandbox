@@ -13,6 +13,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation as Http;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -196,12 +197,16 @@ class UsersController extends BaseController
      *
      * @throws NotFoundHttpException If the user does not exist
      */
-    public function getCurrentUserAction()
-    {
-        $user = $this->getCurrentUser();
+     public function getCurrentUserAction()
+     {
+         $user = $this->getCurrentUser();
 
-        return $this->getUserAction($user->getId());
-    }
+         if ($user->getEmail() == 'guest@sportroops.fr') {
+             return new JsonResponse([], 204);
+         }
+
+         return $this->getUserAction($user->getId());
+     }
 
     /**
      * Add a followed user to the current user.
