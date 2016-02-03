@@ -699,7 +699,6 @@ class UsersController extends BaseController
         if (isset($data['zipcode'])) {
             $user->setZipcode($data['zipcode']);
         }
-
         $em->flush();
 
         return $data;
