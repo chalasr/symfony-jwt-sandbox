@@ -3,6 +3,7 @@
 namespace App\UserBundle\Controller;
 
 use App\SportBundle\Entity;
+use App\UserBundle\AppUserBundle;
 use App\UserBundle\Entity\User;
 use App\Util\Controller\AbstractRestController as BaseController;
 use App\Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
@@ -35,7 +36,7 @@ class UsersController extends BaseController
             'edit' => [
                 'password'      => 'nonempty',
                 'email'         => 'nonempty|email',
-                'first_name'    => 'nonempty',
+                'firs_tname'    => 'nonempty',
                 'last_name'     => 'nonempty',
                 'date_of_birth' => 'nonempty',
                 'description'   => 'nonempty',
@@ -471,7 +472,7 @@ class UsersController extends BaseController
      *
      * @Rest\Post("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
-     *  
+     *
      * @ApiDoc(
      *     section="User",
      *     resource=true,
@@ -560,7 +561,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * Search user.
+     * Search users by name, groups, sports.
      *
      * @Rest\Post("/users/search")
      * @ApiDoc(
@@ -573,8 +574,8 @@ class UsersController extends BaseController
      *     },
      *      filters={
      *          {"name"="name", "dataType"="string"},
-     *          {"name"="sports", "dataType"="array string", "Example"="sports[] sport1, sports[] sport2"},
-     *          {"name"="groups", "dataType"="array string", "Example"="groups[] group1, groups[] group2"},
+     *          {"name"="sports", "dataType"="string", "Example"="sports = sport1,sport2"},
+     *          {"name"="groups", "dataType"="string", "Example"="groups = group1,group2"},
      *      }
      * )
      *
@@ -587,46 +588,27 @@ class UsersController extends BaseController
         $name = $request->request->get('name');
         $sports = $request->request->get('sports');
         $groups = $request->request->get('groups');
-
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $query = $qb->select('U')
             ->from('AppUserBundle:User', 'U');
 
         if ($groups) {
-            $query->JOIN('U.group', 'G');
+            $groups = array_filter(explode(',', $groups), 'trim');
+            $query->JOIN('U.group', 'G', 'WITH', 'G.name IN (:groups)')
+            ->setParameter('groups', $groups);
         }
         if ($sports) {
+            $sports = array_filter(explode(',', $sports), 'trim');
             $query->JOIN('U.sportUsers', 'SU')
-                ->JOIN('AppSportBundle:Sport', 'S');
+                ->JOIN('SU.sport', 'S', 'WITH', 'S.name IN (:sports)')
+                ->setParameter('sports', $sports);
         }
         if ($name) {
             $query->Where('U.firstname LIKE :firstname')
                 ->orWhere('U.lastname LIKE :lastname')
                 ->setParameter('firstname', '%'.$name.'%')
                 ->setParameter('lastname', '%'.$name.'%');
-        }
-        if ($sports) {
-            if (is_array($sports)) {
-                foreach ($sports as &$value) {
-                    $value = "'".$value."'";
-                }
-                unset($value);
-            } else {
-                $sports = "'{$sports}'";
-            }
-            $query->andWhere('S.name IN ('.implode(',', $sports).')');
-        }
-        if ($groups) {
-            if (is_array($groups)) {
-                foreach ($groups as &$value) {
-                    $value = "'".$value."'";
-                }
-                unset($value);
-            } else {
-                $groups = "'{$groups}'";
-            }
-            $query->andWhere('S.name IN ('.implode(',', $groups).')');
         }
 
         $results = $query->setFirstResult(0)
@@ -643,14 +625,27 @@ class UsersController extends BaseController
     /**
      * Update current user profile.
      *
-     * @Rest\Post("/users/profile")
+     * @Rest\Patch("/users/profile")
      * @ApiDoc(
-     *     section="User",
+     *   section="User",
      *     resource=true,
      *     statusCodes={
      *         200="OK",
      *         401="Unauthorized (this resource require an access token)",
+     *         400="invalid data format",
      *     },
+     *     parameters={
+     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="first_name"},
+     *     {"name"="last_name", "dataType"="string", "required"=false, "description"="last_name"},
+     *      {"name"="email", "dataType"="string", "required"=false, "description"="email"},
+     *      {"name"="password", "dataType"="string", "required"=false, "description"="password"},
+     *      {"name"="date_of_birth", "dataType"="integer", "required"=false, "description"="date_of_birth"},
+     *      {"name"="address", "dataType"="string", "required"=false, "description"="address"},
+     *      {"name"="city", "dataType"="string", "required"=false, "description"="city"},
+     *      {"name"="zipcode", "dataType"="string", "required"=false, "description"="zipcode"}
+     *
+     *     },
+     *
      * )
      *
      * @param Request $request
@@ -659,32 +654,53 @@ class UsersController extends BaseController
      */
     public function updateCurrentUserProfile(Request $request)
     {
-        $data = $request->request->all(); // Give an array of params like paramFetcher->getParams
-        // $pr = $paramFetcher->getParams();
-        print_r($data);
-        die();
+        $em = $this->getEntityManager();
+
+        $data = $request->request->all();
         $user = $this->getCurrentUser();
 
-        // @Thuy, for this resource, don't use the ParamFetcher.
-        // Look at the constructor of this controlller, you will see
-        // an array called $rules , which contains a list of fields.
-        // For each field, we have defined one (or more) rules.
-        // Like for 'email' => non empty (if is set because nothing is required in edit,
-        // just not null), and 'email' (email rule mean : a valid email)
-        // Then, just use the validator I've created, like:
-        // if ($this->check($data, 'edit', true)) {
-        //    Success in validation,
-        //    Do your logic with existing fields
-        // }
-        // The last parameter of the check() method is corresponding to lazy = true,
-        // If this parameter is to true, the validation will not be stopped at the first error,
-        // But will be continued and check each field, to return a response like :
-        // [
-        //    'email'    => 'not a valid email',
-        //    'password' => 'is empty'
-        // ]
-        // Instead of throw an exception at the first error.
+        $this->check($data, 'edit', true);
+        if (count($this->errors)) {
+            return $this->errors;
+        }
 
-        return $user;
+        if (isset($data['password'])) {
+            $user->setPlainPassword($data['password']);
+        }
+
+        if (isset($data['email'])) {
+            $userEmail = $em->getRepository('AppUserBundle:User')->findOneBy(array('email' => $data['email']));
+            if ($userEmail) {
+                if ($userEmail->getId() != $user->getId()) {
+                    return array('email' => 'Exist email on system');
+                }
+            } else {
+                $user->setEmail($data['email']);
+            }
+        }
+        if (isset($data['first_name'])) {
+            $user->setFirstName($data['first_name']);
+        }
+        if (isset($data['last_name'])) {
+            $user->setLastName($data['last_name']);
+        }
+        if (isset($data['date_of_birth'])) {
+            $user->setDateOfBirth($data['date_of_birth']);
+        }
+        if (isset($data['description'])) {
+            $user->setDescription($data['description']);
+        }
+        if (isset($data['address'])) {
+            $user->setAddress($data['address']);
+        }
+        if (isset($data['city'])) {
+            $user->setCity($data['city']);
+        }
+        if (isset($data['zipcode'])) {
+            $user->setZipcode($data['zipcode']);
+        }
+        $em->flush();
+
+        return $data;
     }
 }
