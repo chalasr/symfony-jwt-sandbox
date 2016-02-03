@@ -1,5 +1,6 @@
 /src/App/SportBundle/Resources/public/icons/*
 /src/App/UserBundle/Resources/public/pictures/*
+/src/App/UserBundle/Resources/public/coach_documents/*
 /app/config/parameters.yml
 /bin/
 /build/

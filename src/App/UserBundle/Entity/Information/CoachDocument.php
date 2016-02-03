@@ -43,6 +43,8 @@ class CoachDocument extends AbstractEntity implements EntityInterface
      */
     protected $user;
 
+    protected $file;
+
     /**
      * To string.
      *
@@ -102,6 +104,30 @@ class CoachDocument extends AbstractEntity implements EntityInterface
     }
 
     /**
+     * Set urlFile.
+     *
+     * @param string $urlFile
+     *
+     * @return Document
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
      * Set user.
      *
      * @param \App\UserBundle\Entity\User $user
@@ -136,7 +162,10 @@ class CoachDocument extends AbstractEntity implements EntityInterface
 
         $file->move($path, $file->getClientOriginalName());
 
+        $this->setUrlFile($file->getClientOriginalName());
         $this->setName($file->getClientOriginalName());
+
+        return $this;
     }
 
     /**
