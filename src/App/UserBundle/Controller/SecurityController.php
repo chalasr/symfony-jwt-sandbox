@@ -235,16 +235,33 @@ class SecurityController extends Controller
         $user->setPlainPassword($password);
         $userManager->updateUser($user);
 
+        $params = $copy = array('lastname', 'firstname', 'email');
+        $select = '';
+        // for ($i=0; $i < $countParams; $i++) {
+        //     $select .= 'u.'.$params[$i];
+        //     if ($countParams >= $i) {
+        //         $select .= ', ';
+        //     }
+        // }
+        foreach ($params as $param) {
+            $select .= 'u.'.$param;
+            if (next($copy)) {
+                $select .= ', ';
+            }
+        }
+        // die($select);
         /* Retrieves User informations for e-mail content **/
         $query = $this->getEntityManager()
             ->createQueryBuilder('u')
-            ->select('u.firstname', 'u.lastname', 'u.email')
+            ->select($select)
             ->from('App\UserBundle\Entity\User', 'u')
             ->where('u.email = :email')
             ->setParameter('email', $data['email'])
             ->getQuery();
 
+
         $result = $query->getResult();
+        return $result;
 
         $mailing = array(
             'lastname'  => $result[0]['lastname'],
