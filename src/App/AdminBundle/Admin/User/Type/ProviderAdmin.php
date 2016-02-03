@@ -35,14 +35,15 @@ class ProviderAdmin extends BaseUserAdmin
         }
         /* End custom check */
         $formMapper
-            ->with('Général')
-                ->add('email')
-                ->add('plainPassword', 'password', array(
-                    'label'    => 'Mot de passe',
-                    'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
+            ->with('Profil')
+                ->add('providerInformation', 'sonata_type_admin', array(
+                    'by_reference' => false,
+                    'required'     => false,
+                    'label'        => false,
+                ), array(
+                    'edit'       => 'inline',
+                    'admin_code' => 'sonata.admin.provider_information',
                 ))
-            ->end()
-            ->with('Profile')
                 ->add('file', 'file', $pictureOptions)
                 ->add('description', 'textarea', array(
                     'attr' => array(
@@ -62,11 +63,29 @@ class ProviderAdmin extends BaseUserAdmin
                 ->add('city', null, array('label' => 'Ville', 'required' => false))
                 ->add('zipcode', null, array('label' => 'Code postal', 'required' => false))
             ->end()
+            ->with('Sports')
+                ->add('sportUsers', 'sonata_type_collection', array(
+                    'by_reference' => false,
+                    'required'     => false,
+                    'label'        => false,
+                ), array(
+                    'edit'       => 'inline',
+                    'inline'     => 'table',
+                    'admin_code' => 'app_admin.admin.sport_user',
+                ))
+            ->end()
+            ->with('Accès')
+                ->add('email')
+                ->add('plainPassword', 'password', array(
+                    'label'    => 'Mot de passe',
+                    'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
+                ))
+            ->end()
         ;
 
         if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
             $formMapper
-                ->with('Management')
+                ->with('Gestion')
                     ->add('realRoles', 'choice', array(
                         'label'    => 'Rôles',
                         'choices'  => $rolesChoices,
@@ -78,17 +97,6 @@ class ProviderAdmin extends BaseUserAdmin
                 ->end()
             ;
         }
-
-        $formMapper
-            ->add('providerInformation', 'sonata_type_admin', array(
-                'by_reference' => false,
-                'required'     => false,
-                'label'        => 'Informations du provider',
-            ), array(
-                'edit'       => 'inline',
-                'admin_code' => 'sonata.admin.provider_information',
-            ))
-        ;
     }
 
     public function configureDatagridFilters(DatagridMapper $filterMapper)

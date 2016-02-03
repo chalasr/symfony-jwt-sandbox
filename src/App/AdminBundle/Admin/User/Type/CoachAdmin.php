@@ -15,30 +15,119 @@ class CoachAdmin extends BaseUserAdmin
 
     public function configureFormFields(FormMapper $formMapper)
     {
-        parent::configureFormFields($formMapper);
-
+        $container = $this->getContainer();
+        $roles = $container->getParameter('security.role_hierarchy.roles');
+        $rolesChoices = self::flattenRoles($roles);
+        /* Custom check displaying profile picture if is it */
+        $pictureOptions =  array(
+            'required'   => false,
+            'data_class' => null,
+            'label'      => 'Photo de profil',
+        );
+        if ($this->getSubject()->getId()) {
+            $subject = $this->getSubject();
+            if ($subject->getPicture()) {
+                $path = sprintf('http://%s/bundles/appuser/pictures/%s', $container->getParameter('domain'), $subject->getPicture());
+            } else {
+                $path = sprintf('http://%s/bundles/appuser/pictures/default.jpg', $container->getParameter('domain'));
+            }
+            $pictureOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
+        }
+        /* End custom check */
         $formMapper
-            ->add('coachInformation', 'sonata_type_admin', array(
-                'by_reference' => false,
-                'required'     => false,
-                'label'        => false,
-            ), array(
-                'edit'       => 'inline',
-                // 'admin_code' => 'sonata.admin.coach_information',
-            ))
+            ->with('Profil')
+                ->add('firstname', null, array('required' => false, 'label' => 'Prénom'))
+                ->add('lastname', null, array('required' => false, 'label' => 'Nom'))
+                ->add('gender', 'sonata_user_gender', array(
+                    'required'           => false,
+                    'label'              => 'Sexe',
+                    'translation_domain' => $this->getTranslationDomain(),
+                ))
+                ->add('dateOfBirth', 'sonata_type_date_picker', array(
+                    'label'       => 'Date de naissance',
+                    'format'      => 'dd/MM/yyyy',
+                    'dp_language' => 'fr',
+                    'required'    => false,
+                ))
+                ->add('file', 'file', $pictureOptions)
+                ->add('description', 'textarea', array(
+                    'attr' => array(
+                        'maxlength' => 500,
+                    ),
+                    'required' => false,
+                    'label'    => 'Déscription',
+                ))
+                ->add('phone', null, array('required' => false, 'label' => 'Téléphone'))
+                ->add('address', 'textarea', array(
+                    'label'    => 'Adresse',
+                    'required' => false,
+                    'attr'     => array(
+                      'maxlength' => 500,
+                    ),
+                ))
+                ->add('city', null, array(
+                    'label'    => 'Ville',
+                    'required' => false,
+                ))
+                ->add('zipcode', null, array(
+                    'label'    => 'Code postal',
+                    'required' => false,
+                ))
+            ->end()
+            ->with('Sports')
+                ->add('sportUsers', 'sonata_type_collection', array(
+                    'by_reference' => false,
+                    'required'     => false,
+                    'label'        => false,
+                ), array(
+                    'edit'       => 'inline',
+                    'inline'     => 'table',
+                    'admin_code' => 'app_admin.admin.sport_user',
+                ))
+            ->end()
+            ->with('Infos professionnelles')
+                ->add('coachInformation', 'sonata_type_admin', array(
+                    'by_reference' => false,
+                    'required'     => false,
+                    'label'        => false,
+                ), array(
+                    'edit' => 'inline',
+                ))
             ->end()
             ->with('Documents')
-            ->add('coachDocuments', 'sonata_type_collection', array(
-                'by_reference' => false,
-                'required'     => false,
-                'label'        => false,
-            ), array(
-                'edit'       => 'inline',
-                'inline'     => 'table',
-                'admin_code' => 'sonata.admin.coach_document',
-            ))
+                ->add('coachDocuments', 'sonata_type_collection', array(
+                    'by_reference' => false,
+                    'required'     => false,
+                    'label'        => false,
+                ), array(
+                    'edit'       => 'inline',
+                    'inline'     => 'table',
+                    'admin_code' => 'sonata.admin.coach_document',
+                ))
+            ->end()
+            ->with('Accès')
+                ->add('email')
+                ->add('plainPassword', 'password', array(
+                    'label'    => 'Mot de passe',
+                    'required' => (!$this->getSubject() || is_null($this->getSubject()->getId())),
+                ))
             ->end()
         ;
+
+        if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
+            $formMapper
+                ->with('Gestion')
+                    ->add('realRoles', 'choice', array(
+                        'label'    => 'Rôles',
+                        'choices'  => $rolesChoices,
+                        'multiple' => true,
+                        'required' => false,
+                    ))
+                    ->add('locked', null, array('required' => false))
+                    ->add('enabled', null, array('required' => false))
+                ->end()
+            ;
+        }
     }
 
     /**
