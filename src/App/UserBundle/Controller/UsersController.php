@@ -626,22 +626,25 @@ class UsersController extends BaseController
      * Update current user profile.
      *
      * @Rest\Post("/users/profile")
-     * @Rest\RequestParam(name="first_name", requirements="[^/]+", nullable=true, description="first_name")
-     * @Rest\RequestParam(name="last_name", requirements="[^/]+", nullable=true, description="last_name")
-     * @Rest\RequestParam(name="password", requirements="[^/]+", nullable=true, description="password")
-     * @Rest\RequestParam(name="email", requirements="[^/]+", nullable=true, description="email")
-     * @Rest\RequestParam(name="date_of_birth", requirements="\d+", nullable=true, description="date_of_birth")
-     * @Rest\RequestParam(name="address", requirements="[^/]+", nullable=true, description="address")
-     * @Rest\RequestParam(name="city", requirements="[^/]+", nullable=true, description="city")
-     * @Rest\RequestParam(name="zipcode", requirements="[^/]+", nullable=true, description="zipcode")
      * @ApiDoc(
-     *     section="User",
+     *   section="User",
      *     resource=true,
      *     statusCodes={
      *         200="OK",
      *         401="Unauthorized (this resource require an access token)",
      *         400="invalid data format",
      *     },
+     *     parameters={
+     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="first_name"},
+     *     {"name"="last_name", "dataType"="string", "required"=false, "description"="last_name"},
+     *      {"name"="password", "dataType"="string", "required"=false, "description"="password"},
+     *      {"name"="date_of_birth", "dataType"="integer", "required"=false, "description"="date_of_birth"},
+     *      {"name"="address", "dataType"="string", "required"=false, "description"="address"},
+     *      {"name"="city", "dataType"="string", "required"=false, "description"="city"},
+     *      {"name"="zipcode", "dataType"="string", "required"=false, "description"="zipcode"}
+     *
+     *     },
+     *
      * )
      *
      * @param Request $request
