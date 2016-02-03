@@ -471,7 +471,7 @@ class UsersController extends BaseController
      *
      * @Rest\Post("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
-     *  
+     *
      * @ApiDoc(
      *     section="User",
      *     resource=true,
@@ -593,39 +593,19 @@ class UsersController extends BaseController
             ->from('AppUserBundle:User', 'U');
 
         if ($groups) {
-            $query->JOIN('U.group', 'G');
+            $query->JOIN('U.group', 'G','WITH',"G.name IN (:groups)")
+            ->setParameter('groups', $groups);
         }
         if ($sports) {
             $query->JOIN('U.sportUsers', 'SU')
-                ->JOIN('AppSportBundle:Sport', 'S');
+                ->JOIN('SU.sport', 'S',"WITH","S.name IN (:sports)")
+                ->setParameter('sports', $sports);
         }
         if ($name) {
             $query->Where('U.firstname LIKE :firstname')
                 ->orWhere('U.lastname LIKE :lastname')
                 ->setParameter('firstname', '%'.$name.'%')
                 ->setParameter('lastname', '%'.$name.'%');
-        }
-        if ($sports) {
-            if (is_array($sports)) {
-                foreach ($sports as &$value) {
-                    $value = "'".$value."'";
-                }
-                unset($value);
-            } else {
-                $sports = "'{$sports}'";
-            }
-            $query->andWhere('S.name IN ('.implode(',', $sports).')');
-        }
-        if ($groups) {
-            if (is_array($groups)) {
-                foreach ($groups as &$value) {
-                    $value = "'".$value."'";
-                }
-                unset($value);
-            } else {
-                $groups = "'{$groups}'";
-            }
-            $query->andWhere('S.name IN ('.implode(',', $groups).')');
         }
 
         $results = $query->setFirstResult(0)
