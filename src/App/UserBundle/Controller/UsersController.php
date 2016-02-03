@@ -6,15 +6,15 @@ use App\SportBundle\Entity;
 use App\UserBundle\Entity\User;
 use App\Util\Controller\AbstractRestController as BaseController;
 use App\Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
+use App\Util\Validator\CanValidateTrait as CanValidate;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\HttpFoundation as Http;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
  * Users Controller.
@@ -24,7 +24,27 @@ use Symfony\Component\HttpFoundation as Http;
  */
 class UsersController extends BaseController
 {
-    use CanCheckPermissions;
+    use CanCheckPermissions, CanValidate;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->rules = array(
+            'edit' => [
+                'password'      => 'nonempty',
+                'email'         => 'nonempty|email',
+                'first_name'    => 'nonempty',
+                'last_name'     => 'nonempty',
+                'date_of_birth' => 'nonempty',
+                'description'   => 'nonempty',
+                'address'       => 'nonempty',
+                'city'          => 'nonempty',
+                'zipcode'       => 'nonempty',
+            ],
+        );
+    }
 
     /**
      * List all users.
@@ -344,7 +364,8 @@ class UsersController extends BaseController
      *    resource=true,
      *     statusCodes={
      *       204="No Content (picture successfully updated)",
-     *       401="Unauthorized (this resource require an access token)"
+     *       401="Unauthorized (this resource require an access token)",
+     *       403="Forbidden (must be the user or an admin)"
      *     }
      * )
      *
@@ -403,7 +424,7 @@ class UsersController extends BaseController
     {
         $user = $this->findUserOrFail($id);
 
-        $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/' . $user->getPicture());
+        $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/'.$user->getPicture());
         $iconInfo = pathinfo($path_picture);
 
         if (false === isset($iconInfo['extension'])) {
@@ -415,6 +436,7 @@ class UsersController extends BaseController
         $response->headers->set('Content-length', filesize($path_picture));
         $response->sendHeaders();
         $response->setContent(file_get_contents($path_picture));
+
         return $response;
     }
 
@@ -449,27 +471,26 @@ class UsersController extends BaseController
      *
      * @Rest\Post("/users/{id}/sports", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="sport_id", requirements="\d+",description="sport")
+     *  
      * @ApiDoc(
      *     section="User",
      *     resource=true,
      *     statusCodes={
      *         204="No content (success)",
      *         401="Unauthorized (this resource require an access token)",
-     *         404="User not found"
+     *         404="User not found",
+     *         403="Forbidden (must be the user or an admin)"
      *     },
      * )
      *
-     * @param int $id
+     * @param int          $id
      * @param ParamFetcher $paramFetcher
      *
      * @return array
      */
-
     public function addSport($id, ParamFetcher $paramFetcher)
     {
         $sportId = $paramFetcher->get('sport_id');
-
-        #get user
         $user = $this->findUserOrFail($id);
 
         if (!$this->isCurrentUserId($id) && !$this->isAdmin()) {
@@ -509,7 +530,7 @@ class UsersController extends BaseController
      * 	 },
      * )
      *
-     * @param int $id
+     * @param int          $id
      * @param ParamFetcher $paramFetcher
      *
      * @return array
@@ -529,6 +550,7 @@ class UsersController extends BaseController
         if (!$sportUsers) {
             throw new NotFoundHttpException(sprintf('Unable to find sport %d with user %d', $sport_id, $id));
         }
+
         foreach ($sportUsers as $sportUser) {
             $em->remove($sportUser);
             $em->flush();
@@ -538,7 +560,7 @@ class UsersController extends BaseController
     }
 
     /**
-     * search user
+     * Search user.
      *
      * @Rest\Post("/users/search")
      * @ApiDoc(
@@ -565,9 +587,6 @@ class UsersController extends BaseController
         $name = $request->request->get('name');
         $sports = $request->request->get('sports');
         $groups = $request->request->get('groups');
-
-
-
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $query = $qb->select('U')
@@ -575,7 +594,6 @@ class UsersController extends BaseController
 
         if ($groups) {
             $query->JOIN('U.group', 'G');
-
         }
         if ($sports) {
             $query->JOIN('U.sportUsers', 'SU')
@@ -584,26 +602,30 @@ class UsersController extends BaseController
         if ($name) {
             $query->Where('U.firstname LIKE :firstname')
                 ->orWhere('U.lastname LIKE :lastname')
-                ->setParameter('firstname', '%' . $name . '%')
-                ->setParameter('lastname', '%' . $name . '%');
+                ->setParameter('firstname', '%'.$name.'%')
+                ->setParameter('lastname', '%'.$name.'%');
         }
         if ($sports) {
-            if(is_array($sports)){
-                foreach ($sports as &$value) $value = "'".$value."'";
+            if (is_array($sports)) {
+                foreach ($sports as &$value) {
+                    $value = "'".$value."'";
+                }
                 unset($value);
-            }else{
-                $sports="'{$sports}'";
+            } else {
+                $sports = "'{$sports}'";
             }
-            $query->andWhere("S.name IN (" . implode(',', $sports) . ")");
+            $query->andWhere('S.name IN ('.implode(',', $sports).')');
         }
         if ($groups) {
-            if(is_array($groups)){
-                foreach ($groups as &$value) $value = "'".$value."'";
+            if (is_array($groups)) {
+                foreach ($groups as &$value) {
+                    $value = "'".$value."'";
+                }
                 unset($value);
-            }else{
-                $groups="'{$groups}'";
+            } else {
+                $groups = "'{$groups}'";
             }
-            $query->andWhere("S.name IN (" . implode(',', $groups) . ")");
+            $query->andWhere('S.name IN ('.implode(',', $groups).')');
         }
 
         $results = $query->setFirstResult(0)
@@ -613,11 +635,12 @@ class UsersController extends BaseController
         if (!$results) {
             throw new NotFoundHttpException(sprintf('Unable to find user '));
         }
+
         return $results;
     }
 
     /**
-     * Update current user profile
+     * Update current user profile.
      *
      * @Rest\Post("/users/profile")
      * @ApiDoc(
@@ -629,14 +652,37 @@ class UsersController extends BaseController
      *     },
      * )
      *
-     * * @param ParamFetcher $paramFetcher
+     * @param Request $request
      *
      * @return array
-     *
      */
-    public function updateCurrentUserProfile(ParamFetcher $paramFetcher)
+    public function updateCurrentUserProfile(Request $request)
     {
+        $data = $request->request->all(); // Give an array of params like paramFetcher->getParams
+        // $pr = $paramFetcher->getParams();
+        print_r($data);
+        die();
         $user = $this->getCurrentUser();
+
+        // @Thuy, for this resource, don't use the ParamFetcher.
+        // Look at the constructor of this controlller, you will see
+        // an array called $rules , which contains a list of fields.
+        // For each field, we have defined one (or more) rules.
+        // Like for 'email' => non empty (if is set because nothing is required in edit,
+        // just not null), and 'email' (email rule mean : a valid email)
+        // Then, just use the validator I've created, like:
+        // if ($this->check($data, 'edit', true)) {
+        //    Success in validation,
+        //    Do your logic with existing fields
+        // }
+        // The last parameter of the check() method is corresponding to lazy = true,
+        // If this parameter is to true, the validation will not be stopped at the first error,
+        // But will be continued and check each field, to return a response like :
+        // [
+        //    'email'    => 'not a valid email',
+        //    'password' => 'is empty'
+        // ]
+        // Instead of throw an exception at the first error.
 
         return $user;
     }

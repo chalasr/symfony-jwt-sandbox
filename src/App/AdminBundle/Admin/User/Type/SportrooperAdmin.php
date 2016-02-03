@@ -3,8 +3,8 @@
 namespace App\AdminBundle\Admin\User\Type;
 
 use App\AdminBundle\Admin\User\BaseUserAdmin;
-use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 
 class SportrooperAdmin extends BaseUserAdmin
 {

@@ -8,11 +8,12 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation as Http;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpFoundation as Http;
 
 /**
  * Sports resource.
@@ -50,6 +51,8 @@ class SportsController extends Controller
     /**
      * Creates a new Sport entity.
      *
+     * @Security("has_role('ROLE_ADMIN')")
+     *
      * @Rest\Post("/sports")
      * @Rest\RequestParam(name="name", requirements="[^/]+", allowBlank=false, description="Name")
      * @Rest\RequestParam(name="isActive", requirements="true|false", nullable=true, description="Active")
@@ -61,6 +64,7 @@ class SportsController extends Controller
      * 	   201="Created",
      * 	   400="Bad Request",
      * 	   401="Unauthorized",
+     * 	   403="Forbidden"
      * 	 },
      * )
      *
@@ -128,6 +132,8 @@ class SportsController extends Controller
     /**
      * Update an existing entity.
      *
+     * @Security("has_role('ROLE_ADMIN')")
+     *
      * @Rest\Patch("/sports/{id}", requirements={"id" = "\d+"})
      * @Rest\RequestParam(name="name", requirements="[^/]+", nullable=true, description="Name")
      * @Rest\RequestParam(name="isActive", requirements="[^/]+", nullable=true, description="Name")
@@ -137,7 +143,8 @@ class SportsController extends Controller
      * 	 resource=true,
      * 	 statusCodes={
      * 	   200="OK",
-     * 	   401="Unauthorized"
+     * 	   401="Unauthorized",
+     * 	   403="Forbidden"
      * 	 },
      * )
      *
@@ -173,6 +180,8 @@ class SportsController extends Controller
     /**
      * Delete a Sport entity.
      *
+     * @Security("has_role('ROLE_ADMIN')")
+     *
      * @Rest\Delete("/sports/{id}", requirements={"id" = "\d+"})
      *
      * @ApiDoc(
@@ -180,7 +189,8 @@ class SportsController extends Controller
      * 	 resource=true,
      * 	 statusCodes={
      * 	   200="OK",
-     * 	   401="Unauthorized"
+     * 	   401="Unauthorized",
+     * 	   403="Forbidden"
      * 	 },
      * )
      *
@@ -188,7 +198,7 @@ class SportsController extends Controller
      *
      * @return array
      */
-    public function deleteSportAction($id)
+    public function deleteAction($id)
     {
         $repo = $this
             ->getEntityManager()
@@ -225,10 +235,6 @@ class SportsController extends Controller
             ? $repo->findOrFail($sport)
             : $repo->findOneByOrFail(['name' => $sport]);
         $iconName = $entity->getIcon() ?: 'default.png';
-        //
-        // if (!$iconName) {
-        //     $iconName = 'default.png';
-        // }
 
         $path = $this->locateResource('@AppSportBundle/Resources/public/icons').'/'.$iconName;
         $iconInfo = pathinfo($path);
@@ -236,7 +242,6 @@ class SportsController extends Controller
         if (false === isset($iconInfo['extension'])) {
             $path = $this->locateResource('@AppSportBundle/Resources/public/icons').'/default.png';
         }
-
 
         $response = new Http\Response();
         $response->headers->set('Content-type', mime_content_type($path));

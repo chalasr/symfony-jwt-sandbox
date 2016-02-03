@@ -32,26 +32,31 @@ trait CanValidateTrait
         $emailConstraint = new Email();
         $this->errors = array();
 
-        foreach ($this->rules[$type] as $prop) {
+        foreach ($this->rules[$type] as $prop => $rules) {
             // Is set
-            if (false === isset($data[$prop])) {
+            if (!isset($data[$prop]) && $this->hasRule($rules, 'required')) {
                 $this->errors[$prop] = 'missing';
-                unset($data[$prop]);
+            }
+
+            if (!isset($data[$prop])) {
+                if (!empty($this->errors) && false === $lazy) {
+                    return false;
+                }
+
+                continue;
             }
 
             // Is not blank
-            if (!$data[$prop] || null == $data[$prop]) {
+            if (!$data[$prop] && $this->hasRule($rules, 'nonempty')) {
                 $validator = false;
                 $this->errors[$prop] = 'empty';
-                unset($data[$prop]);
             }
 
             // Is valid email
-            if ($prop == 'email') {
+            if ($prop == 'email' && $this->hasRule($rules, 'email')) {
                 $error = $this->get('validator')->validateValue($data[$prop], $emailConstraint);
                 if ($error->count() > 0) {
                     $this->errors[$prop] = 'not a valid email';
-                    unset($data[$prop]);
                 }
             }
 
@@ -120,5 +125,20 @@ trait CanValidateTrait
         throw new UnprocessableEntityHttpException(
             sprintf('An user already exists with %s \'%s\'', $prop, $val)
         );
+    }
+
+    /**
+     * Check if field has rule.
+     *
+     * @param array  $propertyRules
+     * @param string $rule
+     *
+     * @return bool
+     */
+    protected function hasRule($propertyRules, $rule)
+    {
+        $propertyRules = explode('|', $propertyRules);
+
+        return in_array($rule, $propertyRules);
     }
 }
