@@ -567,6 +567,7 @@ class UsersController extends BaseController
         $groups = $request->request->get('groups');
 
 
+
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $query = $qb->select('U')
