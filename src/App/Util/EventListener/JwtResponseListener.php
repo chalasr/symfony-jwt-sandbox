@@ -45,7 +45,6 @@ class JwtResponseListener
             unset($data['user']);
         }
 
-
         $event->setData($data);
     }
 }
