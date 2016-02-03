@@ -4,6 +4,7 @@ namespace App\UserBundle\Controller;
 
 use App\Util\Controller\EntitySerializableTrait as EntitySerializable;
 use App\Util\Validator\CanValidateTrait as CanValidate;
+use App\Util\Validator\Constraints\Email;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
@@ -15,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use App\Util\Validator\Constraints\Email;
 
 /**
  * Mangages users from mobile app in API.
@@ -34,16 +34,16 @@ class SecurityController extends Controller
         $this->rules = array(
             'register' => [
                 'password' => 'nonempty|required',
-                'email'    => 'nonempty|required|email'
+                'email'    => 'nonempty|required|email',
             ],
             'basic' => [
                 'password' => 'nonempty|required',
-                'email'    => 'nonempty|required|email'
+                'email'    => 'nonempty|required|email',
             ],
             'oauth' => [
                 'id'           => 'nonempty|required',
                 'email'        => 'nonempty|required|email',
-                'access_token' => 'nonempty|required'
+                'access_token' => 'nonempty|required',
             ],
         );
     }
@@ -390,7 +390,6 @@ class SecurityController extends Controller
         $em = $this->getEntityManager();
         $userManager = $this->getUserManager();
         $guestEmail = 'guest@sportroops.fr';
-
 
         $user = $userManager->createUser();
         $user->setUsername($guestEmail);

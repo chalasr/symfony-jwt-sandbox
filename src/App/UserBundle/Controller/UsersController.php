@@ -8,7 +8,6 @@ use App\UserBundle\Entity\User;
 use App\Util\Controller\AbstractRestController as BaseController;
 use App\Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
 use App\Util\Validator\CanValidateTrait as CanValidate;
-use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -17,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+
 /**
  * Users Controller.
  *
@@ -594,14 +594,14 @@ class UsersController extends BaseController
             ->from('AppUserBundle:User', 'U');
 
         if ($groups) {
-            $groups=array_filter(explode(',',$groups),'trim');
-            $query->JOIN('U.group', 'G','WITH',"G.name IN (:groups)")
+            $groups = array_filter(explode(',', $groups), 'trim');
+            $query->JOIN('U.group', 'G', 'WITH', 'G.name IN (:groups)')
             ->setParameter('groups', $groups);
         }
         if ($sports) {
-            $sports=array_filter(explode(',',$sports),'trim');
+            $sports = array_filter(explode(',', $sports), 'trim');
             $query->JOIN('U.sportUsers', 'SU')
-                ->JOIN('SU.sport', 'S',"WITH","S.name IN (:sports)")
+                ->JOIN('SU.sport', 'S', 'WITH', 'S.name IN (:sports)')
                 ->setParameter('sports', $sports);
         }
         if ($name) {
@@ -625,7 +625,7 @@ class UsersController extends BaseController
     /**
      * Update current user profile.
      *
-     * @Rest\Post("/users/profile")
+     * @Rest\Patch("/users/profile")
      * @ApiDoc(
      *   section="User",
      *     resource=true,
@@ -654,66 +654,54 @@ class UsersController extends BaseController
      */
     public function updateCurrentUserProfile(Request $request)
     {
-
         $em = $this->getEntityManager();
 
         $data = $request->request->all();
         $user = $this->getCurrentUser();
 
-        $this->check($data,'edit',true);
-        if(count($this->errors)){
+        $this->check($data, 'edit', true);
+        if (count($this->errors)) {
             return $this->errors;
-        }else{
-            if(isset($data['password'])){
-                $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
-                $new_pwd_encoded = $encoder->encodePassword($data['password'], $user->getSalt());
-                $user->setPassword($new_pwd_encoded);
-            }
-
-            if(isset($data['email'])){
-                $userEmail=$em->getRepository('AppUserBundle:User')->findOneBy(array('email'=>$data['email']));
-                if($userEmail){
-                    if($userEmail->getId()!=$user->getId()){
-                        return array('email'=>'Exist email on system');
-                    }
-                }else{
-                    $user->setEmail($data['email']);
-                }
-
-            }
-            if(isset($data['first_name'])) $user->setFirstName($data['first_name']);
-            if(isset($data['last_name'])) $user->setLastName($data['last_name']);
-            if(isset($data['date_of_birth'])) $user->setDateOfBirth($data['date_of_birth']);
-            if(isset($data['description'])) $user->setDescription($data['description']);
-            if(isset($data['address'])) $user->setAddress($data['address']);
-            if(isset($data['city'])) $user->setCity($data['city']);
-            if(isset($data['zipcode'])) $user->setZipcode($data['zipcode']);
-            $em->persist($user);
-            $em->flush();
-            return $data;
         }
 
+        if (isset($data['password'])) {
+            $user->setPlainPassword($data['password']);
+        }
 
-        #print_r($errors);die();
+        if (isset($data['email'])) {
+            $userEmail = $em->getRepository('AppUserBundle:User')->findOneBy(array('email' => $data['email']));
+            if ($userEmail) {
+                if ($userEmail->getId() != $user->getId()) {
+                    return array('email' => 'Exist email on system');
+                }
+            } else {
+                $user->setEmail($data['email']);
+            }
+        }
+        if (isset($data['first_name'])) {
+            $user->setFirstName($data['first_name']);
+        }
+        if (isset($data['last_name'])) {
+            $user->setLastName($data['last_name']);
+        }
+        if (isset($data['date_of_birth'])) {
+            $user->setDateOfBirth($data['date_of_birth']);
+        }
+        if (isset($data['description'])) {
+            $user->setDescription($data['description']);
+        }
+        if (isset($data['address'])) {
+            $user->setAddress($data['address']);
+        }
+        if (isset($data['city'])) {
+            $user->setCity($data['city']);
+        }
+        if (isset($data['zipcode'])) {
+            $user->setZipcode($data['zipcode']);
+        }
 
-        // @Thuy, for this resource, don't use the ParamFetcher.
-        // Look at the constructor of this controlller, you will see
-        // an array called eck , which contains a list of fields.
-        // For each field, we have defined one (or more) rules.
-        // Like for 'email' => non empty (if is set because nothing is required in edit,
-        // just not null), and 'email' (email rule mean : a valid email)
-        // Then, just use the validator I've created, like:
-        // if ($this->check($data, 'edit', true)) {
-        //    Success in validation,
-        //    Do your logic with existing fields
-        // }
-        // The last parameter of the check() method is corresponding to lazy = true,
-        // If this parameter is to true, the validation will not be stopped at the first error,
-        // But will be continued and check each field, to return a response like :
-        // [
-        //    'email'    => 'not a valid email',
-        //    'password' => 'is empty'
-        // ]
-        // Instead of throw an exception at the first error.
+        $em->flush();
+
+        return $data;
     }
 }
