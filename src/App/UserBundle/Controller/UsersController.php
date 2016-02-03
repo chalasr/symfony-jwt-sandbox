@@ -3,10 +3,12 @@
 namespace App\UserBundle\Controller;
 
 use App\SportBundle\Entity;
+use App\UserBundle\AppUserBundle;
 use App\UserBundle\Entity\User;
 use App\Util\Controller\AbstractRestController as BaseController;
 use App\Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
 use App\Util\Validator\CanValidateTrait as CanValidate;
+use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -15,7 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-
 /**
  * Users Controller.
  *
@@ -35,7 +36,7 @@ class UsersController extends BaseController
             'edit' => [
                 'password'      => 'nonempty',
                 'email'         => 'nonempty|email',
-                'first_name'    => 'nonempty',
+                'firs_tname'    => 'nonempty',
                 'last_name'     => 'nonempty',
                 'date_of_birth' => 'nonempty',
                 'description'   => 'nonempty',
@@ -625,12 +626,21 @@ class UsersController extends BaseController
      * Update current user profile.
      *
      * @Rest\Post("/users/profile")
+     * @Rest\RequestParam(name="first_name", requirements="[^/]+", nullable=true, description="first_name")
+     * @Rest\RequestParam(name="last_name", requirements="[^/]+", nullable=true, description="last_name")
+     * @Rest\RequestParam(name="password", requirements="[^/]+", nullable=true, description="password")
+     * @Rest\RequestParam(name="email", requirements="[^/]+", nullable=true, description="email")
+     * @Rest\RequestParam(name="date_of_birth", requirements="\d+", nullable=true, description="date_of_birth")
+     * @Rest\RequestParam(name="address", requirements="[^/]+", nullable=true, description="address")
+     * @Rest\RequestParam(name="city", requirements="[^/]+", nullable=true, description="city")
+     * @Rest\RequestParam(name="zipcode", requirements="[^/]+", nullable=true, description="zipcode")
      * @ApiDoc(
      *     section="User",
      *     resource=true,
      *     statusCodes={
      *         200="OK",
      *         401="Unauthorized (this resource require an access token)",
+     *         400="invalid data format",
      *     },
      * )
      *
@@ -640,15 +650,36 @@ class UsersController extends BaseController
      */
     public function updateCurrentUserProfile(Request $request)
     {
-        $data = $request->request->all(); // Give an array of params like paramFetcher->getParams
-        // $pr = $paramFetcher->getParams();
-        print_r($data);
-        die();
+        $data = $request->request->all();
         $user = $this->getCurrentUser();
+
+        return $user;
+
+        $this->check($data,'edit',true);
+        if(count($this->errors)){
+            return $this->errors;
+        }else{
+            if(isset($data['password'])) $user->setEmail($data['password']);
+            if(isset($data['email'])) $user->setEmail($data['email']);
+            if(isset($data['first_name'])) $user->setFirstName($data['first_name']);
+            if(isset($data['last_name'])) $user->setLastName($data['last_name']);
+            if(isset($data['date_of_birth'])) $user->setDateOfBirth($data['date_of_birth']);
+            if(isset($data['description'])) $user->setDescription($data['description']);
+            if(isset($data['address'])) $user->setAddress($data['address']);
+            if(isset($data['city'])) $user->setCity($data['city']);
+            if(isset($data['zipcode'])) $user->setZipcode($data['zipcode']);
+            $em = $this->getEntityManager();
+            $em->persist($user);
+            $em->flush();
+            return $data;
+        }
+
+
+        #print_r($errors);die();
 
         // @Thuy, for this resource, don't use the ParamFetcher.
         // Look at the constructor of this controlller, you will see
-        // an array called $rules , which contains a list of fields.
+        // an array called eck , which contains a list of fields.
         // For each field, we have defined one (or more) rules.
         // Like for 'email' => non empty (if is set because nothing is required in edit,
         // just not null), and 'email' (email rule mean : a valid email)
