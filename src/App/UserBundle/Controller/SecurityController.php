@@ -235,32 +235,17 @@ class SecurityController extends Controller
         $user->setPlainPassword($password);
         $userManager->updateUser($user);
 
-        $params = $copy = array('lastname', 'firstname', 'email');
-        $select = '';
-        // for ($i=0; $i < $countParams; $i++) {
-        //     $select .= 'u.'.$params[$i];
-        //     if ($countParams >= $i) {
-        //         $select .= ', ';
-        //     }
-        // }
-        foreach ($params as $param) {
-            $select .= 'u.'.$param;
-            if (next($copy)) {
-                $select .= ', ';
-            }
-        }
-        // die($select);
         /* Retrieves User informations for e-mail content **/
         $query = $this->getEntityManager()
             ->createQueryBuilder('u')
-            ->select($select)
+            ->select('u.lastname', 'u.firstname', 'u.email')
             ->from('App\UserBundle\Entity\User', 'u')
             ->where('u.email = :email')
             ->setParameter('email', $data['email'])
             ->getQuery();
 
-
         $result = $query->getResult();
+
         return $result;
 
         $mailing = array(
@@ -303,7 +288,16 @@ class SecurityController extends Controller
     {
         $userManager = $this->getUserManager();
         $em = $this->getEntityManager();
-        $group = $em->getRepository('AppUserBundle:Group')->findOneByName(['name' => 'Sportroopers']);
+
+        if ('Sportroopers') {
+
+        }
+
+        $group = $em->getRepository('AppUserBundle:Group')->findOneByName([
+            'name' => isset($data['group'])
+            ? $data['group']
+            : 'Sportroopers'
+        ]);
 
         $user = $userManager->createUser();
         $user->setUsername($data['email']);
@@ -326,6 +320,31 @@ class SecurityController extends Controller
         }
 
         $userManager->updateUser($user);
+
+        if (null === $user) {
+            return;
+        }
+
+        $mailing = array(
+            'id'        => $user->getId(),
+            'lastname'  => $user->getLastname(),
+            'firstname' => $user->getFirstname(),
+            'email'     => $user->getEmail(),
+            'group'     => $user->getVirtualGroup(),
+        );
+
+        /** Prepares an email with data */
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Sportroops - Confirmation d\'inscription')
+            ->setFrom('support@sportroops.com')
+            ->setTo($mailing['email'])
+            ->setBody(
+                $this->renderView('Emails/confirm_registration.html.twig', $mailing),
+                'text/html'
+            );
+
+        /** Sends email */
+        $this->get('mailer')->send($message);
 
         return $user;
     }

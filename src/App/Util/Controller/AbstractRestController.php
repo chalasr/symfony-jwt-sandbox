@@ -55,4 +55,14 @@ abstract class AbstractRestController extends Controller
 
         return $this->getViewHandler()->handle($view);
     }
+
+    /**
+     * Returns authentication provider.
+     *
+     * @return UserManager $userManager
+     */
+    protected function getUserManager()
+    {
+        return $this->get('fos_user.user_manager');
+    }
 }
