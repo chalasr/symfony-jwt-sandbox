@@ -582,7 +582,7 @@ class UsersController extends BaseController
      * 	      404="User not found",
      *     },
      *      filters={
-     *          {"name"="name", "dataType"="string"},
+     *          {"name"="name", "dataType"="string","search user by firstname or last name, or provider name"},
      *          {"name"="sports", "dataType"="string", "Example"="sports = sport1,sport2"},
      *          {"name"="groups", "dataType"="string", "Example"="groups = group1,group2"},
      *      }
@@ -599,13 +599,8 @@ class UsersController extends BaseController
         $groups = $request->request->get('groups');
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        if($name){
             $query = $qb->select('U','PI.name')
                 ->from('AppUserBundle:User', 'U');
-        }else{
-            $query = $qb->select('U')
-                ->from('AppUserBundle:User', 'U');
-        }
 
 
         if ($groups) {
@@ -619,8 +614,9 @@ class UsersController extends BaseController
                 ->JOIN('SU.sport', 'S', 'WITH', 'S.name IN (:sports)')
                 ->setParameter('sports', $sports);
         }
+
+        $query->leftJOIN('U.providerInformation', 'PI');
         if ($name) {
-            $query->leftJOIN('U.providerInformation', 'PI');
             $query->Where('U.firstname LIKE :firstname')
                 ->orWhere('U.lastname LIKE :lastname')
                 ->orWhere('PI.name LIKE :name')
