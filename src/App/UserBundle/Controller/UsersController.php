@@ -431,10 +431,13 @@ class UsersController extends BaseController
         $user = $this->findUserOrFail($id);
 
         $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/'.$user->getPicture());
-
+        return 'current: '.$path_picture;
         if(!file_exists($path_picture)){
+            return 'default: '.$path_picture;
             $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/').'default.jpg';
         }
+
+        return 'Last file: '.$path_picture;
 
         $iconInfo = pathinfo($path_picture);
 
