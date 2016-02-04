@@ -573,6 +573,7 @@ class UsersController extends BaseController
      * Search users by name, groups, sports.
      *
      * @Rest\Post("/users/search")
+     * @Rest\View(serializerGroups={"api"})
      * @ApiDoc(
      *     section="User",
      *     resource=true,
@@ -592,14 +593,14 @@ class UsersController extends BaseController
      *
      * @return array
      */
-    public function userSearch(Request $request)
+    public function userSearchAction(Request $request)
     {
         $name = $request->request->get('name');
         $sports = $request->request->get('sports');
         $groups = $request->request->get('groups');
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-            $query = $qb->select('U','PI.name')
+            $query = $qb->select('U')
                 ->from('AppUserBundle:User', 'U');
 
 
