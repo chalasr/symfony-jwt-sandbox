@@ -16,10 +16,10 @@ class CoachInformationAdmin extends Admin
                 'dp_language' => 'fr',
             ))
             ->add('insuranceCompanyName', null, array(
-                'label' => 'Nom de la compagnie fournissant la police d\'assurance',
+                'label' => 'Nom de la compagnie d\'assurance',
             ))
             ->add('insurancePolicyNumber', null, array(
-                'label' => 'Numéro de police d\'insurance',
+                'label' => 'Numéro de police d\'assurance',
             ))
             ->add('insurancePolicyExpirationDate', 'sonata_type_date_picker', array(
                 'label'       => 'Date d\'expiration de la police d\'assurance',
