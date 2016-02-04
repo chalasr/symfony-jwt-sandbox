@@ -638,16 +638,19 @@ class UsersController extends BaseController
      *         200="OK",
      *         401="Unauthorized (this resource require an access token)",
      *         400="invalid data format",
+     *         404="Invalid sport port id (sport_id don't exist in system)"
      *     },
      *     parameters={
      *      {"name"="first_name", "dataType"="string", "required"=false, "description"="first_name"},
-     *     {"name"="last_name", "dataType"="string", "required"=false, "description"="last_name"},
+     *      {"name"="last_name", "dataType"="string", "required"=false, "description"="last_name"},
      *      {"name"="email", "dataType"="string", "required"=false, "description"="email"},
+     *      {"name"="old_password", "dataType"="string", "required"=false, "description"="old password"},
      *      {"name"="password", "dataType"="string", "required"=false, "description"="password"},
      *      {"name"="date_of_birth", "dataType"="integer", "required"=false, "description"="date_of_birth"},
      *      {"name"="address", "dataType"="string", "required"=false, "description"="address"},
      *      {"name"="city", "dataType"="string", "required"=false, "description"="city"},
-     *      {"name"="zipcode", "dataType"="string", "required"=false, "description"="zipcode"}
+     *      {"name"="zipcode", "dataType"="string", "required"=false, "description"="zipcode"},
+     *      {"name"="sports", "dataType"="string", "required"=false, "description"="sports list ids, List all sports of user (if don't exist, then add new sport else remove sport), Example: sports= 1,2,3,5"}
      *
      *     },
      *
@@ -663,13 +666,33 @@ class UsersController extends BaseController
 
         $data = $request->request->all();
         $user = $this->getCurrentUser();
-
         $this->check($data, 'edit', true);
         if (count($this->errors)) {
             return $this->errors;
         }
 
+
+        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
+
+
+        #check password
         if (isset($data['password'])) {
+
+            if(!isset($data['old_password'])){
+                return array('password' => 'old password invalid');
+            }
+
+            $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+            $old_pwd_encoded = $encoder->encodePassword($data['old_password'], $user->getSalt());
+
+            if($user->getPassword() != $old_pwd_encoded){
+                return array('password' => 'old password invalid');
+            }
+
+            if($data['old_password']==$data['password']){
+                return array('password' => 'Old password same as current password');
+            }
+
             $user->setPlainPassword($data['password']);
         }
 
@@ -704,8 +727,41 @@ class UsersController extends BaseController
         if (isset($data['zipcode'])) {
             $user->setZipcode($data['zipcode']);
         }
-        $em->flush();
 
+
+        if(isset($data['sports'])){
+            $newSports = array_filter(explode(',', $data['sports']), 'intval');
+            $currentSports=$user->getFullSports();
+
+            $currentSportsId=array();
+
+            #remove sport
+            foreach($currentSports as $sport){
+                if(!in_array($sport['id'],$newSports)){
+                    $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findOneBy(array('user' => $user->getId(), 'sport' => $sport['id']));
+                    $em->remove($sportUsers);
+                }
+                array_push($currentSportsId,$sport['id']);
+            }
+
+            #add sport
+            $repo = $em->getRepository('AppSportBundle:Sport');
+            foreach($newSports as $sportId){
+                if(!in_array($sportId,$currentSportsId)){
+                    $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findOneBy(array('user' => $user->getId(), 'sport' => $sportId));
+                    if(!$sportUsers){
+                        $sport = $repo->findOrFail($sportId);
+                        $sportUser = new Entity\SportUser();
+                        $sportUser->setUser($user);
+                        $sportUser->setSport($sport);
+                        $em->persist($sportUser);
+                    }
+                }
+            }
+        }
+
+
+        $em->flush();
         return $data;
     }
 }
