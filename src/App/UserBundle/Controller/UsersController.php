@@ -431,18 +431,20 @@ class UsersController extends BaseController
         $user = $this->findUserOrFail($id);
 
         $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/'.$user->getPicture());
-        return 'current: '.$path_picture;
-        if(!file_exists($path_picture)){
-            return 'default: '.$path_picture;
-            $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/').'default.jpg';
+        echo $path_picture;
+        $if=is_file($path_picture);
+        var_dump($if);
+        die();
+        if(!$path_picture OR !is_file($path_picture)){
+
+            $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/default.jpg');
+            echo $path_picture;
+            die();
         }
-
-        return 'Last file: '.$path_picture;
-
         $iconInfo = pathinfo($path_picture);
 
         if (false === isset($iconInfo['extension'])) {
-            throw new AccessDeniedHttpException('This resource is invalid extension');
+            throw new AccessDeniedHttpException('This resource is invalid extens');
         }
 
         $response = new Http\Response();
