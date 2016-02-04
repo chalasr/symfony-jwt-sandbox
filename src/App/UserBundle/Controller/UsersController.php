@@ -633,7 +633,13 @@ class UsersController extends BaseController
             throw new NotFoundHttpException(sprintf('Unable to find user '));
         }
 
-        return $results;
+        $response=array();
+        foreach($results as $row){
+            $item=$row[0];
+            $item->name=$row['name'];
+            array_push($response,$item);
+        }
+        return $response;
     }
 
     /**
