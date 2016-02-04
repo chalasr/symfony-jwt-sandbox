@@ -598,8 +598,12 @@ class UsersController extends BaseController
         $sports = $request->request->get('sports');
         $groups = $request->request->get('groups');
         $qb = $this->getEntityManager()->createQueryBuilder();
+
         if($name){
-            $query = $qb->select('U','PI')
+            $query = $qb->select('U','PI.name')
+                ->from('AppUserBundle:User', 'U');
+        }else{
+            $query = $qb->select('U')
                 ->from('AppUserBundle:User', 'U');
         }
 
@@ -616,8 +620,7 @@ class UsersController extends BaseController
                 ->setParameter('sports', $sports);
         }
         if ($name) {
-
-            $query->leftJOIN('U.providerInformation','PI');
+            $query->leftJOIN('U.providerInformation', 'PI');
             $query->Where('U.firstname LIKE :firstname')
                 ->orWhere('U.lastname LIKE :lastname')
                 ->orWhere('PI.name LIKE :name')
