@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Util\Twig;
+
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -23,16 +24,17 @@ class RouteCheckerExtension extends \Twig_Extension
         $this->container = $container;
     }
 
-    public function getFunctions() {
+    public function getFunctions()
+    {
         return array(
-            'isRoute' => new \Twig_Function_Method($this, 'isRoute')
+            'isRoute' => new \Twig_Function_Method($this, 'isRoute'),
         );
     }
 
     /**
      * Checks if a route exist.
      *
-     * @param  [type] $name [description]
+     * @param [type] $name [description]
      *
      * @return bool
      */

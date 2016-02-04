@@ -475,7 +475,7 @@ class UsersController extends BaseController
         $repo = $em->getRepository('AppUserBundle:User');
         $user = $this->findUserOrFail($id);
 
-        return $user->getFullSports();
+        return $user->getVirtualSports();
     }
 
     /**
@@ -724,6 +724,7 @@ class UsersController extends BaseController
                 $user->setEmail($data['email']);
             }
         }
+        
         if (isset($data['first_name'])) {
             $user->setFirstName($data['first_name']);
         }
@@ -753,27 +754,35 @@ class UsersController extends BaseController
             $user->setPhone($data['phone']);
         }
 
-
-        if(isset($data['sports'])){
+        if (isset($data['sports'])) {
             $newSports = array_filter(explode(',', $data['sports']), 'intval');
-            $currentSports = $user->getFullSports();
+            $currentSports = $user->getVirtualSports();
 
             $currentSportsId = array();
 
-            #remove sport
+            # Remove sports
             foreach ($currentSports as $sport) {
                 if (!in_array($sport['id'], $newSports)) {
-                    $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findOneBy(array('user' => $user->getId(), 'sport' => $sport['id']));
+                    $sportUsers = $em->getRepository('AppSportBundle:SportUser')
+                        ->findOneBy(array(
+                            'user' => $user->getId(),
+                            'sport' => $sport['id'],
+                        ));
+
                     $em->remove($sportUsers);
                 }
+
                 array_push($currentSportsId, $sport['id']);
             }
 
-            #add sport
+            # Add Sports
             $repo = $em->getRepository('AppSportBundle:Sport');
             foreach ($newSports as $sportId) {
                 if (!in_array($sportId, $currentSportsId)) {
-                    $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findOneBy(array('user' => $user->getId(), 'sport' => $sportId));
+                    $sportUsers = $em->getRepository('AppSportBundle:SportUser')
+                        ->findOneBy(array(
+                            'user' => $user->getId(), 'sport' => $sportId));
+
                     if (!$sportUsers) {
                         $sport = $repo->findOrFail($sportId);
                         $sportUser = new Entity\SportUser();

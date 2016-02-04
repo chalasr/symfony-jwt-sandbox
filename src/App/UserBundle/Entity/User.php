@@ -908,26 +908,6 @@ class User extends BaseUser
     }
 
     /**
-     * Get sports list.
-     *
-     * @return array
-     */
-    public function getFullSports()
-    {
-        $this->sports = array();
-
-        foreach ($this->sportUsers as $sportUser) {
-            $sport = $sportUser->getSport();
-            $this->sports[] = array(
-                'id'   => $sport->getId(),
-                'name' => $sport->getName(),
-            );
-        }
-
-        return $this->sports;
-    }
-
-    /**
      * Add coachDocument.
      *
      * @param \App\UserBundle\Entity\Information\CoachDocument $coachDocument

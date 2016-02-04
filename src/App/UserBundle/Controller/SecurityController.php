@@ -35,7 +35,7 @@ class SecurityController extends Controller
             'register' => [
                 'password' => 'nonempty|required',
                 'email'    => 'nonempty|required|email',
-                'group'    => 'nonempty|defined|Sportroopers:Coachs:Providers'
+                'group'    => 'nonempty|defined|Sportroopers:Coachs:Providers',
             ],
             'basic' => [
                 'password' => 'nonempty|required',
@@ -291,13 +291,12 @@ class SecurityController extends Controller
         $em = $this->getEntityManager();
 
         if ('Sportroopers') {
-
         }
 
         $group = $em->getRepository('AppUserBundle:Group')->findOneByName([
             'name' => isset($data['group'])
             ? $data['group']
-            : 'Sportroopers'
+            : 'Sportroopers',
         ]);
 
         $user = $userManager->createUser();
@@ -334,7 +333,7 @@ class SecurityController extends Controller
             'group'     => $user->getVirtualGroup(),
         );
 
-        /** Prepares an email with data */
+        /* Prepares an email with data */
         $message = \Swift_Message::newInstance()
             ->setSubject('Sportroops - Confirmation d\'inscription')
             ->setFrom('support@sportroops.com')
@@ -344,7 +343,7 @@ class SecurityController extends Controller
                 'text/html'
             );
 
-        /** Sends email */
+        /* Sends email */
         $this->get('mailer')->send($message);
 
         return $user;
