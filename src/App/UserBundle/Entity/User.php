@@ -231,6 +231,16 @@ class User extends BaseUser
     protected $providerInformation;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     * @JMS\SerializedName("provider_name")
+     * @JMS\Accessor(getter="getVirtualProviderName", setter="")
+     *
+     * @var string
+     */
+    protected $virtualProviderName;
+
+    /**
      * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\Information\CoachInformation", cascade={"persist"})
      * @ORM\JoinColumn(name="coach_id", referencedColumnName="id", nullable=true)
      */
@@ -361,6 +371,16 @@ class User extends BaseUser
         $this->providerInformation = $providerInformation;
 
         return $this;
+    }
+
+    /**
+     * Get providerInformation.
+     *
+     * @return \App\UserBundle\Entity\Information\ProviderInformation
+     */
+    public function getVirtualProviderName()
+    {
+        return $this->providerInformation ? $this->providerInformation->getName() : null;
     }
 
     /**
