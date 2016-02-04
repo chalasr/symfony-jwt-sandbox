@@ -417,7 +417,7 @@ class UsersController extends BaseController
      *    section="User",
      *    resource=true,
      *     statusCodes={
-     *       204="No Content (picture successfully updated)",
+     *       204="No Content (picture successfully get)",
      *       401="Unauthorized (this resource require an access token)"
      *     }
      * )
@@ -431,10 +431,14 @@ class UsersController extends BaseController
         $user = $this->findUserOrFail($id);
 
         $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/'.$user->getPicture());
+
+        if(!$path_picture){
+            $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/default.jpg');
+        }
         $iconInfo = pathinfo($path_picture);
 
         if (false === isset($iconInfo['extension'])) {
-            $path = $this->locateResource('@AppUserBundle/Resources/public/pictures/default.png');
+            throw new AccessDeniedHttpException('This resource is invalid extension');
         }
 
         $response = new Http\Response();
