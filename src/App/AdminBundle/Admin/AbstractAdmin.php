@@ -41,7 +41,7 @@ abstract class AbstractAdmin extends Admin
     {
         $createLabel = $this->translate('create_block_label');
         $entityName = $this->translate($this->getClassnameLabel(), [], 'messages');
-        
+
         if ($this->translator->getLocale() == 'fr') {
             return sprintf('%s %s', $createLabel, $entityName);
         }

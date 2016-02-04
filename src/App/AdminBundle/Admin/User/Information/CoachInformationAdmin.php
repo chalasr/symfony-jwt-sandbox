@@ -28,6 +28,5 @@ class CoachInformationAdmin extends Admin
             ))
             ->end()
         ;
-        // SNIP;
     }
 }

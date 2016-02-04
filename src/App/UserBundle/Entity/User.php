@@ -482,12 +482,12 @@ class User extends BaseUser
 
         foreach ($this->followers as $follower) {
             $this->virtualFollows[] = array(
-              'id'        => $follower->getId(),
-              'email'     => $follower->getEmail(),
-              'firstname' => $follower->getFirstname(),
-              'lastname'  => $follower->getLastname(),
-              'group'     => $follower->getVirtualGroup(),
-              'age'       => $follower->getAge(),
+                'id'        => $follower->getId(),
+                'email'     => $follower->getEmail(),
+                'firstname' => $follower->getFirstname(),
+                'lastname'  => $follower->getLastname(),
+                'group'     => $follower->getVirtualGroup(),
+                'age'       => $follower->getAge(),
             );
         }
 

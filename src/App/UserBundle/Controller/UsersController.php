@@ -12,8 +12,8 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation as Http;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -178,25 +178,25 @@ class UsersController extends BaseController
         return $this->handleView(204);
     }
 
-    /**
-     * Get the current user.
-     *
-     * @Rest\Get("/users/current")
-     * @Rest\View(serializerGroups={"api"})
-     * @ApiDoc(
-     *     section="User",
-     *     resource=true,
-     *     statusCodes={
-     *         200="OK",
-     *         401="Unauthorized (this resource require an access token)",
-     *         422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
-     *     },
-     * )
-     *
-     * @return array
-     *
-     * @throws NotFoundHttpException If the user does not exist
-     */
+     /**
+      * Get the current user.
+      *
+      * @Rest\Get("/users/current")
+      * @Rest\View(serializerGroups={"api"})
+      * @ApiDoc(
+      *     section="User",
+      *     resource=true,
+      *     statusCodes={
+      *         200="OK",
+      *         401="Unauthorized (this resource require an access token)",
+      *         422="Unprocessable Entity (self-following in forbidden|The user is already in followers)"
+      *     },
+      * )
+      *
+      * @return array
+      *
+      * @throws NotFoundHttpException If the user does not exist
+      */
      public function getCurrentUserAction()
      {
          $user = $this->getCurrentUser();
@@ -431,8 +431,7 @@ class UsersController extends BaseController
         $user = $this->findUserOrFail($id);
 
         $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/'.$user->getPicture());
-        if(!is_file($path_picture)){
-
+        if (!is_file($path_picture)) {
             $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/default.jpg');
         }
         $iconInfo = pathinfo($path_picture);
@@ -600,9 +599,8 @@ class UsersController extends BaseController
         $groups = $request->request->get('groups');
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-            $query = $qb->select('U')
+        $query = $qb->select('U')
                 ->from('AppUserBundle:User', 'U');
-
 
         if ($groups) {
             $groups = array_filter(explode(',', $groups), 'trim');
@@ -680,7 +678,7 @@ class UsersController extends BaseController
     public function updateCurrentUserProfile(Request $request)
     {
         $em = $this->getEntityManager();
-
+        $userManager = $this->getUserManager();
         $data = $request->request->all();
         $user = $this->getCurrentUser();
         $this->check($data, 'edit', true);
@@ -688,25 +686,22 @@ class UsersController extends BaseController
             return $this->errors;
         }
 
-
         $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
-
 
         #check password
         if (isset($data['password'])) {
-
-            if(!isset($data['old_password'])){
+            if (!isset($data['old_password'])) {
                 return array('password' => 'old password invalid');
             }
 
             $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
             $old_pwd_encoded = $encoder->encodePassword($data['old_password'], $user->getSalt());
 
-            if($user->getPassword() != $old_pwd_encoded){
+            if ($user->getPassword() != $old_pwd_encoded) {
                 return array('password' => 'old password invalid');
             }
 
-            if($data['old_password']==$data['password']){
+            if ($data['old_password'] == $data['password']) {
                 return array('password' => 'Old password same as current password');
             }
 
@@ -745,28 +740,27 @@ class UsersController extends BaseController
             $user->setZipcode($data['zipcode']);
         }
 
-
-        if(isset($data['sports'])){
+        if (isset($data['sports'])) {
             $newSports = array_filter(explode(',', $data['sports']), 'intval');
-            $currentSports=$user->getFullSports();
+            $currentSports = $user->getFullSports();
 
-            $currentSportsId=array();
+            $currentSportsId = array();
 
             #remove sport
-            foreach($currentSports as $sport){
-                if(!in_array($sport['id'],$newSports)){
+            foreach ($currentSports as $sport) {
+                if (!in_array($sport['id'], $newSports)) {
                     $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findOneBy(array('user' => $user->getId(), 'sport' => $sport['id']));
                     $em->remove($sportUsers);
                 }
-                array_push($currentSportsId,$sport['id']);
+                array_push($currentSportsId, $sport['id']);
             }
 
             #add sport
             $repo = $em->getRepository('AppSportBundle:Sport');
-            foreach($newSports as $sportId){
-                if(!in_array($sportId,$currentSportsId)){
+            foreach ($newSports as $sportId) {
+                if (!in_array($sportId, $currentSportsId)) {
                     $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findOneBy(array('user' => $user->getId(), 'sport' => $sportId));
-                    if(!$sportUsers){
+                    if (!$sportUsers) {
                         $sport = $repo->findOrFail($sportId);
                         $sportUser = new Entity\SportUser();
                         $sportUser->setUser($user);
@@ -777,8 +771,9 @@ class UsersController extends BaseController
             }
         }
 
-
         $em->flush();
+        $userManager->updateUser($user);
+
         return $data;
     }
 }
