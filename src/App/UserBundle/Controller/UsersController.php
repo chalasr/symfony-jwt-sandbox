@@ -44,6 +44,8 @@ class UsersController extends BaseController
                 'address'       => 'nonempty',
                 'city'          => 'nonempty',
                 'zipcode'       => 'nonempty',
+                'description'       => 'nonempty',
+                'phone'       => 'nonempty',
             ],
         );
     }
@@ -665,6 +667,8 @@ class UsersController extends BaseController
      *      {"name"="address", "dataType"="string", "required"=false, "description"="address"},
      *      {"name"="city", "dataType"="string", "required"=false, "description"="city"},
      *      {"name"="zipcode", "dataType"="string", "required"=false, "description"="zipcode"},
+     *      {"name"="phone", "dataType"="string", "required"=false, "description"="phone number"},
+     *      {"name"="description", "dataType"="string", "required"=false, "description"="description"},
      *      {"name"="sports", "dataType"="string", "required"=false, "description"="sports list ids, List all sports of user (if don't exist, then add new sport else remove sport), Example: sports= 1,2,3,5"}
      *
      *     },
@@ -740,7 +744,12 @@ class UsersController extends BaseController
             $user->setZipcode($data['zipcode']);
         }
 
-        if (isset($data['sports'])) {
+        if (isset($data['phone'])) {
+            $user->setPhone($data['phone']);
+        }
+
+
+        if(isset($data['sports'])){
             $newSports = array_filter(explode(',', $data['sports']), 'intval');
             $currentSports = $user->getFullSports();
 
