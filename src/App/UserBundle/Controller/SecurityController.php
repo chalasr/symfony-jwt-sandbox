@@ -35,6 +35,7 @@ class SecurityController extends Controller
             'register' => [
                 'password' => 'nonempty|required',
                 'email'    => 'nonempty|required|email',
+                'group'    => 'nonempty|defined|Sportroopers:Coachs:Providers'
             ],
             'basic' => [
                 'password' => 'nonempty|required',

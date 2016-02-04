@@ -33,6 +33,8 @@ trait CanValidateTrait
         $this->errors = array();
 
         foreach ($this->rules[$type] as $prop => $rules) {
+            $rules = explode('|', $rules);
+
             // Is set
             if (!isset($data[$prop]) && $this->hasRule($rules, 'required')) {
                 $this->errors[$prop] = 'missing';
@@ -57,6 +59,16 @@ trait CanValidateTrait
                 $error = $this->get('validator')->validateValue($data[$prop], $emailConstraint);
                 if ($error->count() > 0) {
                     $this->errors[$prop] = 'not a valid email';
+                }
+            }
+
+            // Is equal
+            if ($data[$prop] && $this->hasRule($rules, 'defined')) {
+                $allowedValues = explode(':', $rules[count($rules) - 1]);
+
+                if (!in_array($data[$prop], $allowedValues)) {
+                    $validator = false;
+                    $this->errors[$prop] = sprintf('allowed values are %s', implode(',', $allowedValues));
                 }
             }
 
@@ -137,8 +149,6 @@ trait CanValidateTrait
      */
     protected function hasRule($propertyRules, $rule)
     {
-        $propertyRules = explode('|', $propertyRules);
-
         return in_array($rule, $propertyRules);
     }
 }

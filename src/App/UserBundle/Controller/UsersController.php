@@ -44,8 +44,8 @@ class UsersController extends BaseController
                 'address'       => 'nonempty',
                 'city'          => 'nonempty',
                 'zipcode'       => 'nonempty',
-                'description'       => 'nonempty',
-                'phone'       => 'nonempty',
+                'description'   => 'nonempty',
+                'phone'         => 'nonempty',
             ],
         );
     }
