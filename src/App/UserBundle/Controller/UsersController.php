@@ -435,7 +435,6 @@ class UsersController extends BaseController
         if(!$path_picture){
             $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/').'default.jpg';
         }
-
         return $path_picture;
         $iconInfo = pathinfo($path_picture);
 
