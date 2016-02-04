@@ -629,17 +629,12 @@ class UsersController extends BaseController
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
+
         if (!$results) {
             throw new NotFoundHttpException(sprintf('Unable to find user '));
         }
 
-        $response=array();
-        foreach($results as $row){
-            $item=$row[0];
-            $item->name=$row['name'];
-            array_push($response,$item);
-        }
-        return $response;
+        return $results;
     }
 
     /**
