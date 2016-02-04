@@ -433,8 +433,10 @@ class UsersController extends BaseController
         $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/'.$user->getPicture());
 
         if(!$path_picture OR !file_exists($path_picture)){
+            return $path_picture;
             $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/').'default.jpg';
         }
+        return 'file:'.$path_picture;
         $iconInfo = pathinfo($path_picture);
 
         if (false === isset($iconInfo['extension'])) {
