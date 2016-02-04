@@ -18,3 +18,10 @@ services:
 
     app.doctrine.repository.factory.default:
         class: Doctrine\ORM\Repository\DefaultRepositoryFactory
+
+    app.twig_extension.route_checker:
+        class: App\Util\Twig\RouteCheckerExtension
+        public: false
+        arguments: ['@service_container']
+        tags:
+            - { name: twig.extension }
