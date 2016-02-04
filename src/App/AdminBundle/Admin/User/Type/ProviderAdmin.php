@@ -52,7 +52,7 @@ class ProviderAdmin extends BaseUserAdmin
                     'required' => false,
                     'label'    => 'Description',
                 ))
-                ->add('phone', null, array('required' => false))
+                ->add('phone', null, array('required' => false, 'label' => 'Téléphone'))
                 ->add('address', 'textarea', array(
                     'label'    => 'Adresse',
                     'required' => false,
