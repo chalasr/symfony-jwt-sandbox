@@ -436,7 +436,7 @@ class UsersController extends BaseController
             $path_picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/default.jpg');
         }
         $iconInfo = pathinfo($path_picture);
-
+        return $path_picture;
         if (false === isset($iconInfo['extension'])) {
             throw new AccessDeniedHttpException('This resource is invalid extension');
         }
