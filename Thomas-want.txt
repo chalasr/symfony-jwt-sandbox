@@ -1,0 +1,56 @@
+Array
+(
+    [0] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 22
+                    [email] => gyldeshalles@yopmail.com
+                    [firstname] => 
+                    [lastname] => 
+                    [gender] => 
+                    [phone] => 94203821
+                    [address] => 897 boulevard des feuilles mortes
+                    [description] => Proin consectetur egestas nulla at sagittis. Integer tempor mi nec placerat egestas. Sed sed sollicitudin diam. Morbi sodales, purus vel pellentesque tempor, lorem est molestie ex, in gravida leo velit sed risus. Praesent id lorem massa. Donec id consequat lacus. Donec consequat consequat finibus. Vestibulum sed bibendum dui. Aliquam erat volutpat.  Mauris tincidunt at lorem at rutrum. Vestibulum ultrices quam ex, a fermentum mi lobortis a. Proin sit amet neque a libero porttitor blandit. Vestibulum sed tempor nulla. Aliquam nec dictum ligula, id commodo nisi. Aenean vel blandit nulla. Donec lacinia, sapien vitae malesuada hendrerit, nisl sem porta felis, id gravida risus metus at magna. Suspendisse gravida justo at sagittis blandit. Etiam ullamcorper vel dui eget tincidunt. Aliquam sit amet maximus tortor. Donec euismod urna urna, id ultrices ligula ullamcorper in. Aliquam rutrum, quam ac ullamcorper vehicula, urna nunc egestas metus, at dapibus magna diam at lectus. Vestibulum rhoncus interdum magna a convallis. Duis id magna et nibh sagittis cursus et eget orci.
+                    [city] => PARIS
+                    [zipcode] => 75007
+                    [age] => 0
+                    [followers] => Array
+                        (
+                        )
+
+                    [follows] => Array
+                        (
+                        )
+
+                    [token] => 
+                    [sports] => Array
+                        (
+                        )
+
+                    [created_at] => 2016-01-31T00:00:00+0700
+                    [updated_at] => 2016-02-01T00:00:00+0700
+                    [group] => Providers
+                    [gplus_name] => 
+                    [twitter_uid] => 
+                    [two_step_verification_code] => 
+                    [birthday] => 1454173200
+                    [twitter_data] => 
+                    [gplus_data] => 
+                    [website] => 
+                    [biography] => 
+                    [facebook_data] => 
+                    [twitter_name] => 
+                    [facebook_name] => 
+                    [facebook_uid] => 
+                    [locale] => 
+                    [timezone] => 
+                    [gplus_uid] => 
+		    [name] => Gym des Halles
+                )
+
+            
+        )
+
+)
+
