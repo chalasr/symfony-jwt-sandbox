@@ -37,15 +37,16 @@ class UsersController extends BaseController
             'edit' => [
                 'password'      => 'nonempty',
                 'email'         => 'nonempty|email',
-                'firs_tname'    => 'nonempty',
+                'first_name'    => 'nonempty',
                 'last_name'     => 'nonempty',
                 'date_of_birth' => 'nonempty',
                 'description'   => 'nonempty',
                 'address'       => 'nonempty',
                 'city'          => 'nonempty',
                 'zipcode'       => 'nonempty',
-                'description'       => 'nonempty',
-                'phone'       => 'nonempty',
+                'description'   => 'nonempty',
+                'phone'         => 'nonempty',
+                'gender'        => 'nonempty',
             ],
         );
     }
@@ -658,17 +659,18 @@ class UsersController extends BaseController
      *         404="Invalid sport port id (sport_id don't exist in system)"
      *     },
      *     parameters={
-     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="first_name"},
-     *      {"name"="last_name", "dataType"="string", "required"=false, "description"="last_name"},
-     *      {"name"="email", "dataType"="string", "required"=false, "description"="email"},
-     *      {"name"="old_password", "dataType"="string", "required"=false, "description"="old password"},
-     *      {"name"="password", "dataType"="string", "required"=false, "description"="password"},
-     *      {"name"="date_of_birth", "dataType"="integer", "required"=false, "description"="date_of_birth"},
-     *      {"name"="address", "dataType"="string", "required"=false, "description"="address"},
-     *      {"name"="city", "dataType"="string", "required"=false, "description"="city"},
-     *      {"name"="zipcode", "dataType"="string", "required"=false, "description"="zipcode"},
-     *      {"name"="phone", "dataType"="string", "required"=false, "description"="phone number"},
-     *      {"name"="description", "dataType"="string", "required"=false, "description"="description"},
+     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname"},
+     *      {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname"},
+     *      {"name"="email", "dataType"="string", "required"=false, "description"="Email"},
+     *      {"name"="old_password", "dataType"="string", "required"=false, "description"="Old password"},
+     *      {"name"="password", "dataType"="string", "required"=false, "description"="Password"},
+     *      {"name"="date_of_birth", "dataType"="integer", "required"=false, "description"="Date of birth"},
+     *      {"name"="address", "dataType"="string", "required"=false, "description"="Address"},
+     *      {"name"="city", "dataType"="string", "required"=false, "description"="City"},
+     *      {"name"="zipcode", "dataType"="string", "required"=false, "description"="Zipcode"},
+     *      {"name"="phone", "dataType"="string", "required"=false, "description"="Phone number"},
+     *      {"name"="description", "dataType"="string", "required"=false, "description"="Description"},
+     *      {"name"="gender", "dataType"="string", "required"=false, "description"="Gender ('m' for male, 'f' for female, 'u' for unknown)"},
      *      {"name"="sports", "dataType"="string", "required"=false, "description"="sports list ids, List all sports of user (if don't exist, then add new sport else remove sport), Example: sports= 1,2,3,5"}
      *
      *     },
@@ -742,6 +744,9 @@ class UsersController extends BaseController
         }
         if (isset($data['zipcode'])) {
             $user->setZipcode($data['zipcode']);
+        }
+        if (isset($data['gender'])) {
+            $user->setGender($data['gender']);
         }
 
         if (isset($data['phone'])) {
