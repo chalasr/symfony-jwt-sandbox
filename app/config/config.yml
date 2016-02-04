@@ -42,6 +42,8 @@ twig:
     form:
         resources:
             - 'SonataCoreBundle:Form:datepicker.html.twig'
+    globals:
+        domain: "%domain%"
 
 # Assetic Configuration
 assetic:
