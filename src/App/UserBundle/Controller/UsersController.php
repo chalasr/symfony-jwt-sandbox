@@ -720,7 +720,7 @@ class UsersController extends BaseController
 
             if ($userEmail) {
                 if ($userEmail->getId() !== $user->getId()) {
-                    $this->errors['email'] = 'Cet adresse email est déjà utilisé par un autre utilisateur';
+                    $this->errors['email'] = 'Cet adresse email est déjà utilisée par un autre utilisateur';
 
                     return $this->errors;
                 }
