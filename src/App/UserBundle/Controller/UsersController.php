@@ -688,43 +688,47 @@ class UsersController extends BaseController
         $data = $request->request->all();
         $user = $this->getCurrentUser();
         $this->check($data, 'edit', true);
+
         if (count($this->errors)) {
             return $this->errors;
         }
 
-        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
-
-        #check password
+        # Check if old_password is valid
         if (isset($data['password'])) {
             if (!isset($data['old_password'])) {
-                return array('password' => 'old password invalid');
+                $this->errors['password'] = 'L\'ancien mot de passe est obligatoire pour être changé';
+
+                return $this->errors;
             }
 
             $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
-            $old_pwd_encoded = $encoder->encodePassword($data['old_password'], $user->getSalt());
+            $encodedOldPassword = $encoder->encodePassword($data['old_password'], $user->getSalt());
 
-            if ($user->getPassword() != $old_pwd_encoded) {
-                return array('password' => 'old password invalid');
+            if ($user->getPassword() !== $encodedOldPassword) {
+                $this->errors['password'] = 'L\'ancien mot de passe n\'est pas valide';
+
+                return $this->errors;
             }
 
-            if ($data['old_password'] == $data['password']) {
-                return array('password' => 'Old password same as current password');
+            if ($data['old_password'] !== $data['password']) {
+                $user->setPlainPassword($data['password']);
             }
-
-            $user->setPlainPassword($data['password']);
         }
 
         if (isset($data['email'])) {
             $userEmail = $em->getRepository('AppUserBundle:User')->findOneBy(array('email' => $data['email']));
+
             if ($userEmail) {
-                if ($userEmail->getId() != $user->getId()) {
-                    return array('email' => 'Exist email on system');
+                if ($userEmail->getId() !== $user->getId()) {
+                    $this->errors['email'] = 'Cet adresse email est déjà utilisée par un autre utilisateur';
+
+                    return $this->errors;
                 }
             } else {
                 $user->setEmail($data['email']);
             }
         }
-        
+
         if (isset($data['first_name'])) {
             $user->setFirstName($data['first_name']);
         }
@@ -755,48 +759,66 @@ class UsersController extends BaseController
         }
 
         if (isset($data['sports'])) {
+            $oldSports = $user->getVirtualSports();
             $newSports = array_filter(explode(',', $data['sports']), 'intval');
-            $currentSports = $user->getVirtualSports();
 
-            $currentSportsId = array();
-
-            # Remove sports
-            foreach ($currentSports as $sport) {
-                if (!in_array($sport['id'], $newSports)) {
-                    $sportUsers = $em->getRepository('AppSportBundle:SportUser')
-                        ->findOneBy(array(
-                            'user' => $user->getId(),
-                            'sport' => $sport['id'],
-                        ));
-
-                    $em->remove($sportUsers);
-                }
-
-                array_push($currentSportsId, $sport['id']);
-            }
-
-            # Add Sports
-            $repo = $em->getRepository('AppSportBundle:Sport');
-            foreach ($newSports as $sportId) {
-                if (!in_array($sportId, $currentSportsId)) {
-                    $sportUsers = $em->getRepository('AppSportBundle:SportUser')
-                        ->findOneBy(array(
-                            'user' => $user->getId(), 'sport' => $sportId));
-
-                    if (!$sportUsers) {
-                        $sport = $repo->findOrFail($sportId);
-                        $sportUser = new Entity\SportUser();
-                        $sportUser->setUser($user);
-                        $sportUser->setSport($sport);
-                        $em->persist($sportUser);
-                    }
-                }
-            }
+            $user = $this->updateUserSports($user, $oldSports, $newSports);
         }
 
         $em->flush();
         $userManager->updateUser($user);
 
         return $data;
+    }
+
+    /**
+     * Update sports of an user.
+     *
+     * @return void
+     */
+    protected function updateUserSports($user, $oldSports, $newSports) {
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('AppSportBundle:Sport');
+        $currentSportsId = array();
+
+        # Remove sports
+        foreach ($oldSports as $sport) {
+            if (!in_array($sport['id'], $newSports)) {
+                $sportUser = $em->getRepository('AppSportBundle:SportUser')
+                    ->findOneBy(array(
+                        'user' => $user->getId(),
+                        'sport' => $sport['id'],
+                    ));
+
+                $em->remove($sportUser);
+            }
+
+            array_push($currentSportsId, $sport['id']);
+        }
+
+        # Add Sports
+        foreach ($newSports as $sportId) {
+            if (in_array($sportId, $currentSportsId)) {
+                continue;
+            }
+
+            if (!$sport = $repo->find($sportId)) {
+                continue;
+            }
+
+            $sportUser = $em->getRepository('AppSportBundle:SportUser')
+                ->findOneBy(array(
+                    'user'  => $user->getId(),
+                    'sport' => $sportId,
+                ));
+
+            if (!$sportUser) {
+                $sportUser = new Entity\SportUser();
+                $sportUser->setSport($sport);
+                $user->addSportUser($sportUser);
+            }
+        }
+
+        return $user;
     }
 }

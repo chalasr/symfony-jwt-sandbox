@@ -36,7 +36,9 @@ class SportUser extends AbstractEntity implements EntityInterface
 
     public function __toString()
     {
-        return sprintf('User #%d - Sport #%d', $this->user->getId(), $this->sport->getId());
+        return $this->user && $this->sport
+        ? sprintf('User #%d - Sport #%d', $this->user->getId(), $this->sport->getId())
+        : 'New Sport-User association';
     }
 
     /**

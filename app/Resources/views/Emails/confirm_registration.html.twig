@@ -10,13 +10,8 @@
     {% if group == 'Coachs' %}
         <p style="color: #525252;font: normal 12px/20px Trebuchet MS,sans-serif;margin: 10px 0;">
           Pour vous connecter à votre tableau de bord, merci de vous rendre à cette adresse :
-            {% if isRoute('sonata_admin_homepage') %}
-                {% set domain = url('sonata_admin_homepage') %}
-            {% else %}
-                {% set domain = url('app_demo') %}
-            {% endif %}
-            <a href="{{ domain }}admin/users/coachs/{{ id }}/edit">
-              {{ domain }}admin/users/coachs/{{ id }}/edit
+            <a href="http://{{ domain }}/admin/users/coachs/{{ id }}/edit">
+              http://{{ domain }}/admin/users/coachs/{{ id }}/edit
             </a>
         </p>
     {% endif %}

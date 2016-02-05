@@ -41,7 +41,8 @@ class ImportCommand extends ContainerAwareCommand
         $reader = new CsvReader($path);
         $recorder = new DoctrineORMEntityRecorder('AppUserBundle:User', $em);
         $recorder->setDateTimeFormat('m/d/Y')
-            ->setKeymap(array('group' => 'group.name'));
+            ->setKeymap(array('group' => 'group.name'))
+            ->setExtraFields(array('plainPassword' => 'test'));
 
         Importer::create($reader, $recorder)->import();
 
