@@ -488,6 +488,7 @@ class User extends BaseUser
                 'lastname'  => $follower->getLastname(),
                 'group'     => $follower->getVirtualGroup(),
                 'age'       => $follower->getAge(),
+                'provider_name'=> $follower->getVirtualProviderName(),
             );
         }
 
@@ -565,6 +566,7 @@ class User extends BaseUser
                 'lastname'  => $follow->getLastname(),
                 'group'     => $follow->getVirtualGroup(),
                 'age'       => $follow->getAge(),
+                'provider_name'       => $this->getVirtualProviderName(),
             );
         }
 
