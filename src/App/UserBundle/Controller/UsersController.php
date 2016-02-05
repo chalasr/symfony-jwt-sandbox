@@ -396,9 +396,11 @@ class UsersController extends BaseController
 
         $picture = $request->files->get('file');
 
+
         if (!$picture) {
-            throw new UnprocessableEntityHttpException('The file parameter is missing');
+            throw new AccessDeniedHttpException('The file parameter is missing');
         }
+
 
         $user->setFile($picture);
 
@@ -406,7 +408,6 @@ class UsersController extends BaseController
 
         if ($user->getFile()) {
             $user->uploadPicture($uploadPath);
-            $em->persist($user);
             $em->flush();
         }
 
