@@ -396,12 +396,6 @@ class UsersController extends BaseController
 
         $picture = $request->files->get('file');
 
-
-        if (!$picture) {
-            throw new AccessDeniedHttpException('The file parameter is missing');
-        }
-
-
         $user->setFile($picture);
 
         $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
