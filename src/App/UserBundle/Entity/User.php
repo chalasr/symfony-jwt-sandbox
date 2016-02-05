@@ -892,7 +892,13 @@ class User extends BaseUser
         }
 
         $interval = $today->diff($birthdate);
-        $this->age = (int) $interval->format('%y')+1;
+        $this->age = (int) $interval->format('%y');
+        if($this->age==0){
+            $this->age=1;
+        }else{
+            $year_born=$birthdate->format('Y');
+            $this->age=date('Y')-$year_born;
+        }
 
         return $this->age;
     }
