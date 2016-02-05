@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Users Controller.
@@ -664,7 +665,7 @@ class UsersController extends BaseController
      *      {"name"="email", "dataType"="string", "required"=false, "description"="Email"},
      *      {"name"="old_password", "dataType"="string", "required"=false, "description"="Old password"},
      *      {"name"="password", "dataType"="string", "required"=false, "description"="Password"},
-     *      {"name"="date_of_birth", "dataType"="integer", "required"=false, "description"="Date of birth"},
+     *      {"name"="date_of_birth", "dataType"="string ", "required"=false, "description"="Date of birth format yyyy-mm-dd"},
      *      {"name"="address", "dataType"="string", "required"=false, "description"="Address"},
      *      {"name"="city", "dataType"="string", "required"=false, "description"="City"},
      *      {"name"="zipcode", "dataType"="string", "required"=false, "description"="Zipcode"},
@@ -736,7 +737,7 @@ class UsersController extends BaseController
             $user->setLastName($data['last_name']);
         }
         if (isset($data['date_of_birth'])) {
-            $user->setDateOfBirth($data['date_of_birth']);
+            $user->setBirthday(new \DateTime($data['date_of_birth']));
         }
         if (isset($data['description'])) {
             $user->setDescription($data['description']);
