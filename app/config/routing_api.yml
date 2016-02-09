@@ -10,3 +10,6 @@ api_security:
 
 sports:
     resource: "@AppSportBundle/Resources/config/routing.yml"
+
+events:
+    resource: "@AppEventBundle/Resources/config/routing.yml"

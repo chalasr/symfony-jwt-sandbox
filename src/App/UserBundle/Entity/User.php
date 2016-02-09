@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table(name="fos_user_user")
  * @JMS\ExclusionPolicy("all")
- * @JMS\AccessorOrder("custom", custom = {"id", "email", "firstname", "lastname", "group", "gender", "phone", "address", "description", "city", "zipcode", "age", "irthday", "sports", "followers", "follows", "created_at", "updated_at"})
+ * @JMS\AccessorOrder("custom", custom = {"id", "email", "firstname", "lastname", "group", "gender", "phone", "address", "description", "city", "zipcode", "age", "birthday", "sports", "followers", "follows", "created_at", "updated_at"})
  * @ORM\Entity
  */
 class User extends BaseUser

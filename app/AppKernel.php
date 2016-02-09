@@ -32,6 +32,7 @@ class AppKernel extends Kernel
             new App\SportBundle\AppSportBundle(),
             new App\UserBundle\AppUserBundle(),
             new App\AdminBundle\AppAdminBundle(),
+            new App\EventBundle\AppEventBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
