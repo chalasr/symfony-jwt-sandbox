@@ -2,7 +2,7 @@
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
-api_security:
+users:
     resource: "@AppUserBundle/Resources/config/routing.yml"
     prefix:   /
     requirements:

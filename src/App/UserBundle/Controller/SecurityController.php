@@ -418,6 +418,10 @@ class SecurityController extends Controller
         $request = $client->request('GET', $endpoint);
         $response = json_decode($client->getResponse()->getContent());
 
+        if ($response->error) {
+            throw new UnprocessableEntityHttpException($response->error->message);
+        }
+
         return $response->id == $id;
     }
 

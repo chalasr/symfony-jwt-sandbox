@@ -93,6 +93,9 @@ class Event
     /** @ORM\OneToOne(targetEntity="\App\EventBundle\Entity\EventType\Cyclic", mappedBy="event", cascade={"persist"}) */
     private $cyclicEvent;
 
+    /** @ORM\OneToOne(targetEntity="\App\UserBundle\Entity\User", mappedBy="event", cascade={"persist"}) */
+    private $user;
+
     /**
      * Get id
      *
