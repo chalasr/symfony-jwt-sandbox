@@ -4,3 +4,7 @@ api_security:
     prefix:   /
     requirements:
         _format: json
+
+users_collection:
+    type: rest
+    resource: App\UserBundle\Controller\UsersController

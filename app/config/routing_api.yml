@@ -4,10 +4,7 @@ fos_user_security:
 
 users:
     resource: "@AppUserBundle/Resources/config/routing.yml"
-    prefix:   /
-    requirements:
-        _format: json
-
+    
 sports:
     resource: "@AppSportBundle/Resources/config/routing.yml"
 
