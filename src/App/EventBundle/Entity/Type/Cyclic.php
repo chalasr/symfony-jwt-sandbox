@@ -1,11 +1,11 @@
 <?php
 
-namespace App\EventBundle\Entity\EventType;
+namespace App\EventBundle\Entity\Type;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Cyclic
+ * Cyclic.
  *
  * @ORM\Table(name="cyclic_events")
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Cyclic
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -29,21 +29,21 @@ class Cyclic
     private $date;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="days", type="integer")
      */
     private $days;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="recurrence", type="integer")
      */
     private $recurrence;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="repetition", type="integer")
      */
@@ -53,9 +53,9 @@ class Cyclic
     protected $event;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -63,7 +63,7 @@ class Cyclic
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
      *
@@ -77,7 +77,7 @@ class Cyclic
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return \DateTime
      */
@@ -87,9 +87,9 @@ class Cyclic
     }
 
     /**
-     * Set days
+     * Set days.
      *
-     * @param integer $days
+     * @param int $days
      *
      * @return Cyclic
      */
@@ -101,9 +101,9 @@ class Cyclic
     }
 
     /**
-     * Get days
+     * Get days.
      *
-     * @return integer
+     * @return int
      */
     public function getDays()
     {
@@ -111,9 +111,9 @@ class Cyclic
     }
 
     /**
-     * Set recurrence
+     * Set recurrence.
      *
-     * @param integer $recurrence
+     * @param int $recurrence
      *
      * @return Cyclic
      */
@@ -125,9 +125,9 @@ class Cyclic
     }
 
     /**
-     * Get recurrence
+     * Get recurrence.
      *
-     * @return integer
+     * @return int
      */
     public function getRecurrence()
     {
@@ -135,9 +135,9 @@ class Cyclic
     }
 
     /**
-     * Set repetition
+     * Set repetition.
      *
-     * @param integer $repetition
+     * @param int $repetition
      *
      * @return Cyclic
      */
@@ -149,9 +149,9 @@ class Cyclic
     }
 
     /**
-     * Get repetition
+     * Get repetition.
      *
-     * @return integer
+     * @return int
      */
     public function getRepetition()
     {
@@ -159,7 +159,7 @@ class Cyclic
     }
 
     /**
-     * Set event
+     * Set event.
      *
      * @param \App\EventBundle\Entity\Event $event
      *
@@ -173,7 +173,7 @@ class Cyclic
     }
 
     /**
-     * Get event
+     * Get event.
      *
      * @return \App\EventBundle\Entity\Event
      */

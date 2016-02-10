@@ -1,0 +1,18 @@
+services:
+    sonata.admin.single_event:
+        class: App\AdminBundle\Admin\Event\Type\SingleAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: events, label: "Évènement simple" }
+        arguments:
+            - ~
+            - App\EventBundle\Entity\Type\Single
+            - ~
+
+    sonata.admin.event:
+        class: App\AdminBundle\Admin\Event\AbstractEventAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: event, label: "Event" }
+        arguments:
+            - ~
+            - App\EventBundle\Entity\Event
+            - ~

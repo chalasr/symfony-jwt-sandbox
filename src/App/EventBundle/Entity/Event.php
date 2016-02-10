@@ -5,7 +5,7 @@ namespace App\EventBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Event
+ * Event.
  *
  * @ORM\Table(name="events")
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Event
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -45,33 +45,33 @@ class Event
     /**
      * @var string
      *
-     * @ORM\Column(name="location_address", type="text")
+     * @ORM\Column(name="location_address", type="text", nullable=true)
      */
     private $locationAddress;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="location_long", type="string", length=500)
+     * @ORM\Column(name="location_long", type="string", length=500, nullable=true)
      */
     private $locationLong;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="location_lat", type="string", length=500)
+     * @ORM\Column(name="location_lat", type="string", length=500, nullable=true)
      */
     private $locationLat;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="canceled", type="boolean")
      */
     private $canceled = false;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="private", type="boolean")
      */
@@ -82,24 +82,27 @@ class Event
      *
      * @ORM\Column(name="price", type="decimal")
      */
-    private $price;
+    private $price = 0;
 
-    /** @ORM\OneToOne(targetEntity="\App\EventBundle\Entity\EventType\Single", mappedBy="event", cascade={"persist"}) */
+    /** @ORM\OneToOne(targetEntity="\App\EventBundle\Entity\Type\Single", mappedBy="event", cascade={"persist"}) */
     private $singleEvent;
 
-    /** @ORM\OneToOne(targetEntity="\App\EventBundle\Entity\EventType\Open", mappedBy="event", cascade={"persist"}) */
+    /** @ORM\OneToOne(targetEntity="\App\EventBundle\Entity\Type\Open", mappedBy="event", cascade={"persist"}) */
     private $openEvent;
 
-    /** @ORM\OneToOne(targetEntity="\App\EventBundle\Entity\EventType\Cyclic", mappedBy="event", cascade={"persist"}) */
+    /** @ORM\OneToOne(targetEntity="\App\EventBundle\Entity\Type\Cyclic", mappedBy="event", cascade={"persist"}) */
     private $cyclicEvent;
 
-    /** @ORM\OneToOne(targetEntity="\App\UserBundle\Entity\User", mappedBy="event", cascade={"persist"}) */
+    /** @ORM\OneToOne(targetEntity="\App\UserBundle\Entity\User", cascade={"persist"}) */
     private $user;
 
+    /** @ORM\OneToOne(targetEntity="\App\SportBundle\Entity\Sport", cascade={"persist"}) */
+    private $sport;
+
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -107,7 +110,7 @@ class Event
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
@@ -121,7 +124,7 @@ class Event
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -131,7 +134,7 @@ class Event
     }
 
     /**
-     * Set picture
+     * Set picture.
      *
      * @param string $picture
      *
@@ -145,7 +148,7 @@ class Event
     }
 
     /**
-     * Get picture
+     * Get picture.
      *
      * @return string
      */
@@ -155,7 +158,7 @@ class Event
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
      *
@@ -169,7 +172,7 @@ class Event
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -179,7 +182,7 @@ class Event
     }
 
     /**
-     * Set locationAddress
+     * Set locationAddress.
      *
      * @param string $locationAddress
      *
@@ -193,7 +196,7 @@ class Event
     }
 
     /**
-     * Get locationAddress
+     * Get locationAddress.
      *
      * @return string
      */
@@ -203,7 +206,7 @@ class Event
     }
 
     /**
-     * Set locationLong
+     * Set locationLong.
      *
      * @param string $locationLong
      *
@@ -217,7 +220,7 @@ class Event
     }
 
     /**
-     * Get locationLong
+     * Get locationLong.
      *
      * @return string
      */
@@ -227,7 +230,7 @@ class Event
     }
 
     /**
-     * Set locationLat
+     * Set locationLat.
      *
      * @param string $locationLat
      *
@@ -241,7 +244,7 @@ class Event
     }
 
     /**
-     * Get locationLat
+     * Get locationLat.
      *
      * @return string
      */
@@ -251,9 +254,9 @@ class Event
     }
 
     /**
-     * Set canceled
+     * Set canceled.
      *
-     * @param boolean $canceled
+     * @param bool $canceled
      *
      * @return Event
      */
@@ -265,9 +268,9 @@ class Event
     }
 
     /**
-     * Get canceled
+     * Get canceled.
      *
-     * @return boolean
+     * @return bool
      */
     public function getCanceled()
     {
@@ -275,9 +278,9 @@ class Event
     }
 
     /**
-     * Set private
+     * Set private.
      *
-     * @param boolean $private
+     * @param bool $private
      *
      * @return Event
      */
@@ -289,9 +292,9 @@ class Event
     }
 
     /**
-     * Get private
+     * Get private.
      *
-     * @return boolean
+     * @return bool
      */
     public function getPrivate()
     {
@@ -299,7 +302,7 @@ class Event
     }
 
     /**
-     * Set price
+     * Set price.
      *
      * @param string $price
      *
@@ -313,7 +316,7 @@ class Event
     }
 
     /**
-     * Get price
+     * Get price.
      *
      * @return string
      */
@@ -323,13 +326,13 @@ class Event
     }
 
     /**
-     * Set singleEvent
+     * Set singleEvent.
      *
-     * @param \App\EventBundle\Entity\EventType\Single $singleEvent
+     * @param \App\EventBundle\Entity\Type\Single $singleEvent
      *
      * @return Event
      */
-    public function setSingleEvent(\App\EventBundle\Entity\EventType\Single $singleEvent = null)
+    public function setSingleEvent(\App\EventBundle\Entity\Type\Single $singleEvent = null)
     {
         $this->singleEvent = $singleEvent;
 
@@ -337,9 +340,9 @@ class Event
     }
 
     /**
-     * Get singleEvent
+     * Get singleEvent.
      *
-     * @return \App\EventBundle\Entity\EventType\Single
+     * @return \App\EventBundle\Entity\Type\Single
      */
     public function getSingleEvent()
     {
@@ -347,13 +350,13 @@ class Event
     }
 
     /**
-     * Set openEvent
+     * Set openEvent.
      *
-     * @param \App\EventBundle\Entity\EventType\Open $openEvent
+     * @param \App\EventBundle\Entity\Type\Open $openEvent
      *
      * @return Event
      */
-    public function setOpenEvent(\App\EventBundle\Entity\EventType\Open $openEvent = null)
+    public function setOpenEvent(\App\EventBundle\Entity\Type\Open $openEvent = null)
     {
         $this->openEvent = $openEvent;
 
@@ -361,9 +364,9 @@ class Event
     }
 
     /**
-     * Get openEvent
+     * Get openEvent.
      *
-     * @return \App\EventBundle\Entity\EventType\Open
+     * @return \App\EventBundle\Entity\Type\Open
      */
     public function getOpenEvent()
     {
@@ -371,13 +374,13 @@ class Event
     }
 
     /**
-     * Set cyclicEvent
+     * Set cyclicEvent.
      *
-     * @param \App\EventBundle\Entity\EventType\Cyclic $cyclicEvent
+     * @param \App\EventBundle\Entity\Type\Cyclic $cyclicEvent
      *
      * @return Event
      */
-    public function setCyclicEvent(\App\EventBundle\Entity\EventType\Cyclic $cyclicEvent = null)
+    public function setCyclicEvent(\App\EventBundle\Entity\Type\Cyclic $cyclicEvent = null)
     {
         $this->cyclicEvent = $cyclicEvent;
 
@@ -385,12 +388,60 @@ class Event
     }
 
     /**
-     * Get cyclicEvent
+     * Get cyclicEvent.
      *
-     * @return \App\EventBundle\Entity\EventType\Cyclic
+     * @return \App\EventBundle\Entity\Type\Cyclic
      */
     public function getCyclicEvent()
     {
         return $this->cyclicEvent;
+    }
+
+    /**
+     * Set user.
+     *
+     * @param \App\UserBundle\Entity\User $user
+     *
+     * @return Event
+     */
+    public function setUser(\App\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user.
+     *
+     * @return \App\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set sport.
+     *
+     * @param \App\SportBundle\Entity\Sport $sport
+     *
+     * @return Event
+     */
+    public function setSport(\App\SportBundle\Entity\Sport $sport = null)
+    {
+        $this->sport = $sport;
+
+        return $this;
+    }
+
+    /**
+     * Get sport.
+     *
+     * @return \App\SportBundle\Entity\Sport
+     */
+    public function getSport()
+    {
+        return $this->sport;
     }
 }

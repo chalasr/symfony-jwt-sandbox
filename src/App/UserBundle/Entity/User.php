@@ -482,13 +482,13 @@ class User extends BaseUser
 
         foreach ($this->followers as $follower) {
             $this->virtualFollows[] = array(
-                'id'        => $follower->getId(),
-                'email'     => $follower->getEmail(),
-                'firstname' => $follower->getFirstname(),
-                'lastname'  => $follower->getLastname(),
-                'group'     => $follower->getVirtualGroup(),
-                'age'       => $follower->getAge(),
-                'provider_name'=> $follower->getVirtualProviderName(),
+                'id'            => $follower->getId(),
+                'email'         => $follower->getEmail(),
+                'firstname'     => $follower->getFirstname(),
+                'lastname'      => $follower->getLastname(),
+                'group'         => $follower->getVirtualGroup(),
+                'age'           => $follower->getAge(),
+                'provider_name' => $follower->getVirtualProviderName(),
             );
         }
 
@@ -560,12 +560,12 @@ class User extends BaseUser
 
         foreach ($this->follows as $follow) {
             $this->virtualFollows[] = array(
-                'id'        => $follow->getId(),
-                'email'     => $follow->getEmail(),
-                'firstname' => $follow->getFirstname(),
-                'lastname'  => $follow->getLastname(),
-                'group'     => $follow->getVirtualGroup(),
-                'age'       => $follow->getAge(),
+                'id'                  => $follow->getId(),
+                'email'               => $follow->getEmail(),
+                'firstname'           => $follow->getFirstname(),
+                'lastname'            => $follow->getLastname(),
+                'group'               => $follow->getVirtualGroup(),
+                'age'                 => $follow->getAge(),
                 'provider_name'       => $follow->getVirtualProviderName(),
             );
         }
@@ -895,11 +895,11 @@ class User extends BaseUser
 
         $interval = $today->diff($birthdate);
         $this->age = (int) $interval->format('%y');
-        if($this->age==0){
-            $this->age=1;
-        }else{
-            $year_born=$birthdate->format('Y');
-            $this->age=date('Y')-$year_born;
+        if ($this->age == 0) {
+            $this->age = 1;
+        } else {
+            $year_born = $birthdate->format('Y');
+            $this->age = date('Y') - $year_born;
         }
 
         return $this->age;

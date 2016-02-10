@@ -122,12 +122,14 @@ class BaseUserAdmin extends AbstractAdmin
         $container = $this->getContainer();
         $roles = $container->getParameter('security.role_hierarchy.roles');
         $rolesChoices = self::flattenRoles($roles);
-        /* Custom check displaying profile picture if is it */
+
         $pictureOptions =  array(
             'required'   => false,
             'data_class' => null,
             'label'      => 'Photo de profil',
         );
+
+        /* Custom check displaying profile picture if is it */
         if ($this->getSubject()->getId()) {
             $subject = $this->getSubject();
             if ($subject->getPicture()) {
@@ -137,7 +139,7 @@ class BaseUserAdmin extends AbstractAdmin
             }
             $pictureOptions['help'] = sprintf('<div class="icon_prev"><img src="%s"/></div>', $path);
         }
-        /* End custom check */
+
         $formMapper
             ->with('Profil')
                 ->add('firstname', null, array('required' => false, 'label' => 'Prénom'))

@@ -1,86 +1,79 @@
 <?php
 
-namespace App\EventBundle\Entity\EventType;
+namespace App\EventBundle\Entity\Type;
 
+use App\Util\Doctrine\Entity\AbstractEntity;
+use App\Util\Doctrine\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Single
+ * Single.
  *
  * @ORM\Table(name="single_events")
  * @ORM\Entity
  */
-class Single
+class Single extends AbstractEntity implements EntityInterface
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="for_kids", type="boolean")
      */
-    private $forKids;
+    private $forKids = false;
 
     /**
-     * @var integer
+     * @var int
      *
-     * @ORM\Column(name="kids_min_age", type="integer")
+     * @ORM\Column(name="kids_min_age", type="integer", nullable=true)
      */
     private $kidsMinAge;
 
     /**
-     * @var integer
+     * @var int
      *
-     * @ORM\Column(name="kids_max_age", type="integer")
+     * @ORM\Column(name="kids_max_age", type="integer", nullable=true)
      */
     private $kidsMaxAge;
 
     /**
-     * @var integer
+     * @var int
      *
-     * @ORM\Column(name="min_participants", type="integer")
+     * @ORM\Column(name="min_participants", type="integer", nullable=true)
      */
     private $minParticipants;
 
     /**
-     * @var integer
+     * @var int
      *
-     * @ORM\Column(name="max_participants", type="integer")
+     * @ORM\Column(name="max_participants", type="integer", nullable=true)
      */
     private $maxParticipants;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="date", type="datetime", nullable=true)
      */
     private $date;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="auto_cancelable", type="boolean")
      */
-    private $autoCancelable;
+    private $autoCancelable = false;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="cancelation_time", type="datetime")
+     * @ORM\Column(name="cancelation_time", type="datetime", nullable=true)
      */
     private $cancelationTime;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="time", type="datetime")
+     * @ORM\Column(name="time", type="time")
      */
     private $time;
 
@@ -92,14 +85,14 @@ class Single
     private $duration;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="cyclic", type="boolean")
      */
     private $cyclic;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="coached", type="boolean")
      */
@@ -108,10 +101,15 @@ class Single
     /** @ORM\OneToOne(targetEntity="App\EventBundle\Entity\Event", cascade={"persist", "remove"}) */
     protected $event;
 
+    public function __toString()
+    {
+        return $this->event ? $this->event->getTitle() : 'New Single Event';
+    }
+
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -119,9 +117,9 @@ class Single
     }
 
     /**
-     * Set forKids
+     * Set forKids.
      *
-     * @param boolean $forKids
+     * @param bool $forKids
      *
      * @return Single
      */
@@ -133,9 +131,9 @@ class Single
     }
 
     /**
-     * Get forKids
+     * Get forKids.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForKids()
     {
@@ -143,9 +141,9 @@ class Single
     }
 
     /**
-     * Set kidsMinAge
+     * Set kidsMinAge.
      *
-     * @param integer $kidsMinAge
+     * @param int $kidsMinAge
      *
      * @return Single
      */
@@ -157,9 +155,9 @@ class Single
     }
 
     /**
-     * Get kidsMinAge
+     * Get kidsMinAge.
      *
-     * @return integer
+     * @return int
      */
     public function getKidsMinAge()
     {
@@ -167,9 +165,9 @@ class Single
     }
 
     /**
-     * Set kidsMaxAge
+     * Set kidsMaxAge.
      *
-     * @param integer $kidsMaxAge
+     * @param int $kidsMaxAge
      *
      * @return Single
      */
@@ -181,9 +179,9 @@ class Single
     }
 
     /**
-     * Get kidsMaxAge
+     * Get kidsMaxAge.
      *
-     * @return integer
+     * @return int
      */
     public function getKidsMaxAge()
     {
@@ -191,9 +189,9 @@ class Single
     }
 
     /**
-     * Set minParticipants
+     * Set minParticipants.
      *
-     * @param integer $minParticipants
+     * @param int $minParticipants
      *
      * @return Single
      */
@@ -205,9 +203,9 @@ class Single
     }
 
     /**
-     * Get minParticipants
+     * Get minParticipants.
      *
-     * @return integer
+     * @return int
      */
     public function getMinParticipants()
     {
@@ -215,9 +213,9 @@ class Single
     }
 
     /**
-     * Set maxParticipants
+     * Set maxParticipants.
      *
-     * @param integer $maxParticipants
+     * @param int $maxParticipants
      *
      * @return Single
      */
@@ -229,9 +227,9 @@ class Single
     }
 
     /**
-     * Get maxParticipants
+     * Get maxParticipants.
      *
-     * @return integer
+     * @return int
      */
     public function getMaxParticipants()
     {
@@ -239,7 +237,7 @@ class Single
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
      *
@@ -253,7 +251,7 @@ class Single
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return \DateTime
      */
@@ -263,9 +261,9 @@ class Single
     }
 
     /**
-     * Set autoCancelable
+     * Set autoCancelable.
      *
-     * @param boolean $autoCancelable
+     * @param bool $autoCancelable
      *
      * @return Single
      */
@@ -277,9 +275,9 @@ class Single
     }
 
     /**
-     * Get autoCancelable
+     * Get autoCancelable.
      *
-     * @return boolean
+     * @return bool
      */
     public function getAutoCancelable()
     {
@@ -287,7 +285,7 @@ class Single
     }
 
     /**
-     * Set cancelationTime
+     * Set cancelationTime.
      *
      * @param \DateTime $cancelationTime
      *
@@ -301,7 +299,7 @@ class Single
     }
 
     /**
-     * Get cancelationTime
+     * Get cancelationTime.
      *
      * @return \DateTime
      */
@@ -311,7 +309,7 @@ class Single
     }
 
     /**
-     * Set time
+     * Set time.
      *
      * @param \DateTime $time
      *
@@ -325,7 +323,7 @@ class Single
     }
 
     /**
-     * Get time
+     * Get time.
      *
      * @return \DateTime
      */
@@ -335,7 +333,7 @@ class Single
     }
 
     /**
-     * Set duration
+     * Set duration.
      *
      * @param float $duration
      *
@@ -349,7 +347,7 @@ class Single
     }
 
     /**
-     * Get duration
+     * Get duration.
      *
      * @return float
      */
@@ -359,9 +357,9 @@ class Single
     }
 
     /**
-     * Set cyclic
+     * Set cyclic.
      *
-     * @param boolean $cyclic
+     * @param bool $cyclic
      *
      * @return Single
      */
@@ -373,9 +371,9 @@ class Single
     }
 
     /**
-     * Get cyclic
+     * Get cyclic.
      *
-     * @return boolean
+     * @return bool
      */
     public function getCyclic()
     {
@@ -383,9 +381,9 @@ class Single
     }
 
     /**
-     * Set coached
+     * Set coached.
      *
-     * @param boolean $coached
+     * @param bool $coached
      *
      * @return Single
      */
@@ -397,9 +395,9 @@ class Single
     }
 
     /**
-     * Get coached
+     * Get coached.
      *
-     * @return boolean
+     * @return bool
      */
     public function getCoached()
     {
@@ -407,7 +405,7 @@ class Single
     }
 
     /**
-     * Set event
+     * Set event.
      *
      * @param \App\EventBundle\Entity\Event $event
      *
@@ -421,7 +419,7 @@ class Single
     }
 
     /**
-     * Get event
+     * Get event.
      *
      * @return \App\EventBundle\Entity\Event
      */

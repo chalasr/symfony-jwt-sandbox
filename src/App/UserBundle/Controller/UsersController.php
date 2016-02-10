@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Users Controller.
@@ -769,10 +768,9 @@ class UsersController extends BaseController
 
     /**
      * Update sports of an user.
-     *
-     * @return void
      */
-    protected function updateUserSports($user, $oldSports, $newSports) {
+    protected function updateUserSports($user, $oldSports, $newSports)
+    {
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Sport');
         $currentSportsId = array();
@@ -782,7 +780,7 @@ class UsersController extends BaseController
             if (!in_array($sport['id'], $newSports)) {
                 $sportUser = $em->getRepository('AppSportBundle:SportUser')
                     ->findOneBy(array(
-                        'user' => $user->getId(),
+                        'user'  => $user->getId(),
                         'sport' => $sport['id'],
                     ));
 

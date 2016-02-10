@@ -1,11 +1,11 @@
 <?php
 
-namespace App\EventBundle\Entity\EventType;
+namespace App\EventBundle\Entity\Type;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Open
+ * Open.
  *
  * @ORM\Table(name="open_events")
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Open
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -32,9 +32,9 @@ class Open
     protected $event;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -42,7 +42,7 @@ class Open
     }
 
     /**
-     * Set dueDate
+     * Set dueDate.
      *
      * @param \DateTime $dueDate
      *
@@ -56,7 +56,7 @@ class Open
     }
 
     /**
-     * Get dueDate
+     * Get dueDate.
      *
      * @return \DateTime
      */
@@ -66,7 +66,7 @@ class Open
     }
 
     /**
-     * Set event
+     * Set event.
      *
      * @param \App\EventBundle\Entity\Event $event
      *
@@ -80,7 +80,7 @@ class Open
     }
 
     /**
-     * Get event
+     * Get event.
      *
      * @return \App\EventBundle\Entity\Event
      */

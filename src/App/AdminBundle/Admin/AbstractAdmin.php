@@ -2,7 +2,6 @@
 
 namespace App\AdminBundle\Admin;
 
-use App\Util\Controller\InjectableTrait as Injectable;
 use App\Util\Controller\LocalizableTrait as Localizable;
 use Sonata\AdminBundle\Admin\Admin;
 
@@ -13,7 +12,7 @@ use Sonata\AdminBundle\Admin\Admin;
  */
 abstract class AbstractAdmin extends Admin
 {
-    use Injectable, Localizable;
+    use Localizable;
 
     public $realLabel;
 
@@ -47,5 +46,38 @@ abstract class AbstractAdmin extends Admin
         }
 
         return sprintf('%s %s', $entityName, $createLabel);
+    }
+
+    /**
+     * Get the current authenticated user.
+     *
+     * @return object
+     */
+    public function getCurrentUser()
+    {
+        return $this->get('security.context')->getToken()->getUser();
+    }
+
+    /**
+     * Shortcut method to retrieve a service.
+     *
+     * @param string $id
+     *
+     * @return object The service
+     */
+    public function get($id)
+    {
+        return $this->getContainer()->get($id);
+    }
+
+    /**
+     * Shortcut method for retrieve container in Sonata admin
+     * class.
+     *
+     * @return ContainerInterface|null
+     */
+    public function getContainer()
+    {
+        return $this->getConfigurationPool()->getContainer();
     }
 }
