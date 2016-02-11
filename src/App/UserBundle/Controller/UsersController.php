@@ -127,7 +127,7 @@ class UsersController extends BaseController
         $user = $this->getCurrentUser();
         $follower = $this->findUserOrFail($follower);
 
-        if (true === $this->iscurrentUser($follower)) {
+        if (true === $this->isCurrentUser($follower)) {
             throw new UnprocessableEntityHttpException('Un utilisateur ne peut pas se suivre lui même');
         }
 
@@ -550,12 +550,12 @@ class UsersController extends BaseController
             throw new AccessDeniedHttpException('This resource is only accessible by the user or an administrator');
         }
 
-        $sport_id = $paramFetcher->get('sport_id');
+        $sportId = $paramFetcher->get('sport_id');
         $em = $this->getEntityManager();
-        $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findBy(array('user' => $id, 'sport' => $sport_id));
+        $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findBy(array('user' => $id, 'sport' => $sportId));
 
         if (!$sportUsers) {
-            throw new NotFoundHttpException(sprintf('Unable to find sport %d with user %d', $sport_id, $id));
+            throw new NotFoundHttpException(sprintf('Unable to find sport %d with user %d', $sportId, $id));
         }
 
         foreach ($sportUsers as $sportUser) {
@@ -626,12 +626,6 @@ class UsersController extends BaseController
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
-        // foreach($results as $res) {
-        //     $res = $res[0];
-        //     if ($res->getProviderInformation()) {
-        //         // $res['provider_name'] = $res->getProviderInformation() ? $res->getProviderInformation()->getName()
-        //     }
-        // }
 
         if (!$results) {
             throw new NotFoundHttpException(sprintf('Unable to find user '));
