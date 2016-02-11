@@ -3,6 +3,8 @@
 namespace App\EventBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Util\Doctrine\Entity\AbstractEntity;
+use App\Util\Doctrine\Entity\EntityInterface;
 
 /**
  * Event.
@@ -10,17 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="events")
  * @ORM\Entity
  */
-class Event
+class Event extends AbstractEntity implements EntityInterface
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
     /**
      * @var string
      *
@@ -90,14 +83,21 @@ class Event
     /** @ORM\OneToOne(targetEntity="\App\EventBundle\Entity\Type\Open", mappedBy="event", cascade={"persist"}) */
     private $openEvent;
 
-    /** @ORM\OneToOne(targetEntity="\App\EventBundle\Entity\Type\Cyclic", mappedBy="event", cascade={"persist"}) */
-    private $cyclicEvent;
-
     /** @ORM\OneToOne(targetEntity="\App\UserBundle\Entity\User", cascade={"persist"}) */
     private $user;
 
     /** @ORM\OneToOne(targetEntity="\App\SportBundle\Entity\Sport", cascade={"persist"}) */
     private $sport;
+
+    /**
+     * To string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->title ?: 'Nouvel évènement';
+    }
 
     /**
      * Get id.

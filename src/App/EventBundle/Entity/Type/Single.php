@@ -99,7 +99,10 @@ class Single extends AbstractEntity implements EntityInterface
     private $coached;
 
     /** @ORM\OneToOne(targetEntity="App\EventBundle\Entity\Event", cascade={"persist", "remove"}) */
-    protected $event;
+    private $event;
+
+    /** @ORM\OneToOne(targetEntity="Cyclic", mappedBy="singleEvent", cascade={"persist"}) */
+    private $cyclicEvent;
 
     public function __toString()
     {
@@ -426,5 +429,29 @@ class Single extends AbstractEntity implements EntityInterface
     public function getEvent()
     {
         return $this->event;
+    }
+
+    /**
+     * Set cyclicEvent
+     *
+     * @param \App\EventBundle\Entity\Type\Cyclic $cyclicEvent
+     *
+     * @return Single
+     */
+    public function setCyclicEvent(\App\EventBundle\Entity\Type\Cyclic $cyclicEvent = null)
+    {
+        $this->cyclicEvent = $cyclicEvent;
+
+        return $this;
+    }
+
+    /**
+     * Get cyclicEvent
+     *
+     * @return \App\EventBundle\Entity\Type\Cyclic
+     */
+    public function getCyclicEvent()
+    {
+        return $this->cyclicEvent;
     }
 }

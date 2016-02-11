@@ -24,16 +24,21 @@ class Cyclic
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="date", type="datetime", nullable=true)
      */
     private $date;
 
     /**
-     * @var int
+     * @var array
      *
-     * @ORM\Column(name="days", type="integer")
+     * @ORM\Column(name="days", type="array")
      */
     private $days;
+
+    /**
+     * @var array
+     */
+    private $virtualDays;
 
     /**
      * @var int
@@ -49,8 +54,20 @@ class Cyclic
      */
     private $repetition;
 
-    /** @ORM\OneToOne(targetEntity="App\EventBundle\Entity\Event", cascade={"persist", "remove"}) */
-    protected $event;
+    /**
+     * @ORM\OneToOne(targetEntity="Single", cascade={"persist", "remove"})
+     */
+    protected $singleEvent;
+
+    /**
+     * To string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->event ? $this->event->getTitle() : 'New Single Event';
+    }
 
     /**
      * Get id.
@@ -84,30 +101,6 @@ class Cyclic
     public function getDate()
     {
         return $this->date;
-    }
-
-    /**
-     * Set days.
-     *
-     * @param int $days
-     *
-     * @return Cyclic
-     */
-    public function setDays($days)
-    {
-        $this->days = $days;
-
-        return $this;
-    }
-
-    /**
-     * Get days.
-     *
-     * @return int
-     */
-    public function getDays()
-    {
-        return $this->days;
     }
 
     /**
@@ -159,26 +152,81 @@ class Cyclic
     }
 
     /**
-     * Set event.
+     * Set singleEvent
      *
-     * @param \App\EventBundle\Entity\Event $event
+     * @param \App\EventBundle\Entity\Type\Single $singleEvent
      *
      * @return Cyclic
      */
-    public function setEvent(\App\EventBundle\Entity\Event $event = null)
+    public function setSingleEvent(\App\EventBundle\Entity\Type\Single $singleEvent = null)
     {
-        $this->event = $event;
+        $this->singleEvent = $singleEvent;
 
         return $this;
     }
 
     /**
-     * Get event.
+     * Get singleEvent
      *
-     * @return \App\EventBundle\Entity\Event
+     * @return \App\EventBundle\Entity\Type\Single
      */
-    public function getEvent()
+    public function getSingleEvent()
     {
-        return $this->event;
+        return $this->singleEvent;
+    }
+
+    /**
+     * Set days
+     *
+     * @param array $days
+     *
+     * @return Cyclic
+     */
+    public function setDays($days)
+    {
+        $this->days = $days;
+
+        return $this;
+    }
+
+    /**
+     * Get days
+     *
+     * @return array
+     */
+    public function getDays()
+    {
+        return $this->days;
+    }
+
+    public function addVirtualDay($virtualDay)
+    {
+        $this->virtualDays[$virtualDay] = $virtualDay;
+        $this->days = $this->virtualDays;
+
+        return $this;
+    }
+
+    public function removeVirtualDay($virtualDay)
+    {
+        unset($this->virtualDays[$virtualDay]);
+        $this->days = $this->virtualDays;
+
+        return $this;
+    }
+
+    public function getVirtualDays()
+    {
+        if ($this->virtualDays) {
+            return $this->virtualDays;
+        }
+
+        $this->virtualDays = array();
+
+        foreach ($this->days as $day) {
+            $this->virtualDays[$day] = $day;
+        }
+
+        return $this->virtualDays;
     }
 }

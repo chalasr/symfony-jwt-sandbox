@@ -21,7 +21,7 @@ class SingleAdmin extends AbstractEventAdmin
             ), array(
                 'edit' => 'inline',
             ))
-            ->add('time', 'time', array('attr' => array('class' => 'fixed-time')))
+            ->add('time', 'time', array('label' => 'Horaire de début de l\'évènement', 'attr' => array('class' => 'fixed-time')))
             ->add('date', 'sonata_type_date_picker', array(), array(
                 'format'      => 'dd/MM/yyyy',
                 'dp_language' => 'fr',
@@ -33,6 +33,13 @@ class SingleAdmin extends AbstractEventAdmin
             ))
             ->add('duration', null, array('label' => 'Durée'))
             ->add('cyclic')
+            ->add('cyclicEvent', 'sonata_type_admin', array(
+                'by_reference' => false,
+                'required'     => false,
+                'label'        => false,
+            ), array(
+                'edit' => 'inline',
+            ))
             // Add cyclic event here + display it depending on cyclic value (false ? hidden : shown)
         ;
     }

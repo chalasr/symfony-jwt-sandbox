@@ -40,9 +40,11 @@ class ImportCommand extends ContainerAwareCommand
             $i = 0;
             while (($data = fgetcsv($handle, null, ',', '"')) !== false) {
                 ++$i;
+
                 if ($ignoreFirstl && $i == 1) {
                     continue;
                 }
+
                 $rows[] = $data;
                 $this->import($input, $output, $rows);
                 $rows = [];

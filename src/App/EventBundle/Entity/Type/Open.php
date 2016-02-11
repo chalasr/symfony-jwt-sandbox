@@ -32,6 +32,16 @@ class Open
     protected $event;
 
     /**
+     * To string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->event ? $this->event->getTitle() : 'New Single Event';
+    }
+
+    /**
      * Get id.
      *
      * @return int
