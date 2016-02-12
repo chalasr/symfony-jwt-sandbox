@@ -25,7 +25,7 @@ class CyclicAdmin extends AbstractEventAdmin
                       'vendredi' => 'Vendredi',
                       'samedi'   => 'Samedi',
                       'dimanche' => 'Dimanche',
-                   )
+                   ),
             ))
             ->add('recurrence', null, array('label' => 'Durée'))
             ->add('repetition', null, array('label' => 'Repetition'))

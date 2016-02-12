@@ -20,7 +20,7 @@ services:
     sonata.admin.cylic_event:
         class: App\AdminBundle\Admin\Event\Type\CyclicAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: event, label: "Évènements cycliques" }
+            - { name: sonata.admin, manager_type: orm, group: event, label: "Évènements cycliques", show_in_dashboard: false }
         arguments:
             - ~
             - App\EventBundle\Entity\Type\Cyclic

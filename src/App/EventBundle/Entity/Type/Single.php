@@ -101,10 +101,10 @@ class Single extends AbstractEntity implements EntityInterface
     /** @ORM\OneToOne(targetEntity="App\EventBundle\Entity\Event", cascade={"persist", "remove"}, orphanRemoval=true) */
     private $event;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Cyclic", cascade={"persist"}, orphanRemoval=true)
-     * @ORM\JoinColumn(name="cyclic_event_id", referencedColumnName="id", nullable=true)
-     */
+     /**
+      * @ORM\OneToOne(targetEntity="Cyclic", cascade={"persist"}, orphanRemoval=true)
+      * @ORM\JoinColumn(name="cyclic_event_id", referencedColumnName="id", nullable=true)
+      */
      private $cyclicEvent;
 
     public function __toString()
@@ -435,7 +435,7 @@ class Single extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Set cyclicEvent
+     * Set cyclicEvent.
      *
      * @param \App\EventBundle\Entity\Type\Cyclic $cyclicEvent
      *
@@ -449,7 +449,7 @@ class Single extends AbstractEntity implements EntityInterface
     }
 
     /**
-     * Get cyclicEvent
+     * Get cyclicEvent.
      *
      * @return \App\EventBundle\Entity\Type\Cyclic
      */

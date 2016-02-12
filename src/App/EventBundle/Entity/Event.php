@@ -2,9 +2,9 @@
 
 namespace App\EventBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Util\Doctrine\Entity\AbstractEntity;
 use App\Util\Doctrine\Entity\EntityInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Event.
@@ -372,7 +372,7 @@ class Event extends AbstractEntity implements EntityInterface
     {
         return $this->openEvent;
     }
-    
+
     /**
      * Set user.
      *

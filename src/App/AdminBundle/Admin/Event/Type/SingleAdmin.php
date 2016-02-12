@@ -46,6 +46,5 @@ class SingleAdmin extends AbstractEventAdmin
 
     public function preUpdate($object)
     {
-        
     }
 }

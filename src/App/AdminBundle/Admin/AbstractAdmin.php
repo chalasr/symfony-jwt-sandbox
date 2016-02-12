@@ -83,11 +83,9 @@ abstract class AbstractAdmin extends Admin
     }
 
     /**
-     * Adds actions to listMapper
+     * Adds actions to listMapper.
      *
      * @param ListMapper $listMapper
-     *
-     * @return void
      */
     protected function mapListActions(ListMapper $listMapper)
     {

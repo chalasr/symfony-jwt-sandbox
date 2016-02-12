@@ -61,7 +61,7 @@ class Cyclic
      */
     public function __toString()
     {
-        return $this->singleEvent ? $this->singleEvent->getEvent()->getTitle() : 'New Single Event';
+        return  'New Cyclic Event';
     }
 
     /**
@@ -147,7 +147,7 @@ class Cyclic
     }
 
     /**
-     * Set days
+     * Set days.
      *
      * @param array $days
      *
@@ -161,7 +161,7 @@ class Cyclic
     }
 
     /**
-     * Get days
+     * Get days.
      *
      * @return array
      */
@@ -210,27 +210,27 @@ class Cyclic
         return $this->virtualDays;
     }
 
-    /**
-     * Set singleEvent
-     *
-     * @param \App\EventBundle\Entity\Type\Single $singleEvent
-     *
-     * @return Cyclic
-     */
-    public function setSingleEvent(\App\EventBundle\Entity\Type\Single $singleEvent = null)
-    {
-        $this->singleEvent = $singleEvent;
-
-        return $this;
-    }
-
-    /**
-     * Get singleEvent
-     *
-     * @return \App\EventBundle\Entity\Type\Single
-     */
-    public function getSingleEvent()
-    {
-        return $this->singleEvent;
-    }
+    // /**
+    //  * Set singleEvent
+    //  *
+    //  * @param \App\EventBundle\Entity\Type\Single $singleEvent
+    //  *
+    //  * @return Cyclic
+    //  */
+    // public function setSingleEvent(\App\EventBundle\Entity\Type\Single $singleEvent = null)
+    // {
+    //     $this->singleEvent = $singleEvent;
+    //
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * Get singleEvent
+    //  *
+    //  * @return \App\EventBundle\Entity\Type\Single
+    //  */
+    // public function getSingleEvent()
+    // {
+    //     return $this->singleEvent;
+    // }
 }

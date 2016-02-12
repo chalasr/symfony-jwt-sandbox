@@ -966,7 +966,7 @@ class User extends BaseUser
     }
 
     /**
-     * Add event
+     * Add event.
      *
      * @param \App\UserBundle\Entity\User $event
      *
