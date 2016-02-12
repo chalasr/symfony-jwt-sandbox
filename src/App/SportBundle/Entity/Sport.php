@@ -57,9 +57,10 @@ class Sport extends AbstractEntity implements EntityInterface
     /** @ORM\OneToMany(targetEntity="SportUser", mappedBy="sport", cascade={"persist"}) */
     protected $sportUsers;
 
-    /**
-     * @var string
-     */
+    /** @ORM\OneToMany(targetEntity="\App\EventBundle\Entity\Event", mappedBy="sport") */
+    protected $events;
+
+    /** @var string */
     private $file;
 
     /**

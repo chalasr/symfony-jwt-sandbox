@@ -43,4 +43,9 @@ class SingleAdmin extends AbstractEventAdmin
             // Add cyclic event here + display it depending on cyclic value (false ? hidden : shown)
         ;
     }
+
+    public function preUpdate($object)
+    {
+        
+    }
 }

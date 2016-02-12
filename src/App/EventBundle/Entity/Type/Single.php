@@ -98,11 +98,14 @@ class Single extends AbstractEntity implements EntityInterface
      */
     private $coached;
 
-    /** @ORM\OneToOne(targetEntity="App\EventBundle\Entity\Event", cascade={"persist", "remove"}) */
+    /** @ORM\OneToOne(targetEntity="App\EventBundle\Entity\Event", cascade={"persist", "remove"}, orphanRemoval=true) */
     private $event;
 
-    /** @ORM\OneToOne(targetEntity="Cyclic", mappedBy="singleEvent", cascade={"persist"}) */
-    private $cyclicEvent;
+    /**
+     * @ORM\OneToOne(targetEntity="Cyclic", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\JoinColumn(name="cyclic_event_id", referencedColumnName="id", nullable=true)
+     */
+     private $cyclicEvent;
 
     public function __toString()
     {

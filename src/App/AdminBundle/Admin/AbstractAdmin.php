@@ -4,6 +4,7 @@ namespace App\AdminBundle\Admin;
 
 use App\Util\Controller\LocalizableTrait as Localizable;
 use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 
 /**
  * Abstract Admin.
@@ -79,5 +80,23 @@ abstract class AbstractAdmin extends Admin
     public function getContainer()
     {
         return $this->getConfigurationPool()->getContainer();
+    }
+
+    /**
+     * Adds actions to listMapper
+     *
+     * @param ListMapper $listMapper
+     *
+     * @return void
+     */
+    protected function mapListActions(ListMapper $listMapper)
+    {
+        $listMapper->add('_action', 'actions', array(
+            'actions' => array(
+                'show'   => [],
+                'edit'   => [],
+                'delete' => [],
+            ),
+        ));
     }
 }

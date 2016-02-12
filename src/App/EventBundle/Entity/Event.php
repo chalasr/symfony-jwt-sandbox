@@ -83,10 +83,10 @@ class Event extends AbstractEntity implements EntityInterface
     /** @ORM\OneToOne(targetEntity="\App\EventBundle\Entity\Type\Open", mappedBy="event", cascade={"persist"}) */
     private $openEvent;
 
-    /** @ORM\OneToOne(targetEntity="\App\UserBundle\Entity\User", cascade={"persist"}) */
+    /** @ORM\ManyToOne(targetEntity="\App\UserBundle\Entity\User", inversedBy="events", cascade={"persist"}) */
     private $user;
 
-    /** @ORM\OneToOne(targetEntity="\App\SportBundle\Entity\Sport", cascade={"persist"}) */
+    /** @ORM\ManyToOne(targetEntity="\App\SportBundle\Entity\Sport", inversedBy="events", cascade={"persist"}) */
     private $sport;
 
     /**
@@ -372,31 +372,7 @@ class Event extends AbstractEntity implements EntityInterface
     {
         return $this->openEvent;
     }
-
-    /**
-     * Set cyclicEvent.
-     *
-     * @param \App\EventBundle\Entity\Type\Cyclic $cyclicEvent
-     *
-     * @return Event
-     */
-    public function setCyclicEvent(\App\EventBundle\Entity\Type\Cyclic $cyclicEvent = null)
-    {
-        $this->cyclicEvent = $cyclicEvent;
-
-        return $this;
-    }
-
-    /**
-     * Get cyclicEvent.
-     *
-     * @return \App\EventBundle\Entity\Type\Cyclic
-     */
-    public function getCyclicEvent()
-    {
-        return $this->cyclicEvent;
-    }
-
+    
     /**
      * Set user.
      *

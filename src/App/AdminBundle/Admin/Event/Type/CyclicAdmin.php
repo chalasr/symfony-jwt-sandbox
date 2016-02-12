@@ -2,10 +2,10 @@
 
 namespace App\AdminBundle\Admin\Event\Type;
 
-use App\AdminBundle\Admin\AbstractAdmin;
+use App\AdminBundle\Admin\Event\AbstractEventAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 
-class CyclicAdmin extends AbstractAdmin
+class CyclicAdmin extends AbstractEventAdmin
 {
     protected $baseRouteName = 'admin_app_events_cyclic';
 

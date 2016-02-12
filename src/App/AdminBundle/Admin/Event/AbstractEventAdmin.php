@@ -4,6 +4,8 @@ namespace App\AdminBundle\Admin\Event;
 
 use App\AdminBundle\Admin\AbstractAdmin;
 use App\EventBundle\Entity\Event;
+use App\EventBundle\Entity\Type\Open;
+use App\EventBundle\Entity\Type\Single;
 use App\Util\Admin\SportsFetchableTrait as SportsFetchable;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -24,7 +26,9 @@ class AbstractEventAdmin extends AbstractAdmin
     {
         $listMapper
             ->add('id')
-            ->add('title');
+            ->add('title')
+        ;
+        $this->mapListActions($listMapper);
     }
 
     protected function configureFormFields(FormMapper $formMapper)
@@ -59,9 +63,13 @@ class AbstractEventAdmin extends AbstractAdmin
     {
         $object = parent::getNewInstance();
 
+        if (!$object instanceof Single && !$object instanceof Open) {
+            return $object;
+        }
+
         $user = $this->get('security.context')->getToken()->getUser();
 
-        if (!$object->getEvent() instanceof Event) {
+        if (!$object->getEvent()) {
             $event = new Event();
             $object->setEvent($event);
         }

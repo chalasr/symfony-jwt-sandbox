@@ -225,7 +225,7 @@ class User extends BaseUser
     protected $virtualFollows;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\Information\ProviderInformation", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\Information\ProviderInformation", cascade={"persist"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="provider_id", referencedColumnName="id", nullable=true)
      */
     protected $providerInformation;
@@ -241,7 +241,7 @@ class User extends BaseUser
     protected $virtualProviderName;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\Information\CoachInformation", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\UserBundle\Entity\Information\CoachInformation", cascade={"persist"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="coach_id", referencedColumnName="id", nullable=true)
      */
     protected $coachInformation;
@@ -252,10 +252,33 @@ class User extends BaseUser
     /** @ORM\OneToMany(targetEntity="\App\UserBundle\Entity\Information\CoachDocument", mappedBy="user", cascade={"persist", "remove"}) */
     protected $coachDocuments;
 
-    /**
-     * @var string
-     */
+    /** @ORM\OneToMany(targetEntity="\App\EventBundle\Entity\Event", mappedBy="user") */
+    protected $events;
+
+    /** @var string */
     private $file;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sportUsers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->coachDocuments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Returns a string representation.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getEmail() ?: 'New'.$this->getVirtualGroup();
+    }
 
     /**
      * Sets file.
@@ -297,28 +320,6 @@ class User extends BaseUser
         $this->setPicture($this->getFile()->getClientOriginalName());
 
         $this->setFile(null);
-    }
-
-    /**
-     * Returns a string representation.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getEmail() ?: 'New'.$this->getVirtualGroup();
-    }
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sportUsers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->coachDocuments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -962,5 +963,19 @@ class User extends BaseUser
     public function getCoachDocuments()
     {
         return $this->coachDocuments;
+    }
+
+    /**
+     * Add event
+     *
+     * @param \App\UserBundle\Entity\User $event
+     *
+     * @return User
+     */
+    public function addEvent(\App\UserBundle\Entity\User $event)
+    {
+        $this->events[] = $event;
+
+        return $this;
     }
 }

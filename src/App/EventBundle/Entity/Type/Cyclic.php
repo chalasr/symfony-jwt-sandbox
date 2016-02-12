@@ -55,18 +55,13 @@ class Cyclic
     private $repetition;
 
     /**
-     * @ORM\OneToOne(targetEntity="Single", cascade={"persist", "remove"})
-     */
-    protected $singleEvent;
-
-    /**
      * To string.
      *
      * @return string
      */
     public function __toString()
     {
-        return $this->event ? $this->event->getTitle() : 'New Single Event';
+        return $this->singleEvent ? $this->singleEvent->getEvent()->getTitle() : 'New Single Event';
     }
 
     /**
@@ -152,30 +147,6 @@ class Cyclic
     }
 
     /**
-     * Set singleEvent
-     *
-     * @param \App\EventBundle\Entity\Type\Single $singleEvent
-     *
-     * @return Cyclic
-     */
-    public function setSingleEvent(\App\EventBundle\Entity\Type\Single $singleEvent = null)
-    {
-        $this->singleEvent = $singleEvent;
-
-        return $this;
-    }
-
-    /**
-     * Get singleEvent
-     *
-     * @return \App\EventBundle\Entity\Type\Single
-     */
-    public function getSingleEvent()
-    {
-        return $this->singleEvent;
-    }
-
-    /**
      * Set days
      *
      * @param array $days
@@ -215,6 +186,11 @@ class Cyclic
         return $this;
     }
 
+    /**
+     * Get virtual days.
+     *
+     * @return
+     */
     public function getVirtualDays()
     {
         if ($this->virtualDays) {
@@ -223,10 +199,38 @@ class Cyclic
 
         $this->virtualDays = array();
 
+        if (!$this->days) {
+            return $this->virtualDays;
+        }
+
         foreach ($this->days as $day) {
             $this->virtualDays[$day] = $day;
         }
 
         return $this->virtualDays;
+    }
+
+    /**
+     * Set singleEvent
+     *
+     * @param \App\EventBundle\Entity\Type\Single $singleEvent
+     *
+     * @return Cyclic
+     */
+    public function setSingleEvent(\App\EventBundle\Entity\Type\Single $singleEvent = null)
+    {
+        $this->singleEvent = $singleEvent;
+
+        return $this;
+    }
+
+    /**
+     * Get singleEvent
+     *
+     * @return \App\EventBundle\Entity\Type\Single
+     */
+    public function getSingleEvent()
+    {
+        return $this->singleEvent;
     }
 }
