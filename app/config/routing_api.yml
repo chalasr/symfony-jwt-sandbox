@@ -2,11 +2,11 @@
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
-api_security:
+users:
     resource: "@AppUserBundle/Resources/config/routing.yml"
-    prefix:   /
-    requirements:
-        _format: json
-
+    
 sports:
     resource: "@AppSportBundle/Resources/config/routing.yml"
+
+events:
+    resource: "@AppEventBundle/Resources/config/routing.yml"

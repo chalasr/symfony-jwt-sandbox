@@ -28,3 +28,13 @@ services:
             - ~
             - App\SportBundle\Entity\Tag
             - AppAdminBundle:TagAdmin
+
+    # User -> Sport
+    app_admin.admin.sport_user:
+        class: App\AdminBundle\Admin\Sport\SportUserAdmin
+        arguments:
+          - ~
+          - App\SportBundle\Entity\SportUser
+          - AppAdminBundle:SportUserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: SportUser }

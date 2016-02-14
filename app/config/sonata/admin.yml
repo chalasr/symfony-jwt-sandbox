@@ -49,6 +49,8 @@ sonata_admin:
                     - sonata.admin.users_providers
             sport:
                 label: "Sport"
+            event:
+                label: "Évènements"
 
         blocks:
             -

@@ -121,7 +121,6 @@ class SportAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-
         /*
          * Same approach than use formMapper and datagridMapper
          *
