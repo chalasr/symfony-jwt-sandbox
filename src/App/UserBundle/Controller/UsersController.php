@@ -614,14 +614,24 @@ class UsersController extends BaseController
 
         $query->leftJOIN('U.providerInformation', 'PI');
         if ($name) {
+            $names=explode(' ',$name);
+            $names=array_filter($names,'trim');
+            if(count($names)>0){
+                $names=implode('|',$names);
+                $query->Where("REGEXP(U.firstname, :regexp) = 1")
+                ->orWhere("REGEXP(U.lastname, :regexp) = 1")
+                ->orWhere("REGEXP(PI.name, :regexp) = 1")
+                ->setParameter('regexp', $names);
+            }
+            /*
             $query->Where('U.firstname LIKE :firstname')
                 ->orWhere('U.lastname LIKE :lastname')
                 ->orWhere('PI.name LIKE :name')
                 ->setParameter('firstname', '%'.$name.'%')
                 ->setParameter('lastname', '%'.$name.'%')
                 ->setParameter('name', '%'.$name.'%');
+            */
         }
-
         $results = $query->setFirstResult(0)
             ->setMaxResults(10)
             ->getQuery()

@@ -15,6 +15,7 @@
         "doctrine/cache": ">=1.4 <1.6",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
+        "beberlei/DoctrineExtensions": "0.3.x-dev",
         "symfony/monolog-bundle": "~2.4",
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "^3.0.2",
