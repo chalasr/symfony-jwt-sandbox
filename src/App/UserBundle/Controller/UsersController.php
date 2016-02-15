@@ -619,7 +619,6 @@ class UsersController extends BaseController
             if(count($names)>0){
 
                 $names=implode('|',$names);
-                return $names;
                 $query->Where("REGEXP(U.firstname, :regexp) = 1")
                 ->orWhere("REGEXP(U.lastname, :regexp) = 1")
                 ->orWhere("REGEXP(PI.name, :regexp) = 1")
