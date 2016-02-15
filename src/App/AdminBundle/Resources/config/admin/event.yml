@@ -7,6 +7,8 @@ services:
             - ~
             - App\EventBundle\Entity\Type\Single
             - ~
+        calls:
+            - [ setTemplate, [edit, AppAdminBundle:CRUD:edit.html.twig]]
 
     sonata.admin.event:
         class: App\AdminBundle\Admin\Event\AbstractEventAdmin
