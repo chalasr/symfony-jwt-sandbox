@@ -127,7 +127,7 @@ class UsersController extends BaseController
         $user = $this->getCurrentUser();
         $follower = $this->findUserOrFail($follower);
 
-        if (true === $this->iscurrentUser($follower)) {
+        if (true === $this->isCurrentUser($follower)) {
             throw new UnprocessableEntityHttpException('Un utilisateur ne peut pas se suivre lui même');
         }
 
@@ -395,17 +395,12 @@ class UsersController extends BaseController
 
         $picture = $request->files->get('file');
 
-        if (!$picture) {
-            throw new UnprocessableEntityHttpException('The file parameter is missing');
-        }
-
         $user->setFile($picture);
 
         $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
 
         if ($user->getFile()) {
             $user->uploadPicture($uploadPath);
-            $em->persist($user);
             $em->flush();
         }
 
@@ -555,12 +550,12 @@ class UsersController extends BaseController
             throw new AccessDeniedHttpException('This resource is only accessible by the user or an administrator');
         }
 
-        $sport_id = $paramFetcher->get('sport_id');
+        $sportId = $paramFetcher->get('sport_id');
         $em = $this->getEntityManager();
-        $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findBy(array('user' => $id, 'sport' => $sport_id));
+        $sportUsers = $em->getRepository('AppSportBundle:SportUser')->findBy(array('user' => $id, 'sport' => $sportId));
 
         if (!$sportUsers) {
-            throw new NotFoundHttpException(sprintf('Unable to find sport %d with user %d', $sport_id, $id));
+            throw new NotFoundHttpException(sprintf('Unable to find sport %d with user %d', $sportId, $id));
         }
 
         foreach ($sportUsers as $sportUser) {
@@ -619,24 +614,29 @@ class UsersController extends BaseController
 
         $query->leftJOIN('U.providerInformation', 'PI');
         if ($name) {
+            $names=explode(' ',$name);
+            $names=array_filter($names,'trim');
+            if(count($names)>0){
+
+                $names=implode('|',$names);
+                $query->Where("REGEXP(U.firstname, :regexp) = 1")
+                ->orWhere("REGEXP(U.lastname, :regexp) = 1")
+                ->orWhere("REGEXP(PI.name, :regexp) = 1")
+                ->setParameter('regexp', $names);
+            }
+            /*
             $query->Where('U.firstname LIKE :firstname')
                 ->orWhere('U.lastname LIKE :lastname')
                 ->orWhere('PI.name LIKE :name')
                 ->setParameter('firstname', '%'.$name.'%')
                 ->setParameter('lastname', '%'.$name.'%')
                 ->setParameter('name', '%'.$name.'%');
+            */
         }
-
         $results = $query->setFirstResult(0)
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
-        // foreach($results as $res) {
-        //     $res = $res[0];
-        //     if ($res->getProviderInformation()) {
-        //         // $res['provider_name'] = $res->getProviderInformation() ? $res->getProviderInformation()->getName()
-        //     }
-        // }
 
         if (!$results) {
             throw new NotFoundHttpException(sprintf('Unable to find user '));
@@ -664,7 +664,7 @@ class UsersController extends BaseController
      *      {"name"="email", "dataType"="string", "required"=false, "description"="Email"},
      *      {"name"="old_password", "dataType"="string", "required"=false, "description"="Old password"},
      *      {"name"="password", "dataType"="string", "required"=false, "description"="Password"},
-     *      {"name"="date_of_birth", "dataType"="integer", "required"=false, "description"="Date of birth"},
+     *      {"name"="date_of_birth", "dataType"="string ", "required"=false, "description"="Date of birth format yyyy-mm-dd"},
      *      {"name"="address", "dataType"="string", "required"=false, "description"="Address"},
      *      {"name"="city", "dataType"="string", "required"=false, "description"="City"},
      *      {"name"="zipcode", "dataType"="string", "required"=false, "description"="Zipcode"},
@@ -736,7 +736,7 @@ class UsersController extends BaseController
             $user->setLastName($data['last_name']);
         }
         if (isset($data['date_of_birth'])) {
-            $user->setDateOfBirth($data['date_of_birth']);
+            $user->setBirthday(new \DateTime($data['date_of_birth']));
         }
         if (isset($data['description'])) {
             $user->setDescription($data['description']);
@@ -773,10 +773,9 @@ class UsersController extends BaseController
 
     /**
      * Update sports of an user.
-     *
-     * @return void
      */
-    protected function updateUserSports($user, $oldSports, $newSports) {
+    protected function updateUserSports($user, $oldSports, $newSports)
+    {
         $em = $this->getEntityManager();
         $repo = $em->getRepository('AppSportBundle:Sport');
         $currentSportsId = array();
@@ -786,7 +785,7 @@ class UsersController extends BaseController
             if (!in_array($sport['id'], $newSports)) {
                 $sportUser = $em->getRepository('AppSportBundle:SportUser')
                     ->findOneBy(array(
-                        'user' => $user->getId(),
+                        'user'  => $user->getId(),
                         'sport' => $sport['id'],
                     ));
 
