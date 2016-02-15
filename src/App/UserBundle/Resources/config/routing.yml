@@ -6,5 +6,4 @@ api_security:
         _format: json
 
 users_collection:
-    type: rest
     resource: App\UserBundle\Controller\UsersController
