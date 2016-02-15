@@ -89,7 +89,7 @@ class Single extends AbstractEntity implements EntityInterface
      *
      * @ORM\Column(name="cyclic", type="boolean")
      */
-    private $cyclic;
+    private $cyclic = false;
 
     /**
      * @var bool
