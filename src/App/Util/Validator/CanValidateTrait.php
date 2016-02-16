@@ -5,6 +5,7 @@ namespace App\Util\Validator;
 use App\Util\Validator\Constraints\Email;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use libphonenumber\PhoneNumberUtil;
 
 /**
  * Add validations for post-request data.
@@ -61,6 +62,35 @@ trait CanValidateTrait
                     $this->errors[$prop] = 'not a valid email';
                 }
             }
+
+            // Is valid date
+            if ($prop == 'date_of_birth' && $this->hasRule($rules, 'date')) {
+
+                if (date('Y-m-d', strtotime($data[$prop])) != $data[$prop]){
+                    $this->errors[$prop] = 'Invalid Date Format yyy-mm-dd';
+                }
+
+            }
+
+            //Is valid gender
+            if ($prop == 'gender' && $this->hasRule($rules, 'gender')) {
+                if(isset($data[$prop])){
+                    if(!in_array($data[$prop],array('m','f'))){
+                        $this->errors[$prop] = 'Invalid value m/f';
+                    }
+                }
+            }
+
+            //Is valid phone
+            if ($prop == 'phone' && $this->hasRule($rules, 'phone')) {
+                if(isset($data[$prop])){
+                    $phoneNumberUtil = PhoneNumberUtil::getInstance();
+                    if(!$phoneNumberUtil->isViablePhoneNumber($data[$prop])){
+                        $this->errors[$prop] = 'Invalid phone format';
+                    }
+                }
+            }
+
 
             // Is equal
             if ($data[$prop] && $this->hasRule($rules, 'defined')) {

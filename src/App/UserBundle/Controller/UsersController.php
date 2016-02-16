@@ -39,14 +39,12 @@ class UsersController extends BaseController
                 'email'         => 'nonempty|email',
                 'first_name'    => 'nonempty',
                 'last_name'     => 'nonempty',
-                'date_of_birth' => 'nonempty',
-                'description'   => 'nonempty',
+                'date_of_birth' => 'nonempty|date',
                 'address'       => 'nonempty',
                 'city'          => 'nonempty',
                 'zipcode'       => 'nonempty',
-                'description'   => 'nonempty',
-                'phone'         => 'nonempty',
-                'gender'        => 'nonempty',
+                'phone'         => 'nonempty|phone',
+                'gender'        => 'nonempty|gender',
             ],
         );
     }
@@ -683,22 +681,19 @@ class UsersController extends BaseController
      */
     public function updateCurrentUserProfile(Request $request)
     {
+        $response=array('error'=>true,'messages'=>array());
         $em = $this->getEntityManager();
         $userManager = $this->getUserManager();
         $data = $request->request->all();
         $user = $this->getCurrentUser();
         $this->check($data, 'edit', true);
 
-        if (count($this->errors)) {
-            return $this->errors;
-        }
+
 
         # Check if old_password is valid
         if (isset($data['password'])) {
             if (!isset($data['old_password'])) {
                 $this->errors['password'] = 'L\'ancien mot de passe est obligatoire pour être changé';
-
-                return $this->errors;
             }
 
             $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
@@ -707,7 +702,6 @@ class UsersController extends BaseController
             if ($user->getPassword() !== $encodedOldPassword) {
                 $this->errors['password'] = 'L\'ancien mot de passe n\'est pas valide';
 
-                return $this->errors;
             }
 
             if ($data['old_password'] !== $data['password']) {
@@ -721,12 +715,15 @@ class UsersController extends BaseController
             if ($userEmail) {
                 if ($userEmail->getId() !== $user->getId()) {
                     $this->errors['email'] = 'Cet adresse email est déjà utilisée par un autre utilisateur';
-
-                    return $this->errors;
                 }
             } else {
                 $user->setEmail($data['email']);
             }
+        }
+
+        if (count($this->errors)) {
+            $response['messages']=$this->errors;
+            return $response;
         }
 
         if (isset($data['first_name'])) {
@@ -761,10 +758,20 @@ class UsersController extends BaseController
         if (isset($data['sports'])) {
             $oldSports = $user->getVirtualSports();
             $newSports = array_filter(explode(',', $data['sports']), 'intval');
+            foreach($newSports as $key=>$value){
+                if($value<1) unset($newSports[$key]);
+            }
+            if( $data['sports']==implode(',',$newSports)){
+                $user = $this->updateUserSports($user, $oldSports, $newSports);
+            }else{
+                $this->errors['sports'] = 'Invalid sports format';
+            }
 
-            $user = $this->updateUserSports($user, $oldSports, $newSports);
         }
-
+        if (count($this->errors)) {
+            $response['messages']=$this->errors;
+            return $response;
+        }
         $em->flush();
         $userManager->updateUser($user);
 
