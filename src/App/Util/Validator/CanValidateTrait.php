@@ -75,7 +75,7 @@ trait CanValidateTrait
             //Is valid gender
             if ($prop == 'gender' && $this->hasRule($rules, 'gender')) {
                 if(isset($data[$prop])){
-                    if(!in_array($data[$prop],array('m','f'))){
+                    if(!in_array($data[$prop],array('m','f','u'))){
                         $this->errors[$prop] = 'Invalid value m/f';
                     }
                 }
