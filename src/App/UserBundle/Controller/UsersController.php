@@ -651,7 +651,7 @@ class UsersController extends BaseController
      *   section="User",
      *     resource=true,
      *     statusCodes={
-     *         200="OK",
+     *         200="OK, If invalid data then return array(error=>true,messages=>arrayMessages)",
      *         401="Unauthorized (this resource require an access token)",
      *         400="invalid data format",
      *         404="Invalid sport port id (sport_id don't exist in system)"
