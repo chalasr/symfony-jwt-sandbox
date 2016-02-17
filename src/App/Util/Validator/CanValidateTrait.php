@@ -85,7 +85,7 @@ trait CanValidateTrait
             //Is valid phone
             if ($prop == 'phone' && $this->hasRule($rules, 'phone')) {
                 if(isset($data[$prop])){
-                    $phoneNumberUtil = PhoneNumberUtil::getInstance();
+                    $phoneNumberUtil = \libphonenumber\PhoneNumberUtil::getInstance();
                     if(!$phoneNumberUtil->isViablePhoneNumber($data[$prop])){
                         $this->errors[$prop] = 'Invalid phone format';
                     }
