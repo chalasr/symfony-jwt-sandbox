@@ -92,6 +92,32 @@ trait CanValidateTrait
                 }
             }
 
+            //Is valid firstname
+            if ($prop == 'first_name' && $this->hasRule($rules, 'notnumeric')) {
+                if(isset($data[$prop])){
+                    if(is_numeric(str_replace(' ', '', $data[$prop]))){
+                        $this->errors[$prop] = 'Invalid first name is not numeric';
+                    }
+                }
+            }
+            //Is valid last name
+            if ($prop == 'last_name' && $this->hasRule($rules, 'notnumeric')) {
+                if(isset($data[$prop])){
+                    if(is_numeric(str_replace(' ', '', $data[$prop]))){
+                        $this->errors[$prop] = 'Invalid last name is not numeric';
+                    }
+                }
+            }
+
+            //Is valid city
+            if ($prop == 'city' && $this->hasRule($rules, 'notnumeric')) {
+                if(isset($data[$prop])){
+                    if(is_numeric(str_replace(' ', '', $data[$prop]))){
+                        $this->errors[$prop] = 'Invalid city is not numeric';
+                    }
+                }
+            }
+
 
             // Is equal
             if ($data[$prop] && $this->hasRule($rules, 'defined')) {
