@@ -15,6 +15,7 @@ class CoachDocumentAdmin extends AbstractAdmin
                 'data_class' => null,
             ))
             ->add('name', null, array('read_only' => true, 'help' => 'lol'))
+            ->add('type', null, array('read_only' => true, 'help' => 'MimeType of file'))
         ;
     }
 }

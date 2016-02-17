@@ -160,10 +160,13 @@ class CoachDocument extends AbstractEntity implements EntityInterface
             return;
         }
 
+        $type=$file->getMimeType();
+
         $file->move($path, $file->getClientOriginalName());
 
         $this->setUrlFile($file->getClientOriginalName());
         $this->setName($file->getClientOriginalName());
+        $this->setType($type);
 
         return $this;
     }

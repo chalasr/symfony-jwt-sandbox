@@ -249,7 +249,7 @@ class User extends BaseUser
     /** @ORM\OneToMany(targetEntity="\App\SportBundle\Entity\SportUser", mappedBy="user", cascade={"persist", "remove"}) */
     protected $sportUsers;
 
-    /** @ORM\OneToMany(targetEntity="\App\UserBundle\Entity\Information\CoachDocument", mappedBy="user", cascade={"persist", "remove"}) */
+    /** @ORM\OneToMany(targetEntity="\App\UserBundle\Entity\Information\CoachDocument", mappedBy="user", cascade={"persist"},orphanRemoval=true) */
     protected $coachDocuments;
 
     /** @ORM\OneToMany(targetEntity="\App\EventBundle\Entity\Event", mappedBy="user") */

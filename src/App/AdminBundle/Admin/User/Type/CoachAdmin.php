@@ -182,6 +182,7 @@ class CoachAdmin extends BaseUserAdmin
 
     public function preUpdate($object)
     {
+
         $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/coach_documents');
 
         foreach ($object->getCoachDocuments() as $document) {
