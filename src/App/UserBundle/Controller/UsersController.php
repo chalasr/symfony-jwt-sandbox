@@ -657,14 +657,14 @@ class UsersController extends BaseController
      *         404="Invalid sport port id (sport_id don't exist in system)"
      *     },
      *     parameters={
-     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname"},
-     *      {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname"},
+     *      {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname, is not numeric"},
+     *      {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname , is not numeric"},
      *      {"name"="email", "dataType"="string", "required"=false, "description"="Email"},
      *      {"name"="old_password", "dataType"="string", "required"=false, "description"="Old password"},
      *      {"name"="password", "dataType"="string", "required"=false, "description"="Password"},
      *      {"name"="date_of_birth", "dataType"="string ", "required"=false, "description"="Date of birth format yyyy-mm-dd"},
      *      {"name"="address", "dataType"="string", "required"=false, "description"="Address"},
-     *      {"name"="city", "dataType"="string", "required"=false, "description"="City"},
+     *      {"name"="city", "dataType"="string", "required"=false, "description"="City, is not numeric"},
      *      {"name"="zipcode", "dataType"="string", "required"=false, "description"="Zipcode"},
      *      {"name"="phone", "dataType"="string", "required"=false, "description"="Phone number"},
      *      {"name"="description", "dataType"="string", "required"=false, "description"="Description"},
