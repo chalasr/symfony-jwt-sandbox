@@ -2,6 +2,7 @@
 
 namespace App\Util\Validator;
 
+
 use App\Util\Validator\Constraints\Email;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
