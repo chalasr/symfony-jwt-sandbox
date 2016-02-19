@@ -3,8 +3,8 @@
 namespace App\UserBundle\Controller;
 
 use App\Util\Controller\CanSerializeTrait as CanSerialize;
-use App\Util\Validator\CanValidateTrait as CanValidate;
 use App\Util\Validator\Constraints\Email;
+use Symfony\Bridge\Doctrine\Validator\Constraints\Unique;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
@@ -13,9 +13,9 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+
 /**
  * Mangages users from mobile app in API.
  *
@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
  */
 class SecurityController extends Controller
 {
-    use CanSerialize, CanValidate;
+    use CanSerialize;
 
     /**
      * Register new user and process authentication.
@@ -51,9 +51,7 @@ class SecurityController extends Controller
         $userManager = $this->getUserManager();
 
         if ($userManager->findUserByEmail($data['email']) !== null) {
-            $this->errors = array('email' => 'already exists');
-
-            return $this->validationFailedException();
+            throw new UnprocessableEntityHttpException(sprintf('An user with email \'%s\' already exists', $data['email']));
         }
 
         return $this->generateToken($this->createUser($data), 201);
@@ -138,18 +136,19 @@ class SecurityController extends Controller
     public function authenticateByOAuthAction(ParamFetcher $paramFetcher)
     {
         $data = $paramFetcher->all();
+        $userManager = $this->getUserManager();
 
         if (false === $this->isValidFacebookAccount($data['facebook_id'], $data['facebook_access_token'])) {
-            throw new UnprocessableEntityHttpException('The given facebook_id has no valid account associated');
+            throw new UnprocessableEntityHttpException('The given id has no valid facebook account associated');
         }
 
-        $userManager = $this->getUserManager();
         $existingByFacebookId = $userManager->findUserBy(['facebookId' => $data['facebook_id']]);
-        $existingByEmail = $userManager->findUserBy(['email' => $data['email']]);
 
         if (null !== $existingByFacebookId) {
             return $this->generateToken($existingByFacebookId, 200);
         }
+
+        $existingByEmail = $userManager->findUserBy(['email' => $data['email']]);
 
         if (null !== $existingByEmail) {
             $existingByEmail->setFacebookId($data['facebook_id']);
@@ -158,7 +157,7 @@ class SecurityController extends Controller
             return $this->generateToken($existingByEmail, 200);
         }
 
-        $data['password'] = $this->getRandomPassword();
+        $data['password'] = $this->generateRandomPassword();
 
         return $this->generateToken($this->createUser($data, true), 201);
     }
@@ -207,18 +206,18 @@ class SecurityController extends Controller
      *
      * @return View
      */
-    public function resetPasswordAction(Request $request)
+    public function resetPasswordAction(ParamFetcher $paramFetcher)
     {
         $userManager = $this->getUserManager();
-        $data = $request->request->all();
+        $data = $paramFetcher->all();
 
         if (null === $user = $userManager->findUserBy(['email' => $data['email']])) {
             throw new NotFoundHttpException(
-                sprintf('Aucun utilisateur trouvable avec email \'%s\'', $data['email'])
+                sprintf('Unable to find a user with email \'%s\'', $data['email'])
             );
         }
 
-        $password = $this->getRandomPassword();
+        $password = $this->generateRandomPassword();
         $user->setPlainPassword($password);
         $userManager->updateUser($user);
 
@@ -259,6 +258,30 @@ class SecurityController extends Controller
         if (null === $user) {
             return;
         }
+
+        return $user;
+    }
+
+    /**
+     * Creates the guest user.
+     *
+     * @return User The newly created guest user
+     */
+    protected function createGuestUser()
+    {
+        $em = $this->getEntityManager();
+        $userManager = $this->getUserManager();
+        $guestEmail = 'guest@rch.fr';
+
+        $user = $userManager->createUser();
+        $user->setUsername($guestEmail);
+        $user->setEmail($guestEmail);
+        $user->setEnabled(true);
+        $user->addRole('ROLE_GUEST');
+        $user->setCreatedAt(new \DateTime());
+        $user->setPlainPassword('guest');
+
+        $userManager->updateUser($user);
 
         return $user;
     }
@@ -330,30 +353,6 @@ class SecurityController extends Controller
     }
 
     /**
-     * Creates the guest user.
-     *
-     * @return User The newly created guest user
-     */
-    protected function createGuestUser()
-    {
-        $em = $this->getEntityManager();
-        $userManager = $this->getUserManager();
-        $guestEmail = 'guest@rch.fr';
-
-        $user = $userManager->createUser();
-        $user->setUsername($guestEmail);
-        $user->setEmail($guestEmail);
-        $user->setEnabled(true);
-        $user->addRole('ROLE_GUEST');
-        $user->setCreatedAt(new \DateTime());
-        $user->setPlainPassword('guest');
-
-        $userManager->updateUser($user);
-
-        return $user;
-    }
-
-    /**
      * Returns Entity Manager.
      *
      * @return EntityManager $entityManager
@@ -378,7 +377,7 @@ class SecurityController extends Controller
      *
      * @return string
      */
-    protected function getRandomPassword()
+    protected function generateRandomPassword()
     {
         $tokenGenerator = $this->get('fos_user.util.token_generator');
 

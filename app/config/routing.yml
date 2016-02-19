@@ -5,17 +5,13 @@ api:
   requirements:
       _format: json|xml
 
-# API demo
+# Demo
 app_demo:
     path: /
     defaults:
         _controller: FrameworkBundle:Template:template
         template:    demo.html.twig
 
-# Security related routing (users and sessions management)
-fos_user_security:
-    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
-    
 # API documentation
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"

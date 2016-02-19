@@ -7,7 +7,6 @@ use App\UserBundle\AppUserBundle;
 use App\UserBundle\Entity\User;
 use App\Util\Controller\AbstractRestController as BaseController;
 use App\Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
-use App\Util\Validator\CanValidateTrait as CanValidate;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -26,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
  */
 class UsersController extends BaseController
 {
-    use CanCheckPermissions, CanValidate;
+    use CanCheckPermissions;
 
     /**
      * List all users.
