@@ -2,28 +2,17 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
-    - { resource: sonata/admin.yml }
-    - { resource: sonata/admin_orm.yml }
-    - { resource: sonata/block.yml }
-    - { resource: sonata/user.yml }
-
-# Parameters still same between environments
-parameters:
-    jwt_private_key_path: '%kernel.root_dir%/jwt/private.pem'
-    jwt_public_key_path: '%kernel.root_dir%/jwt/public.pem'
-    jwt_key_pass_phrase: Ypu41db4896lVXF
-    jwt_token_ttl: 86400
 
 # Symfony
 framework:
-    translator:      { fallbacks: [%locale%] }
-    secret:          "%secret%"
+    translator: { fallbacks: [%locale%] }
+    secret: "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
-    validation:      { enable_annotations: true }
+    validation: { enable_annotations: true }
     templating:
         engines: ['twig']
     default_locale:  "%locale%"
@@ -31,17 +20,13 @@ framework:
     trusted_proxies: ~
     session:
         handler_id: ~
-    fragments:       ~
+    fragments: ~
     http_method_override: true
 
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-
-    form:
-        resources:
-            - 'SonataCoreBundle:Form:datepicker.html.twig'
     globals:
         domain: "%domain%"
 
@@ -99,10 +84,10 @@ jms_serializer:
 
 # JWT Auth
 lexik_jwt_authentication:
-    private_key_path: %jwt_private_key_path%
-    public_key_path:  %jwt_public_key_path%
-    pass_phrase:      %jwt_key_pass_phrase%
-    token_ttl:        %jwt_token_ttl%
+    private_key_path: "%kernel.root_dir%/jwt/private.pem"
+    public_key_path:  "%kernel.root_dir%/jwt/public.pem"
+    pass_phrase:      Ypu41db4896lVXF
+    token_ttl:        86400
 
 # FOS Rest
 fos_rest:
@@ -137,6 +122,19 @@ fos_rest:
             'Symfony\Component\HttpKernel\Exception\NotFoundHttpException': true
             'Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException': true
 
+# Gesdinet Refresh Token
 gesdinet_jwt_refresh_token:
     ttl: 2592000
     firewall: api
+
+fos_user:
+    db_driver:      orm
+    firewall_name:  main
+    user_class: App\UserBundle\Entity\User
+    profile:
+        # Authentication Form
+        form:
+            type:               fos_user_profile
+            handler:            fos_user.profile.form.handler.default
+            name:               fos_user_profile_form
+            validation_groups:  [Authentication] # Please note : this is not the default value

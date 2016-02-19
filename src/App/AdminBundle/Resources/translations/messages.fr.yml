@@ -1,9 +1,0 @@
-Group: Groupe
-Category: Catégorie
-User: Utilisateur
-# New Sport: Nouveau Sport
-# New Category: Nouvelle Catégorie
-# New Tag: Nouveau Tag
-navbar_create: Nouveau %class%
-navbar_list: Liste des %class%s
-create_block_label: Création de

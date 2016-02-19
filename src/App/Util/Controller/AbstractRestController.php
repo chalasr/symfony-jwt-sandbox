@@ -2,7 +2,7 @@
 
 namespace App\Util\Controller;
 
-use App\Util\Controller\EntitySerializableTrait as EntitySerializable;
+use App\Util\Controller\CanSerializeTrait as CanSerialize;
 use App\Util\Controller\LocalizableTrait as Localizable;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandler;
@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 abstract class AbstractRestController extends Controller
 {
-    use Localizable, EntitySerializable;
+    use Localizable, CanSerialize;
 
     /**
      * Returns Entity Manager.

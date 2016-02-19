@@ -1,12 +1,5 @@
-# Security related routing (users and sessions management)
-fos_user_security:
-    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+security:
+    resource: App\UserBundle\Controller\SecurityController
 
-users:
-    resource: "@AppUserBundle/Resources/config/routing.yml"
-    
-sports:
-    resource: "@AppSportBundle/Resources/config/routing.yml"
-
-events:
-    resource: "@AppEventBundle/Resources/config/routing.yml"
+users_collection:
+    resource: App\UserBundle\Controller\UsersController

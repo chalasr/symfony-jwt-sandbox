@@ -19,19 +19,6 @@ security:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        # Sonata
-        admin:
-            pattern:            /admin(.*)
-            context:            user
-            form_login:
-                provider:       fos_userbundle
-                login_path:     /admin/login
-                use_forward:    false
-                check_path:     /admin/login_check
-                failure_path:   null
-            logout:
-                path:           /admin/logout
-            anonymous:          true
         # Signin
         login:
             pattern:  ^/v1/login
@@ -39,7 +26,7 @@ security:
             anonymous: true
             form_login:
                 provider: fos_userbundle
-                check_path: /v1/login_check
+                check_path: /v1/login
                 require_previous_session: false
                 username_parameter: email
                 password_parameter: password
@@ -72,13 +59,6 @@ security:
             lexik_jwt: ~
 
     access_control:
-        # Admin login page needs to be access without credential
-        - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        # Secured part of the Admin
-        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SUPER_ADMIN, ROLE_SONATA_ADMIN] }
-        # REST API
         - { path: ^/v1/signup, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v1/guest/login, role: [IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY] }
         - { path: ^/v1/refresh_token, role: IS_AUTHENTICATED_ANONYMOUSLY }

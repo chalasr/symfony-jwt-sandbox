@@ -10,10 +10,8 @@
     <div class="container" ng-controller="MainCtrl">
         <div class="header clearfix"></div>
         <div class="jumbotron text-center">
-            <h1>Sportroops API v1</h1>
-            <p class="lead">
-              Submit your back-office credentials <br />
-            </p>
+            <h1>Symfony REST Edition</h1>
+            <br>
             <form class="form-horizontal" role="form" style="margin-left: -8%;">
               <div class="form-group">
                 <label for="inputEmail3" class="col-sm-2 control-label">Username</label>
@@ -30,7 +28,7 @@
               <div class="demo-submits">
                   <a
                     ng-click="submit(res)"
-                    ng-repeat="res in ['users', 'sports', 'categories', 'tags']"
+                    ng-repeat="res in ['users']"
                     class="btn btn-success">
                       Fetch [% res| ucfirst %]
                   </a>
@@ -50,7 +48,7 @@
             </div>
         </div>
         <footer class="footer">
-          <p>&copy; Sportroops - 2016</p>
+          <p>&copy; Robin Chalas - 2016</p>
         </footer>
     </div>
     <script src="/bower_components/angular/angular.min.js"></script>

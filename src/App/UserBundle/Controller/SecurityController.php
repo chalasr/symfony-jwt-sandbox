@@ -2,7 +2,7 @@
 
 namespace App\UserBundle\Controller;
 
-use App\Util\Controller\EntitySerializableTrait as EntitySerializable;
+use App\Util\Controller\CanSerializeTrait as CanSerialize;
 use App\Util\Validator\CanValidateTrait as CanValidate;
 use App\Util\Validator\Constraints\Email;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-
 /**
  * Mangages users from mobile app in API.
  *
@@ -24,43 +23,21 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
  */
 class SecurityController extends Controller
 {
-    use EntitySerializable, CanValidate;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->rules = array(
-            'register' => [
-                'password' => 'nonempty|required',
-                'email'    => 'nonempty|required|email',
-                'group'    => 'nonempty|defined|Sportroopers:Coachs:Providers',
-            ],
-            'basic' => [
-                'password' => 'nonempty|required',
-                'email'    => 'nonempty|required|email',
-            ],
-            'oauth' => [
-                'id'           => 'nonempty|required',
-                'email'        => 'nonempty|required|email',
-                'access_token' => 'nonempty|required',
-            ],
-        );
-    }
+    use CanSerialize, CanValidate;
 
     /**
      * Register new user and process authentication.
      *
-     * @Rest\View(serializerGroups={"api"})
+     * @Rest\Post("/register")
+     * @Rest\View
+     * @Rest\RequestParam(name="email", requirements=@Email, nullable=false, allowBlank=false)
+     * @Rest\RequestParam(name="password", requirements="[^/]+", nullable=false, allowBlank=false)
      *
      * @ApiDoc(
      * 	 section="Security",
      *     parameters={
      *   	     {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
      *         {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
-     *         {"name"="first_name", "dataType"="string", "required"=false, "description"="First name"},
-     *         {"name"="last_name", "dataType"="string", "required"=false, "description"="Last name"},
      *     },
      * 	 statusCodes={
      * 	     201="Created (new user created, token generated, returns them with refresh_token)",
@@ -68,14 +45,10 @@ class SecurityController extends Controller
      * 	 },
      * )
      */
-    public function registerUserAccountAction(Request $request)
+    public function registerUserAccountAction(ParamFetcher $paramFetcher)
     {
-        $data = $request->request->all();
+        $data = $paramFetcher->all();
         $userManager = $this->getUserManager();
-
-        if (false === $this->check($data, 'register', true)) {
-            return $this->validationFailedException();
-        }
 
         if ($userManager->findUserByEmail($data['email']) !== null) {
             $this->errors = array('email' => 'already exists');
@@ -89,11 +62,16 @@ class SecurityController extends Controller
     /**
      * Processes user authentication from email/password.
      *
+     * @Rest\Post("/login")
+     *
+     * @Rest\RequestParam(name="email", requirements=@Email, nullable=false, allowBlank=false)
+     * @Rest\RequestParam(name="password", requirements="[^/]+", nullable=false, allowBlank=false)
+     *
      * @ApiDoc(
      *     section="Security",
      *     parameters={
      * 	     {"name"="email", "dataType"="string", "required"=true, "description"="Email"},
-     *        {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
+     *       {"name"="password", "dataType"="string", "required"=true, "description"="Password"},
      *     },
      * 	  statusCodes={
      * 	     200="OK (user authenticated, returns token, refresh_token and available user infos)",
@@ -110,10 +88,11 @@ class SecurityController extends Controller
     /**
      * Authenticates user as guest to access READ resources.
      *
+     * @Rest\Get("/guest/login")
+     *
      * @ApiDoc(
      *    section="Security",
      * 	  statusCodes={
-     * 	     200="OK (user authenticated as guest, returns token and refresh_token)",
      * 	     200="OK (user authenticated as guest, returns token and refresh_token)",
      * 	     404="Not found (guest user not found)"
      * 	  },
@@ -124,7 +103,7 @@ class SecurityController extends Controller
     public function authenticateGuestAction()
     {
         $userManager = $this->getUserManager();
-        $guestId = 'guest@sportroops.fr';
+        $guestId = 'guest@rch.fr';
 
         if (null === $guest = $userManager->findUserByEmail($guestId)) {
             $guest = $this->createGuestUser();
@@ -136,14 +115,18 @@ class SecurityController extends Controller
     /**
      * Register/Authenticate user from OAuth Response.
      *
+     * @Rest\Post("/oauth/login")
+     *
+     * @Rest\RequestParam(name="email", requirements=@Email, nullable=false, allowBlank=false)
+     * @Rest\RequestParam(name="facebook_id", requirements="\d+", nullable=false, allowBlank=false)
+     * @Rest\RequestParam(name="facebook_access_token", requirements="[^/]", nullable=false, allowBlank=false)
+     *
      * @ApiDoc(
      * 	 section="Security",
      *     parameters={
-     *         {"name"="id", "dataType"="integer", "required"=true, "description"="Facebook ID"},
-     *         {"name"="access_token", "dataType"="string", "required"=true, "description"="Facebook access_token"},
      *         {"name"="email", "dataType"="string", "required"=true, "description"="Email credential"},
-     *         {"name"="first_name", "dataType"="string", "required"=false, "description"="Firstname"},
-     *         {"name"="last_name", "dataType"="string", "required"=false, "description"="Lastname"},
+     *         {"name"="facebook_access_token", "dataType"="string", "required"=true, "description"="Facebook access_token"},
+     *         {"name"="facebook_id", "dataType"="integer", "required"=true, "description"="Facebook ID"},
      *     },
      * 	 statusCodes={
      * 	     200="OK (token generated for existing user, returns it with available user infos ans refresh_token)",
@@ -152,20 +135,16 @@ class SecurityController extends Controller
      * 	 },
      * )
      */
-    public function authenticateByOAuthAction(Request $request)
+    public function authenticateByOAuthAction(ParamFetcher $paramFetcher)
     {
-        $data = $request->request->all();
+        $data = $paramFetcher->all();
 
-        if (false === $this->check($data, 'oauth')) {
-            return $this->validationFailedException();
-        }
-
-        if (false === $this->isValidFacebookAccount($data['id'], $data['access_token'])) {
+        if (false === $this->isValidFacebookAccount($data['facebook_id'], $data['facebook_access_token'])) {
             throw new UnprocessableEntityHttpException('The given facebook_id has no valid account associated');
         }
 
         $userManager = $this->getUserManager();
-        $existingByFacebookId = $userManager->findUserBy(['facebookId' => $data['id']]);
+        $existingByFacebookId = $userManager->findUserBy(['facebookId' => $data['facebook_id']]);
         $existingByEmail = $userManager->findUserBy(['email' => $data['email']]);
 
         if (null !== $existingByFacebookId) {
@@ -173,7 +152,7 @@ class SecurityController extends Controller
         }
 
         if (null !== $existingByEmail) {
-            $existingByEmail->setFacebookId($data['id']);
+            $existingByEmail->setFacebookId($data['facebook_id']);
             $userManager->updateUser($existingByEmail);
 
             return $this->generateToken($existingByEmail, 200);
@@ -186,6 +165,11 @@ class SecurityController extends Controller
 
     /**
      * Reset expired Token.
+     *
+     * @Rest\Post("/refresh_token")
+     *
+     * @Rest\RequestParam(name="token", allowBlank=false, requirements="[^/]")
+     * @Rest\RequestParam(name="refresh_token", allowBlank=false, requirements="[^/]")
      *
      * @ApiDoc(
      * 	section="Security",
@@ -205,7 +189,9 @@ class SecurityController extends Controller
     /**
      * Resets lost password for a given user.
      *
+     * @Rest\Post("/users/reset_password")
      * @Rest\RequestParam(name="email", requirements=@Email, allowBlank=false, description="User email")
+     *
      * @ApiDoc(
      * 	section="Security",
      * 	parameters={
@@ -236,39 +222,6 @@ class SecurityController extends Controller
         $user->setPlainPassword($password);
         $userManager->updateUser($user);
 
-        /* Retrieves User informations for e-mail content **/
-        $query = $this->getEntityManager()
-            ->createQueryBuilder('u')
-            ->select('u.lastname', 'u.firstname', 'u.email')
-            ->from('App\UserBundle\Entity\User', 'u')
-            ->where('u.email = :email')
-            ->setParameter('email', $data['email'])
-            ->getQuery();
-
-        $result = $query->getResult();
-
-        return $result;
-
-        $mailing = array(
-            'lastname'  => $result[0]['lastname'],
-            'firstname' => $result[0]['firstname'],
-            'email'     => $result[0]['email'],
-            'password'  => $password,
-        );
-
-        /* Prepares an email with data **/
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Sportroops reset password')
-            ->setFrom('support@sportroops.com')
-            ->setTo($mailing['email'])
-            ->setBody(
-                $this->renderView('Emails/reset_password.html.twig', $mailing),
-                'text/html'
-            );
-
-        /* Sends email **/
-        $this->get('mailer')->send($message);
-
         /* Serializes data before return response **/
         $view = View::create()->setStatusCode(204);
 
@@ -290,33 +243,15 @@ class SecurityController extends Controller
         $userManager = $this->getUserManager();
         $em = $this->getEntityManager();
 
-        if ('Sportroopers') {
-        }
-
-        $group = $em->getRepository('AppUserBundle:Group')->findOneByName([
-            'name' => isset($data['group'])
-            ? $data['group']
-            : 'Sportroopers',
-        ]);
-
         $user = $userManager->createUser();
         $user->setUsername($data['email']);
         $user->setEmail($data['email']);
-        $user->setGroup($group);
         $user->setEnabled(true);
         $user->setCreatedAt(new \DateTime());
         $user->setPlainPassword($data['password']);
 
         if (true === $isOAuth) {
-            $user->setFacebookId($data['id']);
-        }
-
-        if (isset($data['first_name'])) {
-            $user->setFirstname($data['first_name']);
-        }
-
-        if (isset($data['last_name'])) {
-            $user->setLastname($data['last_name']);
+            $user->setFacebookId($data['facebook_id']);
         }
 
         $userManager->updateUser($user);
@@ -324,27 +259,6 @@ class SecurityController extends Controller
         if (null === $user) {
             return;
         }
-
-        $mailing = array(
-            'id'        => $user->getId(),
-            'lastname'  => $user->getLastname(),
-            'firstname' => $user->getFirstname(),
-            'email'     => $user->getEmail(),
-            'group'     => $user->getVirtualGroup(),
-        );
-
-        /* Prepares an email with data */
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Sportroops - Confirmation d\'inscription')
-            ->setFrom('support@sportroops.com')
-            ->setTo($mailing['email'])
-            ->setBody(
-                $this->renderView('Emails/confirm_registration.html.twig', $mailing),
-                'text/html'
-            );
-
-        /* Sends email */
-        $this->get('mailer')->send($message);
 
         return $user;
     }
@@ -363,14 +277,6 @@ class SecurityController extends Controller
             'refresh_token' => $this->attachRefreshToken($user),
             'user'          => json_decode($this->serialize($user, array('groups' => ['api']))),
         );
-
-        if (null !== $user->getFacebookId()) {
-            $response['user']['facebook_id'] = $user->getFacebookId();
-        }
-
-        if ('guest@sportroops.fr' == $user->getUsername()) {
-            unset($response['user']);
-        }
 
         return new JsonResponse($response, $statusCode);
     }
@@ -413,9 +319,7 @@ class SecurityController extends Controller
     protected function isValidFacebookAccount($id, $accessToken)
     {
         $client = new \Goutte\Client();
-
-        $endpoint = sprintf('https://graph.facebook.com/me?access_token=%s', $accessToken);
-        $request = $client->request('GET', $endpoint);
+        $request = $client->request('GET', sprintf('https://graph.facebook.com/me?access_token=%s', $accessToken));
         $response = json_decode($client->getResponse()->getContent());
 
         if ($response->error) {
@@ -434,7 +338,7 @@ class SecurityController extends Controller
     {
         $em = $this->getEntityManager();
         $userManager = $this->getUserManager();
-        $guestEmail = 'guest@sportroops.fr';
+        $guestEmail = 'guest@rch.fr';
 
         $user = $userManager->createUser();
         $user->setUsername($guestEmail);

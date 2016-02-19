@@ -1,4 +1,0 @@
-imports:
-    - { resource: 'admin/user.yml' }
-    - { resource: 'admin/sport.yml' }
-    - { resource: 'admin/event.yml' }

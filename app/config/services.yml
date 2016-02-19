@@ -1,27 +1,13 @@
-parameters:
-  # api.kernel.listener.exception_listener.class: App\Util\EventListener\ExceptionResponseListener
-    app.doctrine.abstract_repository_factory.class: App\Util\Doctrine\Repository\EnhancedRepositoryFactory
-
 services:
-
-  # api.kernel.listener.exception_listener:
-  #     class: %api.kernel.listener.exception_listener.class%
-  #     tags:
-  #         - { name: kernel.event_listener, event: kernel.exception, method: onKernelResponse }
-
+  
+    # EnhancedRepository Factory
     app.doctrine.repository.factory:
-        class: %app.doctrine.abstract_repository_factory.class%
+        class: App\Util\Doctrine\Repository\EnhancedRepositoryFactory
         arguments:
             - []
             - '@service_container'
             - '@app.doctrine.repository.factory.default'
 
+    # EnhancedRepository
     app.doctrine.repository.factory.default:
         class: Doctrine\ORM\Repository\DefaultRepositoryFactory
-
-    app.twig_extension.route_checker:
-        class: App\Util\Twig\RouteCheckerExtension
-        public: false
-        arguments: ['@service_container']
-        tags:
-            - { name: twig.extension }

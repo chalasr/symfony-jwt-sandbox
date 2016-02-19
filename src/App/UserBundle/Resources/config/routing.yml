@@ -1,9 +1,0 @@
-# Users
-api_security:
-    resource: "@AppUserBundle/Resources/config/security.yml"
-    prefix:   /
-    requirements:
-        _format: json
-
-users_collection:
-    resource: App\UserBundle\Controller\UsersController
