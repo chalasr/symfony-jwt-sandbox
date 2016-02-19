@@ -1,7 +1,7 @@
 Symfony REST Skeleton
 =====================
 
-Ready-to-use application built on top of the Symfony fullstack and best
+Ready-to-use skeleton built on top of the Symfony fullstack and REST utilities.
 
 What's inside ?
 ----
@@ -45,7 +45,7 @@ Available routes :
 - `GET /v1/users`
 - `GET /v1/users/{id}`
 
-> _NOTE:_ Resources are serialized in `JSON` as default format, but
+> _NOTE:_ Resources are serialized in JSON by default, but can be in XML by adding .{format}
 
 License
 -------
@@ -57,4 +57,4 @@ For the whole copyright, see the [LICENSE](LICENSE) file.
 Contributing
 ------------
 
-See the guidelines in the  [CONTRIBUTING](https://github.com/chalasr/symfony-rest-edition/blob/master/CONTRIBUTING.md) file.
+See the contribution guidelines in the [CONTRIBUTING](CONTRIBUTING.md) file.
