@@ -57,4 +57,4 @@ For the whole copyright, see the [LICENSE](LICENSE) file.
 Contributing
 ------------
 
-See the guidelines in the  [CONTRIBUTING](https://github.com/chalasr/symfony-rest-edition/blob/master/CONTRIBUTING.md) file.
+See the contribution guidelines in the [CONTRIBUTING](CONTRIBUTING.md) file.
