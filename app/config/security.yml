@@ -34,7 +34,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
         # Signup
         signup:
-            pattern: ^/v1/signup
+            pattern: ^/v1/register
             anonymous: true
             stateless: true
         # OAuth
@@ -59,7 +59,7 @@ security:
             lexik_jwt: ~
 
     access_control:
-        - { path: ^/v1/signup, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/v1/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v1/guest/login, role: [IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY] }
         - { path: ^/v1/refresh_token, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v1/oauth/login , role: [IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY] }
