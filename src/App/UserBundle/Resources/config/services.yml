@@ -1,7 +1,0 @@
-services:
-    api.event.jwt_response_listener:
-        class: App\Util\Security\EventListener\JwtResponseListener
-        tags:
-            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
-        arguments:
-            entityManager: "@doctrine.orm.entity_manager"

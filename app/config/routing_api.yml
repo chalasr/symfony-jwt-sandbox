@@ -1,5 +1,5 @@
 security:
-    resource: App\UserBundle\Controller\SecurityController
+    resource: UserBundle\Controller\SecurityController
 
 users_collection:
-    resource: App\UserBundle\Controller\UsersController
+    resource: UserBundle\Controller\UsersController

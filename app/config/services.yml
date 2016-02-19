@@ -2,7 +2,7 @@ services:
   
     # EnhancedRepository Factory
     app.doctrine.repository.factory:
-        class: App\Util\Doctrine\Repository\EnhancedRepositoryFactory
+        class: Util\Doctrine\Repository\EnhancedRepositoryFactory
         arguments:
             - []
             - '@service_container'

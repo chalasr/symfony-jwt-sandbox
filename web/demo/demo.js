@@ -3,7 +3,7 @@
     function Authentication($rootScope, $http, authService, $httpBackend) {
       return {
         login: function (credentials) {
-          return $http.post('/v1/login_check', credentials, { ignoreAuthModule: true })
+          return $http.post('/v1/login', credentials, { ignoreAuthModule: true })
         },
         logout: function (user) {
           delete $http.defaults.headers.common.Authorization;
@@ -15,7 +15,7 @@
     function MainCtrl($scope, $rootScope, $http, $timeout, authService, AuthenticationService) {
       $scope.access = {};
       $scope.credentials = {
-          email: 'guest@sportroops.fr',
+          email: 'guest@rch.fr',
           password: 'guest'
       };
 
@@ -53,7 +53,7 @@
 
     }
 
-    function ucFirst() {
+    var ucFirst = function() {
       return function(input) {
         if (!angular.isString(input)) return input;
         return input.split(' ').map(function (ch) {
