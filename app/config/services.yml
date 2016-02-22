@@ -1,5 +1,5 @@
 services:
-  
+
     # EnhancedRepository Factory
     app.doctrine.repository.factory:
         class: Util\Doctrine\Repository\EnhancedRepositoryFactory

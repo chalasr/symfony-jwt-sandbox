@@ -2,11 +2,11 @@
 
 namespace Util\Doctrine\Repository;
 
-use Util\Doctrine\Entity\AbstractEntity;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Util\Doctrine\Entity\AbstractEntity;
 
 /**
  * Enhanced EntityRepository that pre-handle exceptions.

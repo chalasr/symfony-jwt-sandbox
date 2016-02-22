@@ -2,20 +2,15 @@
 
 namespace UserBundle\Controller;
 
-use SportBundle\Entity;
-use UserBundle\AppUserBundle;
-use UserBundle\Entity\User;
-use Util\Controller\AbstractRestController as BaseController;
-use Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation as Http;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use UserBundle\Entity\User;
+use Util\Controller\AbstractRestController as BaseController;
+use Util\Controller\CanCheckPermissionsTrait as CanCheckPermissions;
 
 /**
  * Users Controller.
@@ -47,7 +42,7 @@ class UsersController extends BaseController
     public function getAllUsersAction()
     {
         $em = $this->getEntityManager();
-        $repo = $em->getRepository('AppUserBundle:User');
+        $repo = $em->getRepository('UserBundle:User');
 
         return $repo->findAll();
     }
@@ -88,7 +83,7 @@ class UsersController extends BaseController
     protected function findUserOrFail($id)
     {
         $em = $this->getEntityManager();
-        $repo = $em->getRepository('AppUserBundle:User');
+        $repo = $em->getRepository('UserBundle:User');
         $user = $repo->find($id);
 
         if (null === $user) {
@@ -125,13 +120,13 @@ class UsersController extends BaseController
         }
 
         $em = $this->getEntityManager();
-        $repo = $em->getRepository('AppUserBundle:User');
+        $repo = $em->getRepository('UserBundle:User');
 
         $picture = $request->files->get('file');
 
         $user->setFile($picture);
 
-        $uploadPath = $this->locateResource('@AppUserBundle/Resources/public/pictures');
+        $uploadPath = $this->locateResource('@UserBundle/Resources/public/pictures');
 
         if ($user->getFile()) {
             $user->uploadPicture($uploadPath);
@@ -161,10 +156,10 @@ class UsersController extends BaseController
     public function getPicture($id)
     {
         $user = $this->findUserOrFail($id);
-        $picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/'.$user->getPicture());
+        $picture = $this->locateResource('@UserBundle/Resources/public/pictures/'.$user->getPicture());
 
         if (!is_file($picture)) {
-            $picture = $this->locateResource('@AppUserBundle/Resources/public/pictures/default.jpg');
+            $picture = $this->locateResource('@UserBundle/Resources/public/pictures/default.jpg');
         }
 
         $response = new Http\Response();

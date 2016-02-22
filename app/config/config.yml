@@ -67,10 +67,14 @@ swiftmailer:
     spool:     { type: memory }
 
 
+# rch_jwt_user: ~
+
 # Nelmio API Doc
 nelmio_api_doc:
     sandbox:
         body_format: json
+
+rch_jwt_user: ~
 
 # JMS Serializer
 jms_serializer:
@@ -78,16 +82,8 @@ jms_serializer:
         auto_detection: true
         directories:
             FOSUserBundle:
-                path: "@AppUserBundle/Resources/config/serializer/FOS"
+                path: "@RCHJWTUserBundle/Resources/config/serializer/FOS"
                 namespace_prefix: FOS\UserBundle
-
-
-# JWT Auth
-lexik_jwt_authentication:
-    private_key_path: "%kernel.root_dir%/jwt/private.pem"
-    public_key_path:  "%kernel.root_dir%/jwt/public.pem"
-    pass_phrase:      Ypu41db4896lVXF
-    token_ttl:        86400
 
 # FOS Rest
 fos_rest:

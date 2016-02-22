@@ -2,11 +2,11 @@
 
 namespace Util\Controller;
 
-use Util\Controller\CanSerializeTrait as CanSerialize;
-use Util\Controller\LocalizableTrait as Localizable;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Util\Controller\CanSerializeTrait as CanSerialize;
+use Util\Controller\LocalizableTrait as Localizable;
 
 /**
  * Abstract class for Rest Controllers.

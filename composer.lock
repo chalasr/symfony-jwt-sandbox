@@ -4,9 +4,169 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "829aa1154c6150ac76b46d0a30d91862",
-    "content-hash": "ccf7907ce8a69764f325e90389ce91fa",
+    "hash": "2df2634ec9323d422498cbbb3114e1bc",
+    "content-hash": "befb5a50d7e817bacf09be7c638e7e02",
     "packages": [
+        {
+            "name": "behat/transliterator",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Behat/Transliterator.git",
+                "reference": "868e05be3a9f25ba6424c2dd4849567f50715003"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Behat/Transliterator/zipball/868e05be3a9f25ba6424c2dd4849567f50715003",
+                "reference": "868e05be3a9f25ba6424c2dd4849567f50715003",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Behat\\Transliterator": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Artistic-1.0"
+            ],
+            "description": "String transliterator",
+            "keywords": [
+                "i18n",
+                "slug",
+                "transliterator"
+            ],
+            "time": "2015-09-28 16:26:35"
+        },
+        {
+            "name": "chalasr/capistrano-bundle",
+            "version": "1.1.0",
+            "target-dir": "RCH/CapistranoBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chalasr/RCHCapistranoBundle.git",
+                "reference": "afeb3177ff7d69ab8f693ad27f4fea55daf3e79f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chalasr/RCHCapistranoBundle/zipball/afeb3177ff7d69ab8f693ad27f4fea55daf3e79f",
+                "reference": "afeb3177ff7d69ab8f693ad27f4fea55daf3e79f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9",
+                "symfony/config": ">=2.5",
+                "symfony/console": ">=2.5",
+                "symfony/dependency-injection": ">=2.5",
+                "symfony/filesystem": ">=2.5",
+                "symfony/yaml": ">=2.5"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "^1.11"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "RCH\\CapistranoBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Robin CHALAS",
+                    "email": "robin.chalas@gmail.com",
+                    "homepage": "https://github.com/chalasr/CapistranoBundle"
+                }
+            ],
+            "description": "Symfony/console command that provide automation of your deployment workflow on top of Capistrano.",
+            "keywords": [
+                "Symfony2",
+                "bundle",
+                "capifony",
+                "capistrano",
+                "deploy",
+                "production",
+                "workflow"
+            ],
+            "time": "2016-02-07 12:41:53"
+        },
+        {
+            "name": "chalasr/jwt-user-bundle",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chalasr/RCHJWTUserBundle.git",
+                "reference": "7aa2760cab5a89f582d75f0e391115864f4cdfde"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chalasr/RCHJWTUserBundle/zipball/7aa2760cab5a89f582d75f0e391115864f4cdfde",
+                "reference": "7aa2760cab5a89f582d75f0e391115864f4cdfde",
+                "shasum": ""
+            },
+            "require": {
+                "fabpot/goutte": "~2.0",
+                "friendsofsymfony/rest-bundle": "~1.7",
+                "friendsofsymfony/user-bundle": "~1.3",
+                "gesdinet/jwt-refresh-token-bundle": "~0.1",
+                "jms/serializer-bundle": "dev-master",
+                "lexik/jwt-authentication-bundle": "~1.3.1",
+                "php": ">= 5.3.9",
+                "symfony/framework-bundle": ">=2.3",
+                "symfony/security-bundle": ">=2.3"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "^1.11"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "RCH\\JWTUserBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Robin CHALAS",
+                    "email": "robin.chalas@gmail.com",
+                    "homepage": "https://github.com/chalasr/JWTUserBundle"
+                }
+            ],
+            "description": "Json Web Token authentication bundle including FOSUserBundle integration",
+            "keywords": [
+                "Authentication",
+                "Symfony2",
+                "api",
+                "fosrest",
+                "fosuser",
+                "jwt",
+                "lexikjwt",
+                "rest",
+                "token",
+                "user"
+            ],
+            "time": "2016-02-20 22:32:22"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.7",
@@ -974,6 +1134,85 @@
                 "User management"
             ],
             "time": "2015-06-01 00:57:03"
+        },
+        {
+            "name": "gedmo/doctrine-extensions",
+            "version": "v2.4.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
+                "reference": "5f4b6c848f0d6834a434a62a09a0935d147082e1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/5f4b6c848f0d6834a434a62a09a0935d147082e1",
+                "reference": "5f4b6c848f0d6834a434a62a09a0935d147082e1",
+                "shasum": ""
+            },
+            "require": {
+                "behat/transliterator": "~1.0",
+                "doctrine/common": "~2.4",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "doctrine/common": ">=2.5.0",
+                "doctrine/mongodb-odm": ">=1.0.2",
+                "doctrine/orm": ">=2.5.0",
+                "phpunit/phpunit": "~4.4",
+                "phpunit/phpunit-mock-objects": "~2.3",
+                "symfony/yaml": "~2.6"
+            },
+            "suggest": {
+                "doctrine/mongodb-odm": "to use the extensions with the MongoDB ODM",
+                "doctrine/orm": "to use the extensions with the ORM"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Gedmo\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Buchmann",
+                    "email": "david@liip.ch"
+                },
+                {
+                    "name": "Gediminas Morkevicius",
+                    "email": "gediminas.morkevicius@gmail.com"
+                },
+                {
+                    "name": "Gustavo Falco",
+                    "email": "comfortablynumb84@gmail.com"
+                }
+            ],
+            "description": "Doctrine2 behavioral extensions",
+            "homepage": "http://gediminasm.org/",
+            "keywords": [
+                "Blameable",
+                "behaviors",
+                "doctrine2",
+                "extensions",
+                "gedmo",
+                "loggable",
+                "nestedset",
+                "sluggable",
+                "sortable",
+                "timestampable",
+                "translatable",
+                "tree",
+                "uploadable"
+            ],
+            "time": "2016-02-18 15:33:43"
         },
         {
             "name": "gesdinet/jwt-refresh-token-bundle",
@@ -2448,6 +2687,67 @@
             ],
             "description": "A security checker for your composer.lock",
             "time": "2015-11-07 08:07:40"
+        },
+        {
+            "name": "stof/doctrine-extensions-bundle",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stof/StofDoctrineExtensionsBundle.git",
+                "reference": "4e7499d25dc5d0862da09fa8e336164948a29a25"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/4e7499d25dc5d0862da09fa8e336164948a29a25",
+                "reference": "4e7499d25dc5d0862da09fa8e336164948a29a25",
+                "shasum": ""
+            },
+            "require": {
+                "gedmo/doctrine-extensions": "^2.3.1",
+                "php": ">=5.3.2",
+                "symfony/framework-bundle": "~2.1|~3.0"
+            },
+            "suggest": {
+                "doctrine/doctrine-bundle": "to use the ORM extensions",
+                "doctrine/mongodb-odm-bundle": "to use the MongoDB ODM extensions"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stof\\DoctrineExtensionsBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christophe Coevoet",
+                    "email": "stof@notk.org"
+                }
+            ],
+            "description": "Integration of the gedmo/doctrine-extensions with Symfony2",
+            "homepage": "https://github.com/stof/StofDoctrineExtensionsBundle",
+            "keywords": [
+                "behaviors",
+                "doctrine2",
+                "extensions",
+                "gedmo",
+                "loggable",
+                "nestedset",
+                "sluggable",
+                "sortable",
+                "timestampable",
+                "translatable",
+                "tree"
+            ],
+            "time": "2016-01-26 23:58:32"
         },
         {
             "name": "swiftmailer/swiftmailer",

@@ -12,8 +12,21 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class AppUserExtension extends Extension
+class UserExtension extends Extension
 {
+    /**
+     * {@inheritdoc}
+     */
+  // public function prepend(ContainerBuilder $container)
+  // {
+  //     $kernelRootDir = $container->getParameter('kernel.root_dir');
+  //     $container->prependExtensionConfig('lexik_jwt_authentication', array('private_key_path' => $kernelRootDir.'/jwt/private.pem'));
+  //     $configs = $container->getExtensionConfig($this->getAlias());
+  //     // use the Configuration class to generate a config array with
+  //     // the settings "acme_hello"
+  //     $config = $this->processConfiguration(new Configuration(), $configs);
+  // }
+
     /**
      * {@inheritdoc}
      */

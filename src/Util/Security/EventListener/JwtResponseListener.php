@@ -2,9 +2,9 @@
 
 namespace Util\Security\EventListener;
 
-use Util\Controller\CanSerializeTrait as CanSerialize;
 use Doctrine\ORM\EntityManager;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use Util\Controller\CanSerializeTrait as CanSerialize;
 
 /**
  * JWT Response listener.
@@ -34,14 +34,14 @@ class JwtResponseListener
     {
         $data = $event->getData();
         $username = $event->getUser() ? $event->getUser()->getUsername() : '';
-        $userManager = $this->em->getRepository('AppUserBundle:User');
+        $userManager = $this->em->getRepository('UserBundle:User');
         $user = $userManager->findOneBy(['username' => $username]);
 
         $data['user'] = array(
-            'id' => $user->getId(),
+            'id'    => $user->getId(),
             'email' => $user->getEmail(),
         );
-        
+
         $event->setData($data);
     }
 }

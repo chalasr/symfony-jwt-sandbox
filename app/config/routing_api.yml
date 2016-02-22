@@ -1,5 +1,5 @@
 security:
-    resource: UserBundle\Controller\SecurityController
+    resource: "@RCHJWTUserBundle/Resources/config/routing.yml"
 
 users_collection:
     resource: UserBundle\Controller\UsersController
